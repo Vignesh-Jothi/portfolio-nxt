@@ -1,0 +1,88 @@
+<section id="how-i-think" aria-labelledby="code-h">
+  <div class="wrap">
+    <div class="sec-head" data-reveal>
+      <div><span class="tag">// how I think about it</span><h2 id="code-h">A pattern I reuse</h2><p>Instead of just showing code, try it — this is the shape of the idea behind the Deal Size Recalculation Engine, running in miniature. Trigger a few events and watch the audit log.</p></div>
+    </div>
+
+    <div class="sim-card" data-reveal>
+      <div class="sim-top">
+        <div class="sim-booking">
+          <span class="sim-label mono">BOOKING #PYT-4471 · DEAL SIZE</span>
+          <div class="sim-amount-row">
+            <span class="sim-amount mono" id="simAmount">₹42,000</span>
+            <span class="sim-delta mono" id="simDelta"></span>
+          </div>
+          <span class="idempotent-note mono" id="idempotentNote">✓ Idempotent — recalculated, nothing changed, nothing logged</span>
+        </div>
+        <div class="sim-badges">
+          <span class="chip">Idempotent</span>
+          <span class="chip">Transactional</span>
+          <span class="chip">Audited</span>
+        </div>
+      </div>
+
+      <div class="sim-actions" role="group" aria-label="Trigger a booking event">
+        <button class="btn small sim-btn" data-action="refund">↓ Apply refund</button>
+        <button class="btn small sim-btn" data-action="gst">↑ GST adjustment</button>
+        <button class="btn small sim-btn" data-action="cancel">↓ Cancel line item</button>
+        <button class="btn small sim-btn" data-action="noop">⟳ Re-run recalculation</button>
+      </div>
+
+      <div class="sim-log">
+        <div class="sim-log-head">
+          <span class="sim-label mono">AUDIT LOG</span>
+          <button class="btn small danger" id="simReset" type="button">Reset</button>
+        </div>
+        <div id="simLogList"><p class="log-empty">No changes yet — trigger an event above.</p></div>
+      </div>
+    </div>
+
+    <details class="code-details" data-reveal>
+      <summary>
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        Peek at the code behind this
+      </summary>
+      <div class="code-card">
+        <div class="code-head">
+          <div class="head-left">
+            <div class="win-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <span class="filename mono">recalculate-deal-size.php</span>
+            <span class="lang-badge">PHP · Laravel</span>
+          </div>
+          <button class="copy-btn" id="copyCodeBtn" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+            <span id="copyCodeLabel">Copy</span>
+          </button>
+        </div>
+        <div class="code-body">
+          <div class="line-numbers" id="codeLineNumbers" aria-hidden="true"></div>
+          <pre><code id="codeSampleText"><span class="cm">// Simplified illustration — the actual production code is proprietary.</span>
+<span class="cm">// This mirrors the logic driving the simulator above.</span>
+
+<span class="kw">function</span> <span class="fn">recalculateDealSize</span>(Booking $booking, string $reason): void
+{
+    $previous = $booking->deal_size;
+    $updated  = $this->calculator->compute($booking);
+
+    <span class="cm">// idempotent — nothing to log if nothing actually changed</span>
+    <span class="kw">if</span> ($previous === $updated) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="fn">DB::transaction</span>(<span class="kw">function</span> () use ($booking, $previous, $updated, $reason) {
+        $booking->update(['deal_size' => $updated]);
+
+        <span class="fn">DealSizeAudit::create</span>([
+            'booking_id'     => $booking->id,
+            'previous_value' => $previous,
+            'new_value'      => $updated,
+            'reason'         => $reason,        <span class="cm">// e.g. 'refund_applied', 'gst_updated'</span>
+            'triggered_by'   => auth()->id() ?? 'system',
+        ]);
+    });
+}</code></pre>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
