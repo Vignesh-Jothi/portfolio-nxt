@@ -27,7 +27,7 @@ ACHIEVEMENTS.forEach(a=>{
   const card = document.createElement('div');
   card.className = 'ach-card';
   card.innerHTML = `
-    <span class="icon-badge" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a1 1 0 0 0-1 1 4 4 0 0 0 4 4M17 5h3a1 1 0 0 1 1 1 4 4 0 0 1-4 4"/></svg></span>
+    <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
     <div><span class="date">${a.date}</span><h3>${a.title}</h3><p>${a.description}</p></div>`;
   achGrid.appendChild(card);
 });
