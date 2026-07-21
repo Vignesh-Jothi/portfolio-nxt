@@ -283,10 +283,14 @@ function showPortfolio(){
     requestAnimationFrame(()=>viewPortfolio.classList.remove('view-hidden'));
   }, 180);
 }
-document.getElementById('navBlog').addEventListener('click', showBlog);
-document.getElementById('navBlogMobile').addEventListener('click', ()=>{ closeMobileNav(); showBlog(); });
-document.getElementById('backHome').addEventListener('click', (e)=>{ e.preventDefault(); showPortfolio(); });
-document.getElementById('brandHome').addEventListener('click', showPortfolio);
+const navBlog = document.getElementById('navBlog');
+if (navBlog) navBlog.addEventListener('click', showBlog);
+const navBlogMobile = document.getElementById('navBlogMobile');
+if (navBlogMobile) navBlogMobile.addEventListener('click', ()=>{ closeMobileNav(); showBlog(); });
+const backHome = document.getElementById('backHome');
+if (backHome) backHome.addEventListener('click', (e)=>{ e.preventDefault(); showPortfolio(); });
+const brandHome = document.getElementById('brandHome');
+if (brandHome) brandHome.addEventListener('click', showPortfolio);
 
 /* ---------- blog: storage-backed posts with passcode-gated admin ---------- */
 let isAdmin = false; // resets each session by design — no credentials persisted
