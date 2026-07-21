@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vignesh J — Resume</title>
+<meta name="description" content="Resume of Vignesh J, Backend-focused Software Engineer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="resume.css">
+<script>
+  (function(){
+    var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.documentElement.setAttribute('data-theme', prefersLight ? 'light' : 'dark');
+  })();
+</script>
+</head>
+<body>
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Back to portfolio">vignesh<span class="blink">_</span></a>
+    <div class="right">
+      <nav aria-label="Section navigation" id="mainNav">
+        <a href="#summary">summary</a>
+        <a href="#experience">experience</a>
+        <a href="#skills">skills</a>
+        <a href="#projects">projects</a>
+        <a href="#education">education</a>
+      </nav>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to light theme">
+        <svg class="icon-sun" aria-hidden="true"><use href="../icons/icons.svg#sun"></use></svg>
+        <svg class="icon-moon" aria-hidden="true"><use href="../icons/icons.svg#moon"></use></svg>
+      </button>
+      <button class="icon-btn hamburger" id="hamburgerBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg aria-hidden="true"><use href="../icons/icons.svg#menu"></use></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobileNav" class="mobile-nav" aria-label="Mobile navigation" hidden>
+    <a href="#summary">summary</a>
+    <a href="#experience">experience</a>
+    <a href="#skills">skills</a>
+    <a href="#projects">projects</a>
+    <a href="#education">education</a>
+  </nav>
+</div>
+
+<div class="page-actions no-print">
+  <a class="btn" href="../">← Back to portfolio</a>
+  <button class="btn primary" id="downloadBtn" type="button">
+    <svg class="btn-icon" aria-hidden="true"><use href="../icons/icons.svg#download"></use></svg>
+    Download / Print
+  </button>
+</div>
+
+<main class="resume-page" id="resumePage">
+  <div class="loading" id="loading">Loading resume…</div>
+</main>
+
+<script src="resume.js"></script>
+<script>
+  (function(){
+    var themeBtn = document.getElementById('themeToggle');
+    var hamburger = document.getElementById('hamburgerBtn');
+    var mobileNav = document.getElementById('mobileNav');
+
+    var currentTheme = document.documentElement.getAttribute('data-theme');
+    themeBtn.setAttribute('aria-label', currentTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+
+    themeBtn.addEventListener('click', function(){
+      var root = document.documentElement;
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    });
+
+    function closeMobileNav(){
+      mobileNav.classList.remove('open');
+      mobileNav.hidden = true;
+      hamburger.setAttribute('aria-expanded','false');
+    }
+    if(hamburger){
+      hamburger.addEventListener('click', function(){
+        var isOpen = mobileNav.classList.contains('open');
+        if(isOpen){ closeMobileNav(); }
+        else { mobileNav.hidden = false; requestAnimationFrame(function(){ mobileNav.classList.add('open'); }); hamburger.setAttribute('aria-expanded','true'); }
+      });
+      mobileNav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMobileNav); });
+    }
+  })();
+</script>
+</body>
+</html>
