@@ -27,7 +27,7 @@ ACHIEVEMENTS.forEach(a=>{
   const card = document.createElement('div');
   card.className = 'ach-card';
   card.innerHTML = `
-    <span class="icon-badge" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a1 1 0 0 0-1 1 4 4 0 0 0 4 4M17 5h3a1 1 0 0 1 1 1 4 4 0 0 1-4 4"/></svg></span>
+    <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
     <div><span class="date">${a.date}</span><h3>${a.title}</h3><p>${a.description}</p></div>`;
   achGrid.appendChild(card);
 });
@@ -283,10 +283,14 @@ function showPortfolio(){
     requestAnimationFrame(()=>viewPortfolio.classList.remove('view-hidden'));
   }, 180);
 }
-document.getElementById('navBlog').addEventListener('click', showBlog);
-document.getElementById('navBlogMobile').addEventListener('click', ()=>{ closeMobileNav(); showBlog(); });
-document.getElementById('backHome').addEventListener('click', (e)=>{ e.preventDefault(); showPortfolio(); });
-document.getElementById('brandHome').addEventListener('click', showPortfolio);
+const navBlog = document.getElementById('navBlog');
+if (navBlog) navBlog.addEventListener('click', showBlog);
+const navBlogMobile = document.getElementById('navBlogMobile');
+if (navBlogMobile) navBlogMobile.addEventListener('click', ()=>{ closeMobileNav(); showBlog(); });
+const backHome = document.getElementById('backHome');
+if (backHome) backHome.addEventListener('click', (e)=>{ e.preventDefault(); showPortfolio(); });
+const brandHome = document.getElementById('brandHome');
+if (brandHome) brandHome.addEventListener('click', showPortfolio);
 
 /* ---------- blog: storage-backed posts with passcode-gated admin ---------- */
 let isAdmin = false; // resets each session by design — no credentials persisted
