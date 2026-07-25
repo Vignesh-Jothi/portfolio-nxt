@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vignesh J — Resume</title>
-<meta name="description" content="Resume of Vignesh J, Backend-focused Software Engineer.">
+<meta name="description" content="Resume of Vignesh J, Software Engineer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="resume.css">
@@ -21,11 +21,9 @@
     <a class="brand" href="../" aria-label="Back to portfolio">Vignesh<span class="blink">_</span></a>
     <div class="right">
       <nav aria-label="Section navigation" id="mainNav">
-        <a href="#summary">summary</a>
         <a href="#experience">experience</a>
-        <a href="#achievements">achievements</a>
-        <a href="#skills">skills</a>
         <a href="#projects">projects</a>
+        <a href="#skills">skills</a>
         <a href="#education">education</a>
       </nav>
       <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to light theme">
@@ -38,11 +36,9 @@
     </div>
   </div>
   <nav id="mobileNav" class="mobile-nav" aria-label="Mobile navigation" hidden>
-    <a href="#summary">summary</a>
     <a href="#experience">experience</a>
-    <a href="#achievements">achievements</a>
-    <a href="#skills">skills</a>
     <a href="#projects">projects</a>
+    <a href="#skills">skills</a>
     <a href="#education">education</a>
   </nav>
 </div>
@@ -94,6 +90,20 @@
         else { mobileNav.hidden = false; requestAnimationFrame(function(){ mobileNav.classList.add('open'); }); hamburger.setAttribute('aria-expanded','true'); }
       });
       mobileNav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMobileNav); });
+    }
+
+    var navLinks = document.querySelectorAll('#mainNav a[href^="#"]');
+    var navSections = Array.prototype.slice.call(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+    if(navSections.length && 'IntersectionObserver' in window){
+      var navIo = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            var id = '#' + entry.target.id;
+            navLinks.forEach(function(a){ a.classList.toggle('current', a.getAttribute('href') === id); });
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      navSections.forEach(function(s){ navIo.observe(s); });
     }
   })();
 </script>

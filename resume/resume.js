@@ -14,8 +14,32 @@
     return `<a href="${url}" target="_blank" rel="noopener">${icon('link')}${text}</a>`;
   }
 
+  function parseMonthYear(str) {
+    const months = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
+    const parts = str.trim().split(/\s+/);
+    const m = parts[0] || '';
+    const y = parseInt(parts[1] || '0', 10);
+    return new Date(y, months[m.toLowerCase()] || 0, 1);
+  }
+
+  function calcYears(start) {
+    const now = new Date();
+    const s = new Date(start);
+    let years = now.getFullYear() - s.getFullYear();
+    if (now.getMonth() < s.getMonth() || (now.getMonth() === s.getMonth() && now.getDate() < s.getDate())) years--;
+    return Math.max(0, years);
+  }
+
+  function yearsFromExperience(jobs) {
+    if (!jobs || !jobs.length) return 0;
+    const starts = jobs.map(j => parseMonthYear(j.start));
+    const earliest = new Date(Math.min(...starts));
+    return calcYears(earliest);
+  }
+
   function render(data) {
     document.title = `${data.name} — Resume`;
+    const yoe = yearsFromExperience(data.experience);
 
     const contactItems = [
       `<a href="mailto:${data.contact.email}">${icon('mail')}${data.contact.email}</a>`,
@@ -97,7 +121,7 @@
 
         <section class="section section--summary" id="summary">
           <div class="section-title">Summary</div>
-          <p class="summary">${data.summary.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>
+          <p class="summary">${data.summary.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\{years\}/g, yoe)}</p>
         </section>
 
         <section class="section" id="experience">
