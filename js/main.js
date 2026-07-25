@@ -5,6 +5,20 @@
 
 function initPortfolio() {
 
+/* ---------- auto-calculated years of experience ---------- */
+function calcYears(start){
+  const now = new Date();
+  const s = new Date(start);
+  let years = now.getFullYear() - s.getFullYear();
+  if(now.getMonth() < s.getMonth() || (now.getMonth() === s.getMonth() && now.getDate() < s.getDate())) years--;
+  return Math.max(0, years);
+}
+const yoe = calcYears('2023-10-01');
+const expYearsStat = document.getElementById('expYearsStat');
+if(expYearsStat) expYearsStat.textContent = yoe + '+';
+const expYearsText = document.getElementById('expYearsText');
+if(expYearsText) expYearsText.textContent = yoe + '+ years';
+
 /* ---------- render testimonials & achievements ---------- */
 function initials(name){ return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
 
@@ -56,7 +70,7 @@ els.forEach(el=>io.observe(el));
 
 /* ---------- animated hero stat counters on scroll into view ---------- */
 const heroStatTargets = [
-  { el: document.querySelectorAll('.stat-card .num')[0], value: 2, suffix:'+' },
+  { el: document.querySelectorAll('.stat-card .num')[0], value: yoe, suffix:'+' },
   { el: document.querySelectorAll('.stat-card .num')[1], value: 400, suffix:'+' },
   { el: document.querySelectorAll('.stat-card .num')[2], value: 40, suffix:'%+' },
   { el: document.querySelectorAll('.stat-card .num')[3], value: 7, suffix:'' }
@@ -323,20 +337,6 @@ document.getElementById('contactForm').addEventListener('submit', (e)=>{
   const body = encodeURIComponent(`${msg}\n\n— ${name} (${email})`);
   window.location.href = `mailto:vigneshjothishwaran@gmail.com?subject=${subject}&body=${body}`;
 });
-
-/* ---------- auto-calculated years of experience ---------- */
-function calcYears(start){
-  const now = new Date();
-  const s = new Date(start);
-  let years = now.getFullYear() - s.getFullYear();
-  if(now.getMonth() < s.getMonth() || (now.getMonth() === s.getMonth() && now.getDate() < s.getDate())) years--;
-  return Math.max(0, years);
-}
-const yoe = calcYears('2023-10-01');
-const expYearsStat = document.getElementById('expYearsStat');
-if(expYearsStat) expYearsStat.textContent = yoe + '+';
-const expYearsText = document.getElementById('expYearsText');
-if(expYearsText) expYearsText.textContent = yoe + '+ years';
 
 /* ---------- view switching (portfolio <-> blog) ---------- */
 const viewPortfolio = document.getElementById('view-portfolio');

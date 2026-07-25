@@ -16,7 +16,7 @@
       "company": "PickYourTrail",
       "companyUrl": "https://pickyourtrail.com",
       "location": "Chennai, India",
-      "start": "2024 Sep",
+      "start": "Sep 2024",
       "end": "present",
       "bullets": [
         "Contributed to the migration of legacy systems to modern PHP and Laravel, improving maintainability and long-term scalability.",
@@ -35,7 +35,7 @@
       "companyUrl": "https://truetracking.com",
       "location": "Chennai, India",
       "start": "Oct 2023",
-      "end": "2024 Sep",
+      "end": "Sep 2024",
       "bullets": [
         "Improved API performance and database query efficiency, achieving 30% system performance gain.",
         "Implemented security enhancements (authentication hardening, encryption), reducing vulnerabilities.",
@@ -61,7 +61,7 @@
     {
       "name": "Plato",
       "type": "Internal CRM",
-      "start": "2024 Sep",
+      "start": "Sep 2024",
       "end": "Present",
       "bullets": [
         "A centralised CRM platform serving multiple departments (CX, Sales, Product, Visa, Finance).",
@@ -75,7 +75,7 @@
     {
       "name": "Locker Room",
       "type": "HRM",
-      "start": "2024 Dec",
+      "start": "Dec 2024",
       "end": "Present",
       "bullets": [
         "Internal HR management platform for employee data and performance monitoring.",
