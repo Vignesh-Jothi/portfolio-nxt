@@ -1,6 +1,6 @@
 {
   "name": "Vignesh J",
-  "title": "Backend-focused Software Engineer",
+  "title": "Software Engineer",
   "contact": {
     "email": "vigneshjothishwaran@gmail.com",
     "phone": "9360510389",
@@ -9,14 +9,14 @@
     "linkedin": "https://www.linkedin.com/in/vignesh-jothi",
     "github": "https://github.com/vignesh-jothi"
   },
-  "summary": "Backend-focused Software Engineer with 2+ years of experience building scalable internal systems using Laravel, PHP, MySQL, Redis, and modern frontend frameworks (React, Next.js). Currently working on high-impact internal platforms used by 400+ daily active users across CX, Finance, Sales, Product, and Visa teams. Experienced in system migration, API optimisation, workflow automation, caching strategies, cron-based processing, AI-assisted backend workflows, and performance tuning. Focused on building reliable, maintainable backend systems that reduce operational load and scale with business growth.",
+  "summary": "Software Engineer with {years}+ years of experience building scalable internal systems using Laravel, PHP, MySQL, Redis, and modern frontend frameworks (React, Next.js). Currently working on high-impact internal platforms used by 400+ daily active users across CX, Finance, Sales, Product, and Visa teams. Experienced in system migration, API optimisation, workflow automation, caching strategies, cron-based processing, AI-assisted backend workflows, and performance tuning. Focused on building reliable, maintainable backend systems that reduce operational load and scale with business growth.",
   "experience": [
     {
       "role": "Jr. Software Developer",
       "company": "PickYourTrail",
       "companyUrl": "https://pickyourtrail.com",
       "location": "Chennai, India",
-      "start": "2024 Sep",
+      "start": "Sep 2024",
       "end": "present",
       "bullets": [
         "Contributed to the migration of legacy systems to modern PHP and Laravel, improving maintainability and long-term scalability.",
@@ -34,8 +34,8 @@
       "company": "True Tracking",
       "companyUrl": "https://truetracking.com",
       "location": "Chennai, India",
-      "start": "2023 Oct",
-      "end": "2024 Sep",
+      "start": "Oct 2023",
+      "end": "Sep 2024",
       "bullets": [
         "Improved API performance and database query efficiency, achieving 30% system performance gain.",
         "Implemented security enhancements (authentication hardening, encryption), reducing vulnerabilities.",
@@ -61,7 +61,7 @@
     {
       "name": "Plato",
       "type": "Internal CRM",
-      "start": "2024 Sep",
+      "start": "Sep 2024",
       "end": "Present",
       "bullets": [
         "A centralised CRM platform serving multiple departments (CX, Sales, Product, Visa, Finance).",
@@ -75,7 +75,7 @@
     {
       "name": "Locker Room",
       "type": "HRM",
-      "start": "2024 Dec",
+      "start": "Dec 2024",
       "end": "Present",
       "bullets": [
         "Internal HR management platform for employee data and performance monitoring.",

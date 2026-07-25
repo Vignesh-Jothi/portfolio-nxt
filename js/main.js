@@ -5,6 +5,20 @@
 
 function initPortfolio() {
 
+/* ---------- auto-calculated years of experience ---------- */
+function calcYears(start){
+  const now = new Date();
+  const s = new Date(start);
+  let years = now.getFullYear() - s.getFullYear();
+  if(now.getMonth() < s.getMonth() || (now.getMonth() === s.getMonth() && now.getDate() < s.getDate())) years--;
+  return Math.max(0, years);
+}
+const yoe = calcYears('2023-10-01');
+const expYearsStat = document.getElementById('expYearsStat');
+if(expYearsStat) expYearsStat.textContent = yoe + '+';
+const expYearsText = document.getElementById('expYearsText');
+if(expYearsText) expYearsText.textContent = yoe + '+ years';
+
 /* ---------- render testimonials & achievements ---------- */
 function initials(name){ return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
 
@@ -56,7 +70,7 @@ els.forEach(el=>io.observe(el));
 
 /* ---------- animated hero stat counters on scroll into view ---------- */
 const heroStatTargets = [
-  { el: document.querySelectorAll('.stat-card .num')[0], value: 2, suffix:'+' },
+  { el: document.querySelectorAll('.stat-card .num')[0], value: yoe, suffix:'+' },
   { el: document.querySelectorAll('.stat-card .num')[1], value: 400, suffix:'+' },
   { el: document.querySelectorAll('.stat-card .num')[2], value: 40, suffix:'%+' },
   { el: document.querySelectorAll('.stat-card .num')[3], value: 7, suffix:'' }
@@ -79,7 +93,7 @@ const statsBlock = document.querySelector('.stats');
 if(statsBlock) heroStatsIO.observe(statsBlock);
 
 /* ---------- typewriter ---------- */
-const phrases = ["backend engineer @ PickYourTrail","spreadsheets → systems","40%+ faster APIs, on purpose","Laravel · PHP · MySQL · Redis"];
+const phrases = ["software engineer @ PickYourTrail","spreadsheets → systems","40%+ faster APIs, on purpose","Laravel · PHP · MySQL · Redis"];
 const twEl = document.getElementById('typewriter');
 let pi=0, ci=0, deleting=false;
 function tick(){
@@ -132,47 +146,108 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
 
   function fmt(n){ return '₹' + n.toLocaleString('en-IN'); }
 
+  function flashAmount(){
+    amountEl.classList.remove('flash');
+    void amountEl.offsetWidth;
+    amountEl.classList.add('flash');
+    setTimeout(()=>amountEl.classList.remove('flash'), 180);
+  }
+
+  function showDelta(delta){
+    deltaEl.textContent = (delta > 0 ? '+' : '−') + fmt(Math.abs(delta));
+    deltaEl.classList.remove('show');
+    void deltaEl.offsetWidth;
+    deltaEl.classList.add('show');
+  }
+
+  function showIdempotentNote(){
+    noteEl.classList.remove('show');
+    void noteEl.offsetWidth;
+    noteEl.classList.add('show');
+  }
+
   function renderLog(){
     if(!entries.length){ logList.innerHTML = '<p class="log-empty">No changes yet — trigger an event above.</p>'; return; }
     logList.innerHTML = entries.map(e => `
-      <div class="log-entry">
+      <div class="log-entry ${e.authorizer ? 'log-entry--negative' : ''}">
         <div class="log-left">
           <span class="log-reason">${e.reason}</span>
+          ${e.authorizer ? `<span class="log-authorizer">authorized by ${e.authorizer}</span>` : ''}
           <span class="log-values">${fmt(e.previous)} → ${fmt(e.updated)}</span>
         </div>
         <span class="log-time mono">${e.time}</span>
       </div>`).join('');
   }
 
-  function flashAmount(){
-    amountEl.classList.add('flash');
-    setTimeout(()=>amountEl.classList.remove('flash'), 350);
+  function confirmNegativeMargin(delta, updated){
+    return new Promise((resolve)=>{
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop';
+      backdrop.innerHTML = `
+        <div class="modal" role="dialog" aria-modal="true" aria-label="Negative margin warning">
+          <h3>Negative margin warning</h3>
+          <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">This reduction will make the deal size <strong>${fmt(updated)}</strong> (negative margin). Confirm to continue.</p>
+          <div class="field">
+            <label for="nmAuthorizer">Your name <span aria-hidden="true">*</span></label>
+            <input id="nmAuthorizer" type="text" required placeholder="Who authorized this?">
+          </div>
+          <div class="modal-actions">
+            <button class="btn primary small" id="nmConfirm" type="button" disabled>Reduce anyway</button>
+            <button class="btn small" id="nmCancel" type="button">Cancel</button>
+          </div>
+        </div>`;
+      document.body.appendChild(backdrop);
+      const input = backdrop.querySelector('#nmAuthorizer');
+      const confirmBtn = backdrop.querySelector('#nmConfirm');
+      input.focus();
+
+      function isValid(){ return !!input.value.trim(); }
+      function updateButton(){ confirmBtn.disabled = !isValid(); }
+      input.addEventListener('input', updateButton);
+
+      function close(result){
+        backdrop.remove();
+        resolve(result);
+      }
+
+      function tryConfirm(){
+        if(!isValid()){ input.reportValidity(); return; }
+        close({ confirmed: true, name: input.value.trim() });
+      }
+
+      backdrop.querySelector('#nmConfirm').addEventListener('click', tryConfirm);
+      backdrop.querySelector('#nmCancel').addEventListener('click', ()=>close({ confirmed: false }));
+      input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryConfirm(); });
+      backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) close({ confirmed: false }); });
+    });
   }
 
-  function showDelta(delta){
-    deltaEl.textContent = (delta > 0 ? '+' : '') + delta.toLocaleString('en-IN');
-    deltaEl.classList.add('show');
-    setTimeout(()=>deltaEl.classList.remove('show'), 1600);
-  }
+  let isConfirming = false;
 
-  function showIdempotentNote(){
-    noteEl.classList.add('show');
-    setTimeout(()=>noteEl.classList.remove('show'), 2200);
-  }
-
-  function applyEvent(key){
+  async function applyEvent(key){
+    if(isConfirming) return;
     if(key === 'noop'){ showIdempotentNote(); return; }
     const ev = EVENTS[key];
     if(!ev) return;
     const previous = value;
     const updated = value + ev.delta;
-    if(previous === updated){ showIdempotentNote(); return; } // real idempotency check
+    if(previous === updated){ showIdempotentNote(); return; }
+
+    let authorizer = '';
+    if(updated < 0){
+      isConfirming = true;
+      const result = await confirmNegativeMargin(ev.delta, updated);
+      isConfirming = false;
+      if(!result.confirmed) return;
+      authorizer = result.name;
+    }
+
     value = updated;
     amountEl.textContent = fmt(value);
     flashAmount();
     showDelta(ev.delta);
     entries.unshift({
-      previous, updated, reason: ev.reason,
+      previous, updated, reason: ev.reason, authorizer,
       time: new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' })
     });
     renderLog();
