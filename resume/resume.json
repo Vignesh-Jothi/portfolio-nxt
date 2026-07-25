@@ -5,7 +5,7 @@
     "email": "vigneshjothishwaran@gmail.com",
     "phone": "9360510389",
     "location": "Chennai, Tamilnadu",
-    "linktree": "https://linktr.ee/vignesh_jothi",
+    "linktree": "https://vignesh-jothi.github.io/LinkTree/",
     "linkedin": "https://www.linkedin.com/in/vignesh-jothi",
     "github": "https://github.com/vignesh-jothi"
   },
@@ -43,6 +43,11 @@
         "Assisted in cloud integration efforts, increasing system capacity by ~50%."
       ]
     }
+  ],
+  "achievements": [
+    { "title": "Top contributor — Plato & LockerRoom", "date": "2024 – 2025", "description": "#1 contributor on both plato-web and LockerRoom internal application." },
+    { "title": "10+ modules, 50+ features shipped", "date": "2024 – 2025", "description": "Delivered 10+ major modules and 50+ feature enhancements across Plato and LockerRoom." },
+    { "title": "End-to-end LockerRoom ownership", "date": "Dec 2024 → Present", "description": "Took full ownership of the HRM platform — features, bug fixes, and production support — as its primary engineering owner." }
   ],
   "skills": {
     "Architecture": ["System design", "API Design", "Database Optimisation", "Caching Strategies", "Workflow Automation"],
