@@ -1,7 +1,7 @@
 <section id="how-i-think" aria-labelledby="code-h">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <div><span class="tag">// how I think about it</span><h2 id="code-h">A pattern I reuse</h2><p>Instead of just showing code, try it — this is the shape of the idea behind the Deal Size Recalculation Engine, running in miniature. Trigger a few events and watch the audit log.</p></div>
+      <div><span class="tag">// how I think about it</span><h2 id="code-h">A pattern I reuse</h2><p>A compact version of the Deal Size Recalculation Engine, built to handle changes consistently while preserving a clear audit trail.</p></div>
     </div>
 
     <div class="sim-card" data-reveal>
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="sim-actions" role="group" aria-label="Trigger a booking event">
+      <div class="sim-actions" role="group" aria-label="Booking event controls">
         <button class="btn small sim-btn" data-action="refund">↓ Apply refund</button>
         <button class="btn small sim-btn" data-action="gst">↑ GST adjustment</button>
         <button class="btn small sim-btn" data-action="cancel">↓ Cancel line item</button>
@@ -33,7 +33,7 @@
           <span class="sim-label mono">AUDIT LOG</span>
           <button class="btn small danger" id="simReset" type="button">Reset</button>
         </div>
-        <div id="simLogList"><p class="log-empty">No changes yet — trigger an event above.</p></div>
+        <div id="simLogList"><p class="log-empty">No changes recorded yet.</p></div>
       </div>
     </div>
 
