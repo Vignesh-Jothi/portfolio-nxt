@@ -21,77 +21,78 @@ if(expYearsText) expYearsText.textContent = yoe + '+ years';
 
 /* ---------- render testimonials & achievements ---------- */
 const testGrid = document.getElementById('testGrid');
-TESTIMONIALS.forEach(t=>{
+const testDots = document.getElementById('testDots');
+TESTIMONIALS.forEach((t, i)=>{
+  const featured = t.quotes[0];
+  const initials = featured.name.split(' ').map(n=>n[0]).slice(0,2).join('');
+  const more = t.quotes.slice(1);
   const card = document.createElement('div');
   card.className = 'test-card';
+  card.dataset.index = i;
   card.innerHTML = `
+    <div class="test-card-header">
+      <div class="avatar" aria-hidden="true">${initials}</div>
+      <div class="test-card-meta">
+        <b>${featured.name}</b>
+        <span>${featured.role}</span>
+      </div>
+    </div>
     <div class="testimonial-story">
-      <span class="testimonial-tag mono">// ${t.tag}</span>
+      <span class="testimonial-tag mono">${t.tag}</span>
       <h3>${t.title}</h3>
       <p>${t.summary}</p>
     </div>
     <div class="testimonial-quotes">
-      ${t.quotes.map(q=>`
-        <figure class="testimonial-quote">
+      <figure class="testimonial-quote testimonial-quote--featured">
+        <blockquote>“${featured.quote}”</blockquote>
+      </figure>
+      ${more.map(q=>`
+        <figure class="testimonial-quote testimonial-quote--more">
           <blockquote>“${q.quote}”</blockquote>
           <figcaption><b>${q.name}</b><span>${q.role}</span></figcaption>
         </figure>`).join('')}
     </div>`;
   testGrid.appendChild(card);
+  if(testDots){
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot';
+    dot.type = 'button';
+    dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
+    testDots.appendChild(dot);
+  }
 });
 
 function initTestimonialCarousel(grid){
   const cards = Array.from(grid.children);
   if(cards.length < 2) return;
+  const dots = testDots ? Array.from(testDots.children) : [];
 
-  const cloneCount = Math.min(3, cards.length);
-  cards.slice(0, cloneCount).forEach(card=>{
-    const clone = card.cloneNode(true);
-    clone.classList.add('test-card--clone');
-    clone.setAttribute('aria-hidden', 'true');
-    grid.appendChild(clone);
+  function updateFocus(){
+    const carousel = grid.parentElement;
+    const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2;
+    let closest = null, closestDist = Infinity, closestIndex = 0;
+    cards.forEach((card, i)=>{
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(carouselCenter - cardCenter);
+      if(dist < closestDist){ closestDist = dist; closest = card; closestIndex = i; }
+    });
+    cards.forEach(card=>card.classList.toggle('in-focus', card === closest));
+    dots.forEach((dot, i)=>dot.classList.toggle('active', i === closestIndex));
+  }
+  grid.parentElement.addEventListener('scroll', updateFocus, { passive:true });
+  window.addEventListener('resize', updateFocus);
+
+  dots.forEach((dot, i)=>{
+    dot.addEventListener('click', ()=>{
+      const card = cards[i];
+      if(!card) return;
+      grid.parentElement.scrollTo({ left: card.offsetLeft - (grid.parentElement.clientWidth - card.offsetWidth) / 2, behavior:'smooth' });
+    });
   });
+
+  updateFocus();
 
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  let index = 0;
-  let paused = false;
-  const positionTrack = ()=>{
-    const card = grid.querySelector('.test-card');
-    const gap = parseFloat(window.getComputedStyle(grid).gap) || 0;
-    grid.style.transform = `translateX(-${index * (card.getBoundingClientRect().width + gap)}px)`;
-  };
-  const advance = ()=>{
-    if(paused) return;
-    index += 1;
-    positionTrack();
-  };
-
-  window.setInterval(advance, 4500);
-  const pause = ()=>{ paused = true; };
-  const resume = ()=>{ paused = false; };
-
-  grid.addEventListener('transitionend', event=>{
-    if(event.target !== grid || event.propertyName !== 'transform' || index !== cards.length) return;
-    grid.classList.add('is-resetting');
-    index = 0;
-    positionTrack();
-    requestAnimationFrame(()=>requestAnimationFrame(()=>grid.classList.remove('is-resetting')));
-  });
-  grid.addEventListener('pointerenter', pause);
-  grid.addEventListener('pointerleave', resume);
-  grid.addEventListener('focusin', pause);
-  grid.addEventListener('focusout', ()=>{
-    window.setTimeout(()=>{
-      if(!grid.contains(document.activeElement)) resume();
-    }, 0);
-  });
-  window.addEventListener('resize', ()=>{
-    if(index === 0) return;
-    grid.classList.add('is-resetting');
-    positionTrack();
-    requestAnimationFrame(()=>grid.classList.remove('is-resetting'));
-  });
 }
 
 initTestimonialCarousel(testGrid);
@@ -118,7 +119,7 @@ window.addEventListener('scroll', updateScrollProgress, { passive:true });
 updateScrollProgress();
 
 /* ---------- reveal on scroll, staggered within each group ---------- */
-const revealGroups = [document.querySelectorAll('.test-grid > *'), document.querySelectorAll('.ach-grid > *')];
+const revealGroups = [document.querySelectorAll('.ach-grid > *')];
 revealGroups.forEach(group=>{
   group.forEach((el,i)=>{ el.setAttribute('data-reveal',''); el.style.transitionDelay = Math.min(i*70,280)+'ms'; });
 });
@@ -388,15 +389,18 @@ themeBtn.addEventListener('click', ()=>{
 });
 
 /* ---------- contact form -> mailto ---------- */
-document.getElementById('contactForm').addEventListener('submit', (e)=>{
-  e.preventDefault();
-  const name = document.getElementById('cf-name').value;
-  const email = document.getElementById('cf-email').value;
-  const msg = document.getElementById('cf-msg').value;
-  const subject = encodeURIComponent(`Portfolio contact from ${name}`);
-  const body = encodeURIComponent(`${msg}\n\n— ${name} (${email})`);
-  window.location.href = `mailto:vigneshjothishwaran@gmail.com?subject=${subject}&body=${body}`;
-});
+const contactForm = document.getElementById('contactForm');
+if(contactForm){
+  contactForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('cf-name').value;
+    const email = document.getElementById('cf-email').value;
+    const msg = document.getElementById('cf-msg').value;
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(`${msg}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:vigneshjothishwaran@gmail.com?subject=${subject}&body=${body}`;
+  });
+}
 
 /* ---------- view switching (portfolio <-> blog) ---------- */
 const viewPortfolio = document.getElementById('view-portfolio');
@@ -486,10 +490,12 @@ async function publishPost(title, body){
 
 /* ---------- admin modal ---------- */
 const adminBtn = document.getElementById('adminBtn');
-adminBtn.addEventListener('click', ()=>{
-  if(isAdmin){ openComposer(); return; }
-  openPasscodeModal();
-});
+if(adminBtn){
+  adminBtn.addEventListener('click', ()=>{
+    if(isAdmin){ openComposer(); return; }
+    openPasscodeModal();
+  });
+}
 
 function openPasscodeModal(){
   const backdrop = document.createElement('div');

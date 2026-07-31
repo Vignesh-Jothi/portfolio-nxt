@@ -8,7 +8,7 @@ const TESTIMONIALS = [
   {
     tag: "Trippie launch",
     title: "A faster, smoother Trippie experience",
-    summary: "Two launches shipped in under a week: a Test Arena for Trip Custodians and a migration from MCP to function calling, reducing failed escalations and making responses faster.",
+    summary: "Two launches shipped in under a week: a Test Arena for Trip Custodians and a migration from function calling to MCP, reducing failed escalations and making responses faster.",
     quotes: [
       { name: "Nishanth Thilagar", role: "Product Manager, PickYourTrail", quote: "Vignesh scoped, built, and launched both improvements in rapid succession, making Trippie genuinely better for customers." },
       { name: "Business Owner", role: "PickYourTrail", quote: "Two Trippie launches in under a week, with customers feeling the difference within hours — that’s real impact." }
