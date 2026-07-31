@@ -167,7 +167,7 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
   }
 
   function renderLog(){
-    if(!entries.length){ logList.innerHTML = '<p class="log-empty">No changes yet — trigger an event above.</p>'; return; }
+    if(!entries.length){ logList.innerHTML = '<p class="log-empty">No changes recorded yet.</p>'; return; }
     logList.innerHTML = entries.map(e => `
       <div class="log-entry ${e.authorizer ? 'log-entry--negative' : ''}">
         <div class="log-left">
