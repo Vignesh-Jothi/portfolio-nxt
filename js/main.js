@@ -36,6 +36,62 @@ TESTIMONIALS.forEach(t=>{
   testGrid.appendChild(card);
 });
 
+function initTestimonialCarousel(grid){
+  const cards = Array.from(grid.children);
+  if(cards.length < 2) return;
+
+  const cloneCount = Math.min(3, cards.length);
+  cards.slice(0, cloneCount).forEach(card=>{
+    const clone = card.cloneNode(true);
+    clone.classList.add('test-card--clone');
+    clone.setAttribute('aria-hidden', 'true');
+    grid.appendChild(clone);
+  });
+
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let index = 0;
+  let paused = false;
+  const positionTrack = ()=>{
+    const card = grid.querySelector('.test-card');
+    const gap = parseFloat(window.getComputedStyle(grid).gap) || 0;
+    grid.style.transform = `translateX(-${index * (card.getBoundingClientRect().width + gap)}px)`;
+  };
+  const advance = ()=>{
+    if(paused) return;
+    index += 1;
+    positionTrack();
+  };
+
+  window.setInterval(advance, 4500);
+  const pause = ()=>{ paused = true; };
+  const resume = ()=>{ paused = false; };
+
+  grid.addEventListener('transitionend', event=>{
+    if(event.target !== grid || event.propertyName !== 'transform' || index !== cards.length) return;
+    grid.classList.add('is-resetting');
+    index = 0;
+    positionTrack();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>grid.classList.remove('is-resetting')));
+  });
+  grid.addEventListener('pointerenter', pause);
+  grid.addEventListener('pointerleave', resume);
+  grid.addEventListener('focusin', pause);
+  grid.addEventListener('focusout', ()=>{
+    window.setTimeout(()=>{
+      if(!grid.contains(document.activeElement)) resume();
+    }, 0);
+  });
+  window.addEventListener('resize', ()=>{
+    if(index === 0) return;
+    grid.classList.add('is-resetting');
+    positionTrack();
+    requestAnimationFrame(()=>grid.classList.remove('is-resetting'));
+  });
+}
+
+initTestimonialCarousel(testGrid);
+
 const achGrid = document.getElementById('achGrid');
 ACHIEVEMENTS.forEach(a=>{
   const card = document.createElement('div');

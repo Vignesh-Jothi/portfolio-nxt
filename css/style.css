@@ -216,9 +216,13 @@ footer{ border-bottom:none; }
 .quote-strip{ margin-top:var(--s3); padding:var(--s2) var(--s3); border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; font-size:14.5px; color:var(--ink); font-style:italic; }
 
 /* ---------- testimonials ---------- */
-.test-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--s3); }
-@media (max-width:720px){ .test-grid{ grid-template-columns:1fr; } }
-.test-card{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:var(--s3); display:flex; flex-direction:column; gap:var(--s2); }
+.testimonials-carousel{ overflow:hidden; padding:6px 0 10px; }
+.test-grid{ --testimonial-card-width:calc(33.333% - 16px); display:flex; gap:var(--s3); transition:transform .55s cubic-bezier(.22,1,.36,1); will-change:transform; }
+.test-grid.is-resetting{ transition:none; }
+.test-card{ flex:0 0 var(--testimonial-card-width); min-width:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:var(--s3); display:flex; flex-direction:column; gap:var(--s2); }
+@media (max-width:960px){ .test-grid{ --testimonial-card-width:calc(50% - 12px); } }
+@media (max-width:720px){ .test-grid{ --testimonial-card-width:100%; } }
+@media (prefers-reduced-motion: reduce){ .test-grid{ transition:none; } }
 .test-quote-mark{ font-family:'Bricolage Grotesque',sans-serif; font-size:32px; color:var(--accent-fg); line-height:1; }
 .test-card p.quote{ font-size:15px; color:var(--ink); max-width:none; }
 .test-person{ display:flex; align-items:center; gap:var(--s2); margin-top:auto; }
