@@ -1,6 +1,6 @@
 /* ============================================================
    MAIN — all interactive logic for the portfolio.
-   Depends on: js/data.js (TESTIMONIALS, ACHIEVEMENTS, ADMIN_PASSCODE)
+   Depends on: js/data.js (TESTIMONIALS, ACHIEVEMENTS)
    ============================================================ */
 
 function initPortfolio() {
@@ -431,119 +431,34 @@ if (backHome) backHome.addEventListener('click', (e)=>{ e.preventDefault(); show
 const brandHome = document.getElementById('brandHome');
 if (brandHome) brandHome.addEventListener('click', showPortfolio);
 
-/* ---------- blog: storage-backed posts with passcode-gated admin ---------- */
-let isAdmin = false; // resets each session by design — no credentials persisted
+/* ---------- blog: public read-only post list ---------- */
 const postsList = document.getElementById('postsList');
-const storageWarning = document.getElementById('storageWarning');
 
 async function loadPosts(){
+  if(!postsList) return;
   postsList.innerHTML = '<p class="empty-state">Loading…</p>';
-  if(!(window.storage)){ storageWarning.hidden = false; renderPosts([]); return; }
   try{
+    if(!window.storage) throw new Error('storage unavailable');
     const res = await window.storage.get('blog:posts', true);
     const posts = res && res.value ? JSON.parse(res.value) : [];
-    storageWarning.hidden = true;
     renderPosts(posts);
   } catch(e){
-    storageWarning.hidden = false;
     renderPosts([]);
   }
 }
 
 function renderPosts(posts){
-  if(!posts.length){ postsList.innerHTML = '<p class="empty-state">No posts yet.' + (isAdmin ? ' Use the composer above to publish your first one.' : '') + '</p>'; }
-  else {
-    postsList.innerHTML = posts.map((p,i)=>`
-      <article class="post-card">
-        <span class="p-date mono">${p.date}</span>
-        <h3>${p.title}</h3>
-        <div class="p-body">${p.body}</div>
-        ${isAdmin ? `<div class="p-actions"><button class="btn small danger" data-idx="${i}" data-action="delete">Delete</button></div>` : ''}
-      </article>`).join('');
+  if(!postsList) return;
+  if(!posts.length){
+    postsList.innerHTML = '<p class="empty-state">Blog not found.</p>';
+    return;
   }
-  if(isAdmin){
-    postsList.querySelectorAll('[data-action="delete"]').forEach(b=>{
-      b.addEventListener('click', ()=>deletePost(parseInt(b.dataset.idx,10)));
-    });
-  }
-}
-
-async function savePosts(posts){
-  await window.storage.set('blog:posts', JSON.stringify(posts), true);
-}
-
-async function deletePost(idx){
-  const res = await window.storage.get('blog:posts', true);
-  const posts = res && res.value ? JSON.parse(res.value) : [];
-  posts.splice(idx,1);
-  await savePosts(posts);
-  loadPosts();
-}
-
-async function publishPost(title, body){
-  let posts = [];
-  try{ const res = await window.storage.get('blog:posts', true); posts = res && res.value ? JSON.parse(res.value) : []; } catch(e){}
-  posts.unshift({ title, body, date: new Date().toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' }) });
-  await savePosts(posts);
-  loadPosts();
-}
-
-/* ---------- admin modal ---------- */
-const adminBtn = document.getElementById('adminBtn');
-if(adminBtn){
-  adminBtn.addEventListener('click', ()=>{
-    if(isAdmin){ openComposer(); return; }
-    openPasscodeModal();
-  });
-}
-
-function openPasscodeModal(){
-  const backdrop = document.createElement('div');
-  backdrop.className = 'modal-backdrop';
-  backdrop.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Admin login">
-      <h3>Admin access</h3>
-      <div class="field"><label for="pw">Passcode</label><input id="pw" type="password" autocomplete="off"></div>
-      <p class="err" id="pwErr">Incorrect passcode.</p>
-      <div class="modal-actions">
-        <button class="btn primary small" id="pwSubmit" type="button">Unlock</button>
-        <button class="btn small" id="pwCancel" type="button">Cancel</button>
-      </div>
-    </div>`;
-  document.body.appendChild(backdrop);
-  const pwInput = backdrop.querySelector('#pw');
-  pwInput.focus();
-  backdrop.querySelector('#pwCancel').addEventListener('click', ()=>backdrop.remove());
-  backdrop.querySelector('#pwSubmit').addEventListener('click', tryUnlock);
-  pwInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryUnlock(); });
-  function tryUnlock(){
-    if(pwInput.value === ADMIN_PASSCODE){ isAdmin = true; backdrop.remove(); adminBtn.textContent = '🔓 New Post'; loadPosts(); openComposer(); }
-    else { backdrop.querySelector('#pwErr').style.display = 'block'; }
-  }
-}
-
-function openComposer(){
-  const backdrop = document.createElement('div');
-  backdrop.className = 'modal-backdrop';
-  backdrop.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true" aria-label="New blog post">
-      <h3>New post</h3>
-      <div class="field"><label for="pt">Title</label><input id="pt" type="text"></div>
-      <div class="field"><label for="pb">Body</label><textarea id="pb" style="min-height:160px;"></textarea></div>
-      <div class="modal-actions">
-        <button class="btn primary small" id="pubBtn" type="button">Publish</button>
-        <button class="btn small" id="pcCancel" type="button">Cancel</button>
-      </div>
-    </div>`;
-  document.body.appendChild(backdrop);
-  backdrop.querySelector('#pcCancel').addEventListener('click', ()=>backdrop.remove());
-  backdrop.querySelector('#pubBtn').addEventListener('click', async ()=>{
-    const title = backdrop.querySelector('#pt').value.trim();
-    const body = backdrop.querySelector('#pb').value.trim();
-    if(!title || !body) return;
-    await publishPost(title, body);
-    backdrop.remove();
-  });
+  postsList.innerHTML = posts.map(p=>`
+    <article class="post-card">
+      <span class="p-date mono">${p.date}</span>
+      <h3>${p.title}</h3>
+      <div class="p-body">${p.body}</div>
+    </article>`).join('');
 }
 
 } // end initPortfolio

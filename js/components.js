@@ -16,7 +16,7 @@
     await Promise.all(placeholders.map(async function (node) {
       const src = node.getAttribute('data-include');
       try {
-        const res = await fetch(src, { credentials: 'same-origin' });
+        const res = await fetch(src, { credentials: 'same-origin', cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status + ' for ' + src);
         const html = await res.text();
         node.outerHTML = html;
