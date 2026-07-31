@@ -41,12 +41,15 @@ Then visit `http://localhost:8000` (or the port shown by your server).
 ```
 portfolio/
 ├── index.html          # Entry point; wires components together
+├── admin/
+│   └── index.html      # Passcode-protected blog admin (/admin)
 ├── css/
 │   └── style.css       # Design system and component styles
 ├── js/
 │   ├── components.js   # Loads HTML fragments into [data-include] placeholders
 │   ├── data.js         # Content data (testimonials, achievements, passcode)
-│   └── main.js         # Navigation, theme toggle, mobile menu, view switching
+│   ├── main.js         # Navigation, theme toggle, mobile menu, view switching
+│   └── admin.js        # Admin-only blog composer and delete controls
 └── components/
     ├── topbar.html
     ├── hero.html

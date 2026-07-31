@@ -1,6 +1,6 @@
 /* ============================================================
    MAIN — all interactive logic for the portfolio.
-   Depends on: js/data.js (TESTIMONIALS, ACHIEVEMENTS, ADMIN_PASSCODE)
+   Depends on: js/data.js (TESTIMONIALS, ACHIEVEMENTS)
    ============================================================ */
 
 function initPortfolio() {
@@ -20,21 +20,82 @@ const expYearsText = document.getElementById('expYearsText');
 if(expYearsText) expYearsText.textContent = yoe + '+ years';
 
 /* ---------- render testimonials & achievements ---------- */
-function initials(name){ return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
-
 const testGrid = document.getElementById('testGrid');
-TESTIMONIALS.forEach(t=>{
+const testDots = document.getElementById('testDots');
+TESTIMONIALS.forEach((t, i)=>{
+  const featured = t.quotes[0];
+  const initials = featured.name.split(' ').map(n=>n[0]).slice(0,2).join('');
+  const more = t.quotes.slice(1);
   const card = document.createElement('div');
   card.className = 'test-card';
+  card.dataset.index = i;
   card.innerHTML = `
-    <div class="test-quote-mark" aria-hidden="true">"</div>
-    <p class="quote">${t.quote}</p>
-    <div class="test-person">
-      <div class="avatar" aria-hidden="true">${initials(t.name)}</div>
-      <div class="who"><b>${t.name}</b><span>${t.role}</span></div>
+    <div class="test-card-header">
+      <div class="avatar" aria-hidden="true">${initials}</div>
+      <div class="test-card-meta">
+        <b>${featured.name}</b>
+        <span>${featured.role}</span>
+      </div>
+    </div>
+    <div class="testimonial-story">
+      <span class="testimonial-tag mono">${t.tag}</span>
+      <h3>${t.title}</h3>
+      <p>${t.summary}</p>
+    </div>
+    <div class="testimonial-quotes">
+      <figure class="testimonial-quote testimonial-quote--featured">
+        <blockquote>“${featured.quote}”</blockquote>
+      </figure>
+      ${more.map(q=>`
+        <figure class="testimonial-quote testimonial-quote--more">
+          <blockquote>“${q.quote}”</blockquote>
+          <figcaption><b>${q.name}</b><span>${q.role}</span></figcaption>
+        </figure>`).join('')}
     </div>`;
   testGrid.appendChild(card);
+  if(testDots){
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot';
+    dot.type = 'button';
+    dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
+    testDots.appendChild(dot);
+  }
 });
+
+function initTestimonialCarousel(grid){
+  const cards = Array.from(grid.children);
+  if(cards.length < 2) return;
+  const dots = testDots ? Array.from(testDots.children) : [];
+
+  function updateFocus(){
+    const carousel = grid.parentElement;
+    const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2;
+    let closest = null, closestDist = Infinity, closestIndex = 0;
+    cards.forEach((card, i)=>{
+      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(carouselCenter - cardCenter);
+      if(dist < closestDist){ closestDist = dist; closest = card; closestIndex = i; }
+    });
+    cards.forEach(card=>card.classList.toggle('in-focus', card === closest));
+    dots.forEach((dot, i)=>dot.classList.toggle('active', i === closestIndex));
+  }
+  grid.parentElement.addEventListener('scroll', updateFocus, { passive:true });
+  window.addEventListener('resize', updateFocus);
+
+  dots.forEach((dot, i)=>{
+    dot.addEventListener('click', ()=>{
+      const card = cards[i];
+      if(!card) return;
+      grid.parentElement.scrollTo({ left: card.offsetLeft - (grid.parentElement.clientWidth - card.offsetWidth) / 2, behavior:'smooth' });
+    });
+  });
+
+  updateFocus();
+
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+}
+
+initTestimonialCarousel(testGrid);
 
 const achGrid = document.getElementById('achGrid');
 ACHIEVEMENTS.forEach(a=>{
@@ -58,7 +119,7 @@ window.addEventListener('scroll', updateScrollProgress, { passive:true });
 updateScrollProgress();
 
 /* ---------- reveal on scroll, staggered within each group ---------- */
-const revealGroups = [document.querySelectorAll('.test-grid > *'), document.querySelectorAll('.ach-grid > *')];
+const revealGroups = [document.querySelectorAll('.ach-grid > *')];
 revealGroups.forEach(group=>{
   group.forEach((el,i)=>{ el.setAttribute('data-reveal',''); el.style.transitionDelay = Math.min(i*70,280)+'ms'; });
 });
@@ -328,15 +389,18 @@ themeBtn.addEventListener('click', ()=>{
 });
 
 /* ---------- contact form -> mailto ---------- */
-document.getElementById('contactForm').addEventListener('submit', (e)=>{
-  e.preventDefault();
-  const name = document.getElementById('cf-name').value;
-  const email = document.getElementById('cf-email').value;
-  const msg = document.getElementById('cf-msg').value;
-  const subject = encodeURIComponent(`Portfolio contact from ${name}`);
-  const body = encodeURIComponent(`${msg}\n\n— ${name} (${email})`);
-  window.location.href = `mailto:vigneshjothishwaran@gmail.com?subject=${subject}&body=${body}`;
-});
+const contactForm = document.getElementById('contactForm');
+if(contactForm){
+  contactForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('cf-name').value;
+    const email = document.getElementById('cf-email').value;
+    const msg = document.getElementById('cf-msg').value;
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(`${msg}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:vigneshjothishwaran@gmail.com?subject=${subject}&body=${body}`;
+  });
+}
 
 /* ---------- view switching (portfolio <-> blog) ---------- */
 const viewPortfolio = document.getElementById('view-portfolio');
@@ -367,117 +431,34 @@ if (backHome) backHome.addEventListener('click', (e)=>{ e.preventDefault(); show
 const brandHome = document.getElementById('brandHome');
 if (brandHome) brandHome.addEventListener('click', showPortfolio);
 
-/* ---------- blog: storage-backed posts with passcode-gated admin ---------- */
-let isAdmin = false; // resets each session by design — no credentials persisted
+/* ---------- blog: public read-only post list ---------- */
 const postsList = document.getElementById('postsList');
-const storageWarning = document.getElementById('storageWarning');
 
 async function loadPosts(){
+  if(!postsList) return;
   postsList.innerHTML = '<p class="empty-state">Loading…</p>';
-  if(!(window.storage)){ storageWarning.hidden = false; renderPosts([]); return; }
   try{
+    if(!window.storage) throw new Error('storage unavailable');
     const res = await window.storage.get('blog:posts', true);
     const posts = res && res.value ? JSON.parse(res.value) : [];
-    storageWarning.hidden = true;
     renderPosts(posts);
   } catch(e){
-    storageWarning.hidden = false;
     renderPosts([]);
   }
 }
 
 function renderPosts(posts){
-  if(!posts.length){ postsList.innerHTML = '<p class="empty-state">No posts yet.' + (isAdmin ? ' Use the composer above to publish your first one.' : '') + '</p>'; }
-  else {
-    postsList.innerHTML = posts.map((p,i)=>`
-      <article class="post-card">
-        <span class="p-date mono">${p.date}</span>
-        <h3>${p.title}</h3>
-        <div class="p-body">${p.body}</div>
-        ${isAdmin ? `<div class="p-actions"><button class="btn small danger" data-idx="${i}" data-action="delete">Delete</button></div>` : ''}
-      </article>`).join('');
+  if(!postsList) return;
+  if(!posts.length){
+    postsList.innerHTML = '<p class="empty-state">Blog not found.</p>';
+    return;
   }
-  if(isAdmin){
-    postsList.querySelectorAll('[data-action="delete"]').forEach(b=>{
-      b.addEventListener('click', ()=>deletePost(parseInt(b.dataset.idx,10)));
-    });
-  }
-}
-
-async function savePosts(posts){
-  await window.storage.set('blog:posts', JSON.stringify(posts), true);
-}
-
-async function deletePost(idx){
-  const res = await window.storage.get('blog:posts', true);
-  const posts = res && res.value ? JSON.parse(res.value) : [];
-  posts.splice(idx,1);
-  await savePosts(posts);
-  loadPosts();
-}
-
-async function publishPost(title, body){
-  let posts = [];
-  try{ const res = await window.storage.get('blog:posts', true); posts = res && res.value ? JSON.parse(res.value) : []; } catch(e){}
-  posts.unshift({ title, body, date: new Date().toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' }) });
-  await savePosts(posts);
-  loadPosts();
-}
-
-/* ---------- admin modal ---------- */
-const adminBtn = document.getElementById('adminBtn');
-adminBtn.addEventListener('click', ()=>{
-  if(isAdmin){ openComposer(); return; }
-  openPasscodeModal();
-});
-
-function openPasscodeModal(){
-  const backdrop = document.createElement('div');
-  backdrop.className = 'modal-backdrop';
-  backdrop.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Admin login">
-      <h3>Admin access</h3>
-      <div class="field"><label for="pw">Passcode</label><input id="pw" type="password" autocomplete="off"></div>
-      <p class="err" id="pwErr">Incorrect passcode.</p>
-      <div class="modal-actions">
-        <button class="btn primary small" id="pwSubmit" type="button">Unlock</button>
-        <button class="btn small" id="pwCancel" type="button">Cancel</button>
-      </div>
-    </div>`;
-  document.body.appendChild(backdrop);
-  const pwInput = backdrop.querySelector('#pw');
-  pwInput.focus();
-  backdrop.querySelector('#pwCancel').addEventListener('click', ()=>backdrop.remove());
-  backdrop.querySelector('#pwSubmit').addEventListener('click', tryUnlock);
-  pwInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryUnlock(); });
-  function tryUnlock(){
-    if(pwInput.value === ADMIN_PASSCODE){ isAdmin = true; backdrop.remove(); adminBtn.textContent = '🔓 New Post'; loadPosts(); openComposer(); }
-    else { backdrop.querySelector('#pwErr').style.display = 'block'; }
-  }
-}
-
-function openComposer(){
-  const backdrop = document.createElement('div');
-  backdrop.className = 'modal-backdrop';
-  backdrop.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true" aria-label="New blog post">
-      <h3>New post</h3>
-      <div class="field"><label for="pt">Title</label><input id="pt" type="text"></div>
-      <div class="field"><label for="pb">Body</label><textarea id="pb" style="min-height:160px;"></textarea></div>
-      <div class="modal-actions">
-        <button class="btn primary small" id="pubBtn" type="button">Publish</button>
-        <button class="btn small" id="pcCancel" type="button">Cancel</button>
-      </div>
-    </div>`;
-  document.body.appendChild(backdrop);
-  backdrop.querySelector('#pcCancel').addEventListener('click', ()=>backdrop.remove());
-  backdrop.querySelector('#pubBtn').addEventListener('click', async ()=>{
-    const title = backdrop.querySelector('#pt').value.trim();
-    const body = backdrop.querySelector('#pb').value.trim();
-    if(!title || !body) return;
-    await publishPost(title, body);
-    backdrop.remove();
-  });
+  postsList.innerHTML = posts.map(p=>`
+    <article class="post-card">
+      <span class="p-date mono">${p.date}</span>
+      <h3>${p.title}</h3>
+      <div class="p-body">${p.body}</div>
+    </article>`).join('');
 }
 
 } // end initPortfolio

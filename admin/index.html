@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Admin — Vignesh J</title>
+<meta name="description" content="Admin interface for the blog.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230A0A0A'/%3E%3Ctext x='12' y='17' font-family='monospace' font-size='14' font-weight='700' fill='%232563EB' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script>
+  (function(){
+    var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.documentElement.setAttribute('data-theme', prefersLight ? 'light' : 'dark');
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<div class="topbar">
+  <div class="wrap">
+    <a href="../" class="brand">Vignesh<span class="blink">_</span></a>
+    <div class="right">
+      <nav aria-label="Admin navigation">
+        <a href="../">Portfolio</a>
+        <a href="../" id="adminToBlog">Back to site</a>
+      </nav>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to light theme">
+        <svg class="icon-sun" aria-hidden="true"><use href="../icons/icons.svg#sun"></use></svg>
+        <svg class="icon-moon" aria-hidden="true"><use href="../icons/icons.svg#moon"></use></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+  <div class="wrap blog-header">
+    <div class="row">
+      <div>
+        <h1>Blog Admin</h1>
+        <p class="mono" style="color:var(--muted); font-size:13px;">Manage posts. Changes are saved only in the current environment.</p>
+      </div>
+      <button class="btn small" id="adminBtn" type="button" hidden>🔒 Admin</button>
+    </div>
+  </div>
+  <section style="border-bottom:none;">
+    <div class="wrap">
+      <div id="postsList"></div>
+      <div class="storage-note" id="storageWarning" hidden>⚠ Post storage isn't available in this environment (it only works while viewing inside Claude). Posts you add won't be saved if you self-host this file without a backend.</div>
+    </div>
+  </section>
+</main>
+
+<script src="../js/data.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>
