@@ -20,18 +20,22 @@ const expYearsText = document.getElementById('expYearsText');
 if(expYearsText) expYearsText.textContent = yoe + '+ years';
 
 /* ---------- render testimonials & achievements ---------- */
-function initials(name){ return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
-
 const testGrid = document.getElementById('testGrid');
 TESTIMONIALS.forEach(t=>{
   const card = document.createElement('div');
   card.className = 'test-card';
   card.innerHTML = `
-    <div class="test-quote-mark" aria-hidden="true">"</div>
-    <p class="quote">${t.quote}</p>
-    <div class="test-person">
-      <div class="avatar" aria-hidden="true">${initials(t.name)}</div>
-      <div class="who"><b>${t.name}</b><span>${t.role}</span></div>
+    <div class="testimonial-story">
+      <span class="testimonial-tag mono">// ${t.tag}</span>
+      <h3>${t.title}</h3>
+      <p>${t.summary}</p>
+    </div>
+    <div class="testimonial-quotes">
+      ${t.quotes.map(q=>`
+        <figure class="testimonial-quote">
+          <blockquote>“${q.quote}”</blockquote>
+          <figcaption><b>${q.name}</b><span>${q.role}</span></figcaption>
+        </figure>`).join('')}
     </div>`;
   testGrid.appendChild(card);
 });
