@@ -1,52 +1,56 @@
-<section id="how-i-think" class="alt" aria-labelledby="code-h">
+<section id="ai-rules" class="alt" aria-labelledby="rules-h">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <div><span class="tag">// how I think about it</span><h2 id="code-h">A pattern I reuse</h2><p>A compact version of the Deal Size Recalculation Engine, built to handle changes consistently while preserving a clear audit trail.</p></div>
+      <div><span class="tag">// how the AI decides</span><h2 id="rules-h">The stage-rule engine</h2><p>A compact version of the call-intelligence pipeline from the story above — feed it a call, watch the AI decide what happens next. No human in the loop.</p></div>
     </div>
 
     <div class="sim-card" data-reveal>
       <div class="sim-top">
         <div class="sim-booking">
-          <span class="sim-label mono">BOOKING #PYT-4471 · DEAL SIZE</span>
-          <div class="sim-amount-row">
-            <span class="sim-amount mono" id="simAmount">₹42,000</span>
-            <span class="sim-delta mono" id="simDelta"></span>
-          </div>
-          <span class="idempotent-note mono" id="idempotentNote">✓ Idempotent — recalculated, nothing changed, nothing logged</span>
+          <span class="sim-label mono">LIVE CALL #8421 · 02:14 · INBOUND</span>
+          <p class="call-line" id="callTranscript">Transcript appears here when you run a call…</p>
+          <p class="call-summary mono" id="callSummary"></p>
         </div>
         <div class="sim-badges">
-          <span class="chip">Idempotent</span>
-          <span class="chip">Transactional</span>
-          <span class="chip">Audited</span>
+          <span class="chip" id="stageTag">STAGE: AWAITING</span>
+          <span class="chip" id="ruleTag">RULE: —</span>
         </div>
       </div>
 
-      <div class="sim-actions" role="group" aria-label="Booking event controls">
-        <button class="btn small sim-btn" data-action="refund">↓ Apply refund</button>
-        <button class="btn small sim-btn" data-action="gst">↑ GST adjustment</button>
-        <button class="btn small sim-btn" data-action="cancel">↓ Cancel line item</button>
-        <button class="btn small sim-btn" data-action="noop">⟳ Re-run recalculation</button>
+      <div class="stage-flow" id="stageFlow" aria-label="AI call pipeline steps">
+        <div class="stage-step"><span class="n">01</span><span class="t">Transcribed</span></div>
+        <div class="stage-step"><span class="n">02 · AI</span><span class="t">Summarised</span></div>
+        <div class="stage-step"><span class="n">03 · AI</span><span class="t">Rule matched</span></div>
+        <div class="stage-step"><span class="n">04</span><span class="t">Stage moved</span></div>
+      </div>
+
+      <div class="sim-actions" role="group" aria-label="Sample calls to run through the engine">
+        <button class="btn small sim-btn" data-scenario="refund" type="button">Customer asks for a refund</button>
+        <button class="btn small sim-btn" data-scenario="confirm" type="button">Customer confirms trip dates</button>
+        <button class="btn small sim-btn" data-scenario="change" type="button">Customer wants a hotel change</button>
+        <button class="btn small sim-btn" data-scenario="escalate" type="button">Customer upset about a delay</button>
+        <button class="btn small sim-btn" data-scenario="noop" type="button">Chit-chat, nothing to act on</button>
       </div>
 
       <div class="sim-log">
         <div class="sim-log-head">
-          <span class="sim-label mono">AUDIT LOG</span>
-          <button class="btn small danger" id="simReset" type="button">Reset</button>
+          <span class="sim-label mono">CRM STAGE LOG</span>
+          <button class="btn small danger" id="ruleReset" type="button">Reset</button>
         </div>
-        <div id="simLogList"><p class="log-empty">No changes recorded yet.</p></div>
+        <div id="ruleLogList"><p class="log-empty">No stage moves recorded yet. Run a call above.</p></div>
       </div>
     </div>
 
     <details class="code-details" data-reveal>
       <summary>
         <svg width="14" height="14" aria-hidden="true"><use href="icons/icons.svg#chevron-down"></use></svg>
-        Peek at the code behind this
+        Peek at the rule engine behind this
       </summary>
       <div class="code-card">
         <div class="code-head">
           <div class="head-left">
             <div class="win-dots" aria-hidden="true"><span></span><span></span><span></span></div>
-            <span class="filename mono">recalculate-deal-size.php</span>
+            <span class="filename mono">stage-rules.php</span>
             <span class="lang-badge">PHP · Laravel</span>
           </div>
           <button class="copy-btn" id="copyCodeBtn" type="button">
@@ -57,29 +61,25 @@
         <div class="code-body">
           <div class="line-numbers" id="codeLineNumbers" aria-hidden="true"></div>
           <pre><code id="codeSampleText"><span class="cm">// Simplified illustration — the actual production code is proprietary.</span>
-<span class="cm">// This mirrors the logic driving the simulator above.</span>
+<span class="cm">// This mirrors the stage-rule engine driving the simulator above.</span>
 
-<span class="kw">function</span> <span class="fn">recalculateDealSize</span>(Booking $booking, string $reason): void
+<span class="kw">final class</span> <span class="fn">StageRuleEngine</span>
 {
-    $previous = $booking->deal_size;
-    $updated  = $this->calculator->compute($booking);
+    <span class="kw">public function</span> <span class="fn">decide</span>(array $summary, Booking $booking): ?StageMove
+    {
+        <span class="cm">// rules read the AI summary, not the raw audio</span>
+        <span class="kw">if</span> ($this-&gt;mentions($summary, 'refund')) {
+            <span class="kw">return new</span> <span class="fn">StageMove</span>('refund_pending', 'refund_request');
+        }
+        <span class="kw">if</span> ($summary['intent'] === 'confirm') {
+            <span class="kw">return new</span> <span class="fn">StageMove</span>('confirmed', 'trip_confirmed');
+        }
+        <span class="kw">if</span> ($summary['sentiment'] === 'escalated') {
+            <span class="kw">return new</span> <span class="fn">StageMove</span>('escalated', 'priority_escalation');
+        }
 
-    <span class="cm">// idempotent — nothing to log if nothing actually changed</span>
-    <span class="kw">if</span> ($previous === $updated) {
-        <span class="kw">return</span>;
+        <span class="kw">return null;</span> <span class="cm">// nothing matched → nothing changes, nothing logged</span>
     }
-
-    <span class="fn">DB::transaction</span>(<span class="kw">function</span> () use ($booking, $previous, $updated, $reason) {
-        $booking->update(['deal_size' => $updated]);
-
-        <span class="fn">DealSizeAudit::create</span>([
-            'booking_id'     => $booking->id,
-            'previous_value' => $previous,
-            'new_value'      => $updated,
-            'reason'         => $reason,        <span class="cm">// e.g. 'refund_applied', 'gst_updated'</span>
-            'triggered_by'   => auth()->id() ?? 'system',
-        ]);
-    });
 }</code></pre>
         </div>
       </div>
