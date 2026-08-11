@@ -155,17 +155,21 @@ const heroStatsIO = new IntersectionObserver((entries)=>{
 const statsBlock = document.querySelector('.stats');
 if(statsBlock) heroStatsIO.observe(statsBlock);
 
-/* ---------- typewriter ---------- */
-const phrases = ["ai_workflows_in_production();","call → summary → stage move, no human in the loop","400+ daily users run on what I ship","Laravel · PHP · OpenAI · Whisper · MCP"];
-const twEl = document.getElementById('typewriter');
-let pi=0, ci=0, deleting=false;
-function tick(){
-  const phrase = phrases[pi];
-  if(!deleting){ ci++; twEl.textContent = phrase.slice(0,ci); if(ci===phrase.length){ deleting=true; setTimeout(tick,1400); return; } }
-  else { ci--; twEl.textContent = phrase.slice(0,ci); if(ci===0){ deleting=false; pi=(pi+1)%phrases.length; } }
-  setTimeout(tick, deleting?35:55);
+/* ---------- hero ship.log terminal reveal ---------- */
+document.documentElement.classList.add('js');
+const termLines = document.querySelectorAll('.tech-body .tech-line');
+if(termLines.length){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion){ termLines.forEach(l=>l.classList.add('show')); }
+  else{
+    let i = 0;
+    (function next(){
+      if(i >= termLines.length) return;
+      termLines[i].classList.add('show'); i++;
+      setTimeout(next, termLines[i-1].classList.contains('t-gap') ? 140 : 280);
+    })();
+  }
 }
-tick();
 
 /* ---------- before/after toggles ---------- */
 document.querySelectorAll('.toggle').forEach(toggle=>{

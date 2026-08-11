@@ -9,7 +9,7 @@
     "linkedin": "https://www.linkedin.com/in/vignesh-jothi",
     "github": "https://github.com/vignesh-jothi"
   },
-  "summary": "Software Engineer with {years}+ years of experience building scalable internal systems using Laravel, PHP, MySQL, Redis, and modern frontend frameworks (React, Next.js). Currently working on high-impact internal platforms used by 400+ daily active users across CX, Finance, Sales, Product, and Visa teams. Experienced in system migration, API optimisation, workflow automation, caching strategies, cron-based processing, AI-assisted backend workflows (OpenAI, Whisper, MCP agent wiring), and performance tuning. Focused on building reliable, maintainable backend systems that reduce operational load and scale with business growth.",
+  "summary": "Software Engineer with {years}+ years of experience building scalable internal systems using Laravel, PHP, MySQL, Redis, and modern frontend frameworks (React, Next.js). Currently working on high-impact internal platforms used by 400+ daily active users across CX, Finance, Sales, Product, and Visa teams. Experienced in system migration, API optimisation, workflow automation, caching strategies, cron-based processing, AI-assisted backend workflows (OpenAI, Self developed opensource models, MCP agent wiring), and performance tuning. Focused on building reliable, maintainable backend systems that reduce operational load and scale with business growth.",
   "experience": [
     {
       "role": "Jr. Software Developer",
@@ -20,7 +20,7 @@
       "end": "present",
       "bullets": [
         "Migrated legacy systems to modern PHP and Laravel with zero downtime — the business kept running on old workflows throughout.",
-        "Built AI call-intelligence and voice-automation workflows on OpenAI + Whisper: call transcription and summarisation, automatic pipeline-stage movement and customer follow-ups that previously ran by hand — so stages stay current and call documentation is consistent without anyone updating it.",
+        "Built AI call-intelligence and voice-automation workflows on OpenAI + Self developed opensource models: call transcription and summarisation, automatic pipeline-stage movement and customer follow-ups that previously ran by hand — so stages stay current and call documentation is consistent without anyone updating it.",
         "Optimised APIs and database queries for a 40%+ response-time reduction across key modules — agents spend less wall-clock per action and close more cases per shift.",
         "Designed and owned backend services used by 400+ daily active users across 7 teams (CX, Sales, Product, Visa and Finance) — one platform replaced five departments' spreadsheets, so handoffs between teams stopped getting lost.",
         "Automated CX, Visa, Finance and Sales workflows — cutting refund cycle time from 3–5 days to under 24 hours, and freeing the Finance team from per-refund busywork.",
@@ -53,7 +53,7 @@
   "skills": {
     "Architecture": ["System design", "API Design", "Database Optimisation", "Caching Strategies", "Workflow Automation"],
     "Backend": ["PHP", "Laravel", "REST APIs", "GraphQL", "MySQL", "Redis", "Cron Jobs", "Queue Systems", "Webhooks"],
-    "AI Integrations": ["Call transcription & summarisation (OpenAI, Whisper)", "Agent-based workflows (MCP, function calling)", "Voice agent automation"],
+    "AI Integrations": ["Call transcription & summarisation (OpenAI, Self developed opensource models)", "Agent-based workflows (MCP, function calling)", "Voice agent automation"],
     "Frontend": ["React", "Next.js", "TypeScript"],
     "Security Implementations": ["Data encryption", "Authentication", "Authorization"],
     "DevOps & Tools": ["Git", "Linux (Ubuntu)", "Nginx", "Docker", "Kubernetes", "AWS"]
