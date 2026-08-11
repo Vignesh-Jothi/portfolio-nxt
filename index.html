@@ -7,13 +7,10 @@
 <meta name="description" content="Software Engineer building internal platforms, AI-powered workflows, and CRM systems used by 400+ daily users.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230A0A0A'/%3E%3Ctext x='12' y='17' font-family='monospace' font-size='14' font-weight='700' fill='%232563EB' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=9">
 <script>
-  (function(){
-    var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-    document.documentElement.setAttribute('data-theme', prefersLight ? 'light' : 'dark');
-  })();
+  document.documentElement.setAttribute('data-theme','light');
 </script>
 </head>
 <body>
@@ -29,14 +26,13 @@
   <main id="main">
     <div data-include="components/hero.html"></div>
     <div data-include="components/about.html"></div>
+    <div data-include="components/achievements.html"></div>
     <div data-include="components/projects.html"></div>
     <div data-include="components/testimonials.html"></div>
-    <div data-include="components/achievements.html"></div>
     <div data-include="components/experience.html"></div>
-    <div data-include="components/skills.html"></div>
-    <div data-include="components/education.html"></div>
     <div data-include="components/how-i-think.html"></div>
     <div data-include="components/growth.html"></div>
+    <div data-include="components/education.html"></div>
   </main>
 
   <div data-include="components/contact.html"></div>
@@ -46,6 +42,6 @@
 
 <script src="js/data.js"></script>
 <script src="js/components.js?v=2"></script>
-<script src="js/main.js?v=2"></script>
+<script src="js/main.js?v=7"></script>
 </body>
 </html>

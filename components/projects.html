@@ -1,11 +1,138 @@
 <section id="projects" aria-labelledby="projects-h">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <div><span class="tag">// case studies</span><h2 id="projects-h">Projects, the way they actually happened</h2><p>A closer look at the systems I’ve helped ship, from the problem through to the outcome.</p></div>
+      <div><span class="tag">// ai in production</span><h2 id="projects-h">AI that does the work</h2><p>Three AI systems in daily use at PickYourTrail — each one replaced a manual process, and none of them wait for a human to run.</p></div>
     </div>
 
-    <!-- ── Plato CRM ── -->
+    <!-- ── AI Call Intelligence · flagship ── -->
+    <div class="story story--flagship" id="ai-call" data-reveal>
+      <div class="story-top">
+        <div><h3>AI Call Intelligence <span class="ai-badge mono">AI</span></h3><div class="meta">OpenAI + Self developed opensource models · call summarisation &amp; auto stage movement · Plato</div></div>
+        <div class="toggle" data-active="before" data-project="aicall" role="group" aria-label="Toggle AI Call Intelligence story view">
+          <button class="active" data-state="before" aria-pressed="true">Before</button>
+          <button data-state="after" aria-pressed="false">After</button>
+        </div>
+      </div>
+      <div class="story-body">
+        <div class="panel show" data-project="aicall" data-state="before">
+          <div class="icon-row" aria-hidden="true">
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#phone"></use></svg></span>
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#clock"></use></svg></span>
+          </div>
+          <h4>The problem</h4>
+          <p>Agents had to manually listen to full call recordings or dig through notes to understand what happened on a call. Separately, sales and CX pipeline stages were updated by hand — which meant delays, stages that didn't match reality, and decisions made from stale data.</p>
+          <p class="sub">Two different manual bottlenecks, both slowing down the same pipeline — and both costing sales time.</p>
+        </div>
+        <div class="panel" data-project="aicall" data-state="after">
+          <div class="icon-row" aria-hidden="true">
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#sparkle"></use></svg></span>
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
+          </div>
+          <h4>What shipped</h4>
+          <p>Built AI-powered call summarisation (OpenAI + Self developed opensource models) with structured insights inside Plato, plus an AI-driven workflow that automatically moves sales/CX stages based on call transcription and business rules — so the pipeline updates itself as calls happen.</p>
+          <div class="impact-grid">
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">No more listening to full recordings — manual review effort dropped sharply.</div></div>
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Sales works from one consistent live pipeline instead of everyone's notes.</div></div>
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Call documentation became uniform across every agent — nothing gets lost between people.</div></div>
+          </div>
+          <div class="diagram-card">
+            <h4>How the pipeline works</h4>
+            <p class="sub">A call comes in, and everything downstream happens without a human touching it.</p>
+            <div class="diagram-scroll">
+              <div class="diagram-flow" aria-hidden="true">
+                <div class="diagram-step"><span class="n">01</span><span class="t">Call recorded</span></div>
+                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
+                <div class="diagram-step highlight"><span class="n">02 · AI</span><span class="t">Transcribed &amp; summarised</span></div>
+                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
+                <div class="diagram-step highlight"><span class="n">03 · AI</span><span class="t">Stage rules applied</span></div>
+                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
+                <div class="diagram-step"><span class="n">04</span><span class="t">CRM stage updated</span></div>
+                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
+                <div class="diagram-step"><span class="n">05</span><span class="t">Agent sees it in Stream</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Trippie · flagship ── -->
     <div class="story" data-reveal>
+      <div class="story-top">
+        <div><h3>Trippie — AI Pre-Trip Assistant <span class="ai-badge mono">AI</span></h3><div class="meta">MCP tool wiring · Test Arena · customer-facing, in production</div></div>
+        <div class="toggle" data-active="before" data-project="trippie" role="group" aria-label="Toggle Trippie story view">
+          <button class="active" data-state="before" aria-pressed="true">Before</button>
+          <button data-state="after" aria-pressed="false">After</button>
+        </div>
+      </div>
+      <div class="story-body">
+        <div class="panel show" data-project="trippie" data-state="before">
+          <div class="icon-row" aria-hidden="true">
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#sparkle"></use></svg></span>
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#warning"></use></svg></span>
+          </div>
+          <h4>The problem</h4>
+          <p>Trippie is the first thing a customer meets pre-trip — and when it escalated a chat, the handoff was fragile. Escalations failed, responses lagged, and Trip Custodians had no safe way to test how Trippie would behave before it reached a real customer.</p>
+          <div class="challenge-tag">⚠ hardest part: changing how an agent wires its tools without breaking live chats</div>
+        </div>
+        <div class="panel" data-project="trippie" data-state="after">
+          <div class="icon-row" aria-hidden="true">
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
+          </div>
+          <h4>What shipped</h4>
+          <p>Two launches in under a week: a dedicated Test Arena where Trip Custodians safely try Trippie's behaviour before customers see it, and a migration of tool wiring from function calling to MCP — making escalations more reliable and responses faster.</p>
+          <div class="impact-grid">
+            <div class="impact-card"><div class="n" data-count="2">0</div><div class="l">CUSTOMER-VISIBLE LAUNCHES IN ONE WEEK</div></div>
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Failed escalations down and response speed up — the whole point of the migration.</div></div>
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Customers felt the difference within hours — not weeks.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Voice Automation ── -->
+    <div class="story" data-reveal>
+      <div class="story-top">
+        <div><h3>AI Voice Automation <span class="ai-badge mono">AI</span></h3><div class="meta">OpenAI + Self developed opensource models · follow-ups, lead qualification &amp; trip assistance</div></div>
+        <div class="toggle" data-active="before" data-project="voiceai" role="group" aria-label="Toggle Voice Automation story view">
+          <button class="active" data-state="before" aria-pressed="true">Before</button>
+          <button data-state="after" aria-pressed="false">After</button>
+        </div>
+      </div>
+      <div class="story-body">
+        <div class="panel show" data-project="voiceai" data-state="before">
+          <div class="icon-row" aria-hidden="true">
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#phone"></use></svg></span>
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#clock"></use></svg></span>
+          </div>
+          <h4>The problem</h4>
+          <p>Follow-ups and lead qualification ran on manual outbound calls — easy to miss, slow to schedule, and different from one agent to the next. A lead that didn't get called back in time simply went cold.</p>
+          <p class="sub">Repeated, time-sensitive work — exactly the kind that shouldn't depend on whoever is free.</p>
+        </div>
+        <div class="panel" data-project="voiceai" data-state="after">
+          <div class="icon-row" aria-hidden="true">
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#sparkle"></use></svg></span>
+            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#trend"></use></svg></span>
+          </div>
+          <h4>What shipped</h4>
+          <p>Voice AI workflows on OpenAI + Self developed opensource models now handle customer follow-ups, lead qualification, and trip-related assistance — so a case keeps moving even when no human is free to pick up the phone.</p>
+          <div class="impact-grid">
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Follow-ups no longer depend on agent availability — fewer leads go cold.</div></div>
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Every interaction is transcribed and stored — consistent, searchable, auditable.</div></div>
+            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Agents freed for the conversations that actually need a human.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── the platform underneath ── -->
+    <div class="mini-sec" data-reveal>
+      <span class="tag">// the platform underneath</span>
+      <h3>The AI above lives inside Plato — and the rest of the platform, too</h3>
+    </div>
+
+    <div class="story story--flagship" data-reveal>
       <div class="story-top">
         <div><h3>Plato — Internal CRM</h3><div class="meta">Sep 2024 → Present · Serving CX, Sales, Product, Visa &amp; Finance</div></div>
         <div class="toggle" data-active="before" data-project="plato" role="group" aria-label="Toggle Plato story view">
@@ -30,7 +157,7 @@
             <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#trend"></use></svg></span>
           </div>
           <h4>What shipped</h4>
-          <p>A centralised CRM that replaced the spreadsheet sprawl with one backend — workflow tracking, customer data processing, and operational reporting in a single system, with background jobs automating what used to be manual busywork.</p>
+          <p>A centralised CRM that replaced the spreadsheet sprawl with one backend — workflow tracking, customer data processing, and operational reporting in a single system, with background jobs and the AI systems above automating what used to be manual busywork.</p>
           <div class="impact-grid">
             <div class="impact-card"><div class="n" data-count="40">0</div><div class="l">% FASTER API RESPONSE</div></div>
             <div class="impact-card"><div class="n" data-count="400">0</div><div class="l">DAILY ACTIVE USERS</div></div>
@@ -41,193 +168,38 @@
       </div>
     </div>
 
-    <!-- ── Locker Room HRM ── -->
-    <div class="story" data-reveal>
-      <div class="story-top">
-        <div><h3>Locker Room — Internal HRM</h3><div class="meta">Dec 2024 → Present · Employee data &amp; performance monitoring</div></div>
-        <div class="toggle" data-active="before" data-project="locker" role="group" aria-label="Toggle Locker Room story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
+    <div class="mini-grid">
+      <div class="mini-story" data-reveal>
+        <div class="mini-head">
+          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#kanban"></use></svg></span>
+          <div><h3>Stream</h3><span class="meta">CX workspace · inside Plato</span></div>
         </div>
+        <p class="mini-line"><span class="bf">5 scattered tabs per customer</span> <span class="arr">→</span> <span class="af">one consolidated timeline for agents</span></p>
+        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#monitor"></use></svg> design + engineering · context switching cut way down</div>
       </div>
-      <div class="story-body">
-        <div class="panel show" data-project="locker" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#file-text"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#clock"></use></svg></span>
-          </div>
-          <h4>The problem</h4>
-          <p>HR ran on paper. Employee records and performance tracking were handled offline — slow to update, easy to misplace, and nearly impossible to report on accurately when leadership needed a real answer.</p>
-          <p class="sub">Every review cycle meant manually chasing down physical records instead of just looking something up.</p>
+      <div class="mini-story" data-reveal>
+        <div class="mini-head">
+          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#file-text"></use></svg></span>
+          <div><h3>Locker Room</h3><span class="meta">HRM · Dec 2024 → Present · I'm the engineering owner</span></div>
         </div>
-        <div class="panel" data-project="locker" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#monitor"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
-          </div>
-          <h4>What shipped</h4>
-          <p>A digital HRM platform that pulled employee data and performance tracking out of paper files and into one automated system, cutting the manual processing that used to eat up HR's time.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="n" data-count="50">0</div><div class="l">% LESS MANUAL HR TIME</div></div>
-            <div class="impact-card" style="grid-column:span 2;"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Reporting accuracy and data visibility improved enough that leadership and the HR team called it out directly.</div></div>
-          </div>
-        </div>
+        <p class="mini-line"><span class="bf">Paper files</span> <span class="arr">→</span> <span class="af">digital employee records &amp; performance tracking</span></p>
+        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#trend"></use></svg> 50% less manual HR processing time</div>
       </div>
-    </div>
-
-    <!-- ── Stream ── -->
-    <div class="story" data-reveal>
-      <div class="story-top">
-        <div><h3>Stream — Single Customer View</h3><div class="meta">Design &amp; Engineering · Unified CX workspace inside Plato</div></div>
-        <div class="toggle" data-active="before" data-project="stream" role="group" aria-label="Toggle Stream story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
+      <div class="mini-story" data-reveal>
+        <div class="mini-head">
+          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#shield-check"></use></svg></span>
+          <div><h3>Deal Size Engine</h3><span class="meta">Finance · inside Plato</span></div>
         </div>
+        <p class="mini-line"><span class="bf">Drifting, untrustworthy numbers</span> <span class="arr">→</span> <span class="af">audited recalculation with a traceable why</span></p>
+        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#shield-check"></use></svg> idempotent by design — no change, no log entry</div>
       </div>
-      <div class="story-body">
-        <div class="panel show" data-project="stream" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#grid"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#refresh"></use></svg></span>
-          </div>
-          <h4>The problem</h4>
-          <p>A customer's story lived in pieces — AI summaries on one page, staged summaries on another, call notes, chats, and trip details scattered across the rest. Every support case meant agents jumping between tabs just to understand what had already happened.</p>
-          <div class="challenge-tag">⚠ hardest part: designing one coherent surface for five different data types</div>
-          <p class="sub" style="margin-top:14px;">This wasn't just a backend build — it needed an information hierarchy that could hold AI-generated summaries, human notes, chats, and structured trip data side by side without burying any of them, and stay legible under real support-load pressure.</p>
+      <div class="mini-story" data-reveal>
+        <div class="mini-head">
+          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#lightning"></use></svg></span>
+          <div><h3>Refund Automation</h3><span class="meta">Finance · inside Plato</span></div>
         </div>
-        <div class="panel" data-project="stream" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#kanban"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
-          </div>
-          <h4>What shipped</h4>
-          <p>Designed and built Stream — a single consolidated view that brings AI summaries, staged summaries, call notes, chats, and trip information into one interface, so an agent can understand a customer's full history without leaving the page.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Context switching cut way down — agents work from one screen instead of many.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Agent productivity improved across CX.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Faster, more confident support decisions.</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── AI Call Intelligence ── -->
-    <div class="story" data-reveal>
-      <div class="story-top">
-        <div><h3>AI Call Intelligence</h3><div class="meta">AI call summarisation &amp; auto stage movement · Plato</div></div>
-        <div class="toggle" data-active="before" data-project="aicall" role="group" aria-label="Toggle AI Call Intelligence story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
-        </div>
-      </div>
-      <div class="story-body">
-        <div class="panel show" data-project="aicall" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#phone"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#clock"></use></svg></span>
-          </div>
-          <h4>The problem</h4>
-          <p>Agents had to manually listen to full call recordings or dig through notes to understand what happened on a call. Separately, sales and CX pipeline stages were updated by hand — which meant delays and stages that didn't match reality.</p>
-          <p class="sub">Two different manual bottlenecks, both slowing down the same pipeline.</p>
-        </div>
-        <div class="panel" data-project="aicall" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#sparkle"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
-          </div>
-          <h4>What shipped</h4>
-          <p>Built AI-powered call summarisation with structured insights inside Plato, plus an AI-driven workflow that automatically moves sales/CX stages based on call transcription and business rules — so the pipeline updates itself as calls happen.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Manual review effort and stage updates both dropped sharply.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Call documentation became consistent across every agent.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">CRM data accuracy and issue resolution speed both improved.</div></div>
-          </div>
-          <div class="diagram-card">
-            <h4>How the pipeline works</h4>
-            <p class="sub">A call comes in, and everything downstream happens without a human touching it.</p>
-            <div class="diagram-scroll">
-              <div class="diagram-flow" aria-hidden="true">
-                <div class="diagram-step"><span class="n">01</span><span class="t">Call recorded</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step highlight"><span class="n">02 · AI</span><span class="t">Transcribed &amp; summarised</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step highlight"><span class="n">03 · AI</span><span class="t">Stage rules applied</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step"><span class="n">04</span><span class="t">CRM stage updated</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step"><span class="n">05</span><span class="t">Agent sees it in Stream</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Deal Size Engine ── -->
-    <div class="story" data-reveal>
-      <div class="story-top">
-        <div><h3>Deal Size Recalculation Engine</h3><div class="meta">Financial accuracy &amp; audit trail · Plato</div></div>
-        <div class="toggle" data-active="before" data-project="dealsize" role="group" aria-label="Toggle Deal Size Engine story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
-        </div>
-      </div>
-      <div class="story-body">
-        <div class="panel show" data-project="dealsize" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#warning"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#layout"></use></svg></span>
-          </div>
-          <h4>The problem</h4>
-          <p>Deal size numbers drifted out of sync every time a booking had a cancellation, refund, GST change, or update — leaving Finance and CX without a number they could fully trust, and no clear trail of why a figure had changed.</p>
-          <div class="challenge-tag">⚠ hardest part: keeping every recalculation auditable, not just accurate</div>
-        </div>
-        <div class="panel" data-project="dealsize" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#shield-check"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#trend"></use></svg></span>
-          </div>
-          <h4>What shipped</h4>
-          <p>Built and hardened an automatic deal size recalculation engine that re-syncs on every relevant change, and logs an audit reason for each recalculation — so any number can be traced back to exactly why it changed.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Financial accuracy improved across Finance and CX.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Debugging a wrong number went from guesswork to a clear audit trail.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Greater transparency for every team relying on the number.</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Refund Automation ── -->
-    <div class="story" data-reveal>
-      <div class="story-top">
-        <div><h3>Refund Automation</h3><div class="meta">Finance workflow · Plato</div></div>
-        <div class="toggle" data-active="before" data-project="refund" role="group" aria-label="Toggle Refund Automation story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
-        </div>
-      </div>
-      <div class="story-body">
-        <div class="panel show" data-project="refund" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#clock"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#warning"></use></svg></span>
-          </div>
-          <h4>The problem</h4>
-          <p>Refunds went through a manual finance process that routinely took 3–5 days to complete — slow for customers waiting on their money back, and repetitive, error-prone work for the finance team processing each one by hand.</p>
-        </div>
-        <div class="panel" data-project="refund" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#lightning"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
-          </div>
-          <h4>What shipped</h4>
-          <p>Built refund automation into Plato's financial APIs, removing the manual steps between a refund being approved and the money actually moving.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:15px; color:var(--accent-fg); font-weight:700;">3–5 days → under 24 hours</div></div>
-            <div class="impact-card" style="grid-column:span 2;"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Freed the finance team from repetitive manual processing on every single refund.</div></div>
-          </div>
-        </div>
+        <p class="mini-line"><span class="bf">3–5 day manual process</span> <span class="arr">→</span> <span class="af">money moves in under 24 hours</span></p>
+        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#clock"></use></svg> finance team freed from per-refund busywork</div>
       </div>
     </div>
   </div>

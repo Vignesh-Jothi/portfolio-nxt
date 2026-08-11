@@ -129,6 +129,11 @@
           ${experienceHtml}
         </section>
 
+        <section class="section" id="projects">
+          <div class="section-title">Projects</div>
+          ${projectsHtml}
+        </section>
+
         <section class="section" id="achievements">
           <div class="section-title">Key Achievements</div>
           ${achievementsHtml || '<p class="empty-section">No achievements listed.</p>'}
@@ -139,14 +144,9 @@
           <div class="skills-grid">${skillsHtml}</div>
         </section>
 
-        <section class="section" id="projects">
-          <div class="section-title">Projects</div>
-          ${projectsHtml}
-        </section>
-
         <section class="section" id="education">
           <div class="section-title">Education</div>
-          ${educationHtml}
+          <div class="edu-fade">${educationHtml}</div>
         </section>
       </div>
     `;

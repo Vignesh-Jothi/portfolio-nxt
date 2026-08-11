@@ -98,9 +98,9 @@ function initTestimonialCarousel(grid){
 initTestimonialCarousel(testGrid);
 
 const achGrid = document.getElementById('achGrid');
-ACHIEVEMENTS.forEach(a=>{
+ACHIEVEMENTS.forEach((a,i)=>{
   const card = document.createElement('div');
-  card.className = 'ach-card';
+  card.className = 'ach-card' + (i === 0 ? ' ach-card--featured' : '');
   card.innerHTML = `
     <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
     <div><span class="date">${a.date}</span><h3>${a.title}</h3><p>${a.description}</p></div>`;
@@ -119,7 +119,7 @@ window.addEventListener('scroll', updateScrollProgress, { passive:true });
 updateScrollProgress();
 
 /* ---------- reveal on scroll, staggered within each group ---------- */
-const revealGroups = [document.querySelectorAll('.ach-grid > *')];
+const revealGroups = [document.querySelectorAll('.ach-grid > *'), document.querySelectorAll('.stats > *'), document.querySelectorAll('.mini-grid > *')];
 revealGroups.forEach(group=>{
   group.forEach((el,i)=>{ el.setAttribute('data-reveal',''); el.style.transitionDelay = Math.min(i*70,280)+'ms'; });
 });
@@ -131,10 +131,12 @@ els.forEach(el=>io.observe(el));
 
 /* ---------- animated hero stat counters on scroll into view ---------- */
 const heroStatTargets = [
-  { el: document.querySelectorAll('.stat-card .num')[0], value: yoe, suffix:'+' },
-  { el: document.querySelectorAll('.stat-card .num')[1], value: 400, suffix:'+' },
-  { el: document.querySelectorAll('.stat-card .num')[2], value: 40, suffix:'%+' },
-  { el: document.querySelectorAll('.stat-card .num')[3], value: 7, suffix:'' }
+  { el: document.querySelectorAll('.stat-card .num')[0], value: 400, suffix:'+' },
+  { el: document.querySelectorAll('.stat-card .num')[1], value: 40, suffix:'%+' },
+  { el: document.querySelectorAll('.stat-card .num')[2], value: 24, suffix:'h' },
+  { el: document.querySelectorAll('.stat-card .num')[3], value: 100, suffix:'' },
+  { el: document.querySelectorAll('.stat-card .num')[4], value: 7, suffix:'' },
+  { el: document.querySelectorAll('.stat-card .num')[5], value: 10, suffix:'+' }
 ];
 let heroStatsDone = false;
 const heroStatsIO = new IntersectionObserver((entries)=>{
@@ -153,17 +155,21 @@ const heroStatsIO = new IntersectionObserver((entries)=>{
 const statsBlock = document.querySelector('.stats');
 if(statsBlock) heroStatsIO.observe(statsBlock);
 
-/* ---------- typewriter ---------- */
-const phrases = ["software engineer @ PickYourTrail","spreadsheets → systems","40%+ faster APIs, on purpose","Laravel · PHP · MySQL · Redis"];
-const twEl = document.getElementById('typewriter');
-let pi=0, ci=0, deleting=false;
-function tick(){
-  const phrase = phrases[pi];
-  if(!deleting){ ci++; twEl.textContent = phrase.slice(0,ci); if(ci===phrase.length){ deleting=true; setTimeout(tick,1400); return; } }
-  else { ci--; twEl.textContent = phrase.slice(0,ci); if(ci===0){ deleting=false; pi=(pi+1)%phrases.length; } }
-  setTimeout(tick, deleting?35:55);
+/* ---------- hero ship.log terminal reveal ---------- */
+document.documentElement.classList.add('js');
+const termLines = document.querySelectorAll('.tech-body .tech-line');
+if(termLines.length){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion){ termLines.forEach(l=>l.classList.add('show')); }
+  else{
+    let i = 0;
+    (function next(){
+      if(i >= termLines.length) return;
+      termLines[i].classList.add('show'); i++;
+      setTimeout(next, termLines[i-1].classList.contains('t-gap') ? 140 : 280);
+    })();
+  }
 }
-tick();
 
 /* ---------- before/after toggles ---------- */
 document.querySelectorAll('.toggle').forEach(toggle=>{
@@ -186,141 +192,115 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
   });
 });
 
-/* ---------- recalculation simulator ---------- */
+/* ---------- AI stage-rule engine demo ---------- */
 (function(){
-  const amountEl = document.getElementById('simAmount');
-  const deltaEl = document.getElementById('simDelta');
-  const noteEl = document.getElementById('idempotentNote');
-  const logList = document.getElementById('simLogList');
-  const resetBtn = document.getElementById('simReset');
-  if(!amountEl) return;
+  const flow = document.getElementById('stageFlow');
+  if(!flow) return;
+  const transcriptEl = document.getElementById('callTranscript');
+  const summaryEl = document.getElementById('callSummary');
+  const stageTag = document.getElementById('stageTag');
+  const ruleTag = document.getElementById('ruleTag');
+  const logList = document.getElementById('ruleLogList');
+  const resetBtn = document.getElementById('ruleReset');
+  const steps = flow.querySelectorAll('.stage-step');
+  const entries = [];
+  let running = false;
 
-  const BASE = 42000;
-  let value = BASE;
-  let entries = [];
-
-  const EVENTS = {
-    refund: { delta: -3200, reason: 'refund_applied', label: 'Refund applied' },
-    gst:    { delta:  840,  reason: 'gst_updated',     label: 'GST adjustment' },
-    cancel: { delta: -5400, reason: 'line_item_cancelled', label: 'Line item cancelled' }
+  const SCENARIOS = {
+    refund: {
+      transcript: '…I want my money back for the cancelled hotel segment…',
+      summary: 'intent: refund · component: hotel · customer requested cancellation refund',
+      rule: 'refund_request',
+      stage: 'Refund Pending'
+    },
+    confirm: {
+      transcript: '…yes, the 14th works for both of us, please go ahead…',
+      summary: 'intent: confirm · dates: accepted · customer approved itinerary',
+      rule: 'trip_confirmed',
+      stage: 'Confirmed'
+    },
+    change: {
+      transcript: '…can we switch to a beachfront room instead…',
+      summary: 'intent: change · component: hotel · wants an alternative room',
+      rule: 'plan_change',
+      stage: 'Change Request'
+    },
+    escalate: {
+      transcript: '…this delay is ridiculous, I need someone senior…',
+      summary: 'sentiment: escalated · issue: delay · requested escalation',
+      rule: 'priority_escalation',
+      stage: 'Escalated · Priority'
+    },
+    noop: {
+      transcript: '…thanks, everything\'s good over here, bye…',
+      summary: 'intent: none · sentiment: positive',
+      rule: null,
+      stage: null,
+      note: 'No rule matched — stage unchanged, nothing logged. Idempotent by design, same as the deal-size engine.'
+    }
   };
 
-  function fmt(n){ return '₹' + n.toLocaleString('en-IN'); }
-
-  function flashAmount(){
-    amountEl.classList.remove('flash');
-    void amountEl.offsetWidth;
-    amountEl.classList.add('flash');
-    setTimeout(()=>amountEl.classList.remove('flash'), 180);
-  }
-
-  function showDelta(delta){
-    deltaEl.textContent = (delta > 0 ? '+' : '−') + fmt(Math.abs(delta));
-    deltaEl.classList.remove('show');
-    void deltaEl.offsetWidth;
-    deltaEl.classList.add('show');
-  }
-
-  function showIdempotentNote(){
-    noteEl.classList.remove('show');
-    void noteEl.offsetWidth;
-    noteEl.classList.add('show');
+  function setBadges(stage, rule){
+    stageTag.textContent = stage ? 'STAGE: ' + stage : 'STAGE: AWAITING';
+    ruleTag.textContent = rule ? 'RULE: ' + rule : 'RULE: —';
+    stageTag.classList.toggle('moved', !!stage);
+    ruleTag.classList.toggle('moved', !!rule);
   }
 
   function renderLog(){
-    if(!entries.length){ logList.innerHTML = '<p class="log-empty">No changes recorded yet.</p>'; return; }
+    if(!entries.length){ logList.innerHTML = '<p class="log-empty">No stage moves recorded yet. Run a call above.</p>'; return; }
     logList.innerHTML = entries.map(e => `
-      <div class="log-entry ${e.authorizer ? 'log-entry--negative' : ''}">
+      <div class="log-entry">
         <div class="log-left">
-          <span class="log-reason">${e.reason}</span>
-          ${e.authorizer ? `<span class="log-authorizer">authorized by ${e.authorizer}</span>` : ''}
-          <span class="log-values">${fmt(e.previous)} → ${fmt(e.updated)}</span>
+          <span class="log-reason">${e.rule}</span>
+          ${e.stage ? `<span class="log-stage">moved → ${e.stage}</span>` : `<span class="log-stage muted">${e.note}</span>`}
         </div>
         <span class="log-time mono">${e.time}</span>
       </div>`).join('');
   }
 
-  function confirmNegativeMargin(delta, updated){
-    return new Promise((resolve)=>{
-      const backdrop = document.createElement('div');
-      backdrop.className = 'modal-backdrop';
-      backdrop.innerHTML = `
-        <div class="modal" role="dialog" aria-modal="true" aria-label="Negative margin warning">
-          <h3>Negative margin warning</h3>
-          <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">This reduction will make the deal size <strong>${fmt(updated)}</strong> (negative margin). Confirm to continue.</p>
-          <div class="field">
-            <label for="nmAuthorizer">Your name <span aria-hidden="true">*</span></label>
-            <input id="nmAuthorizer" type="text" required placeholder="Who authorized this?">
-          </div>
-          <div class="modal-actions">
-            <button class="btn primary small" id="nmConfirm" type="button" disabled>Reduce anyway</button>
-            <button class="btn small" id="nmCancel" type="button">Cancel</button>
-          </div>
-        </div>`;
-      document.body.appendChild(backdrop);
-      const input = backdrop.querySelector('#nmAuthorizer');
-      const confirmBtn = backdrop.querySelector('#nmConfirm');
-      input.focus();
-
-      function isValid(){ return !!input.value.trim(); }
-      function updateButton(){ confirmBtn.disabled = !isValid(); }
-      input.addEventListener('input', updateButton);
-
-      function close(result){
-        backdrop.remove();
-        resolve(result);
+  function run(key){
+    if(running) return;
+    const s = SCENARIOS[key];
+    if(!s) return;
+    running = true;
+    steps.forEach(st => st.classList.remove('on'));
+    transcriptEl.textContent = '';
+    summaryEl.textContent = '';
+    let i = 0;
+    (function next(){
+      if(i < steps.length){
+        steps[i].classList.add('on');
+        i++;
+        setTimeout(next, 260);
+      } else {
+        transcriptEl.textContent = '“' + s.transcript + '”';
+        summaryEl.textContent = '→ ' + s.summary;
+        setTimeout(()=>{
+          const now = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+          if(s.rule){
+            setBadges(s.stage, s.rule);
+            entries.unshift({ rule: s.rule, stage: s.stage, time: now });
+          } else {
+            entries.unshift({ rule: s.rule || 'no_match', stage: null, note: s.note, time: now });
+          }
+          renderLog();
+          running = false;
+        }, 240);
       }
-
-      function tryConfirm(){
-        if(!isValid()){ input.reportValidity(); return; }
-        close({ confirmed: true, name: input.value.trim() });
-      }
-
-      backdrop.querySelector('#nmConfirm').addEventListener('click', tryConfirm);
-      backdrop.querySelector('#nmCancel').addEventListener('click', ()=>close({ confirmed: false }));
-      input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryConfirm(); });
-      backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) close({ confirmed: false }); });
-    });
+    })();
   }
 
-  let isConfirming = false;
-
-  async function applyEvent(key){
-    if(isConfirming) return;
-    if(key === 'noop'){ showIdempotentNote(); return; }
-    const ev = EVENTS[key];
-    if(!ev) return;
-    const previous = value;
-    const updated = value + ev.delta;
-    if(previous === updated){ showIdempotentNote(); return; }
-
-    let authorizer = '';
-    if(updated < 0){
-      isConfirming = true;
-      const result = await confirmNegativeMargin(ev.delta, updated);
-      isConfirming = false;
-      if(!result.confirmed) return;
-      authorizer = result.name;
-    }
-
-    value = updated;
-    amountEl.textContent = fmt(value);
-    flashAmount();
-    showDelta(ev.delta);
-    entries.unshift({
-      previous, updated, reason: ev.reason, authorizer,
-      time: new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' })
-    });
-    renderLog();
-  }
-
-  document.querySelectorAll('.sim-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>applyEvent(btn.dataset.action));
+  document.querySelectorAll('.sim-btn[data-scenario]').forEach(btn=>{
+    btn.addEventListener('click', ()=>run(btn.dataset.scenario));
   });
 
   resetBtn.addEventListener('click', ()=>{
-    value = BASE; entries = [];
-    amountEl.textContent = fmt(value);
+    entries.length = 0;
+    steps.forEach(st => st.classList.remove('on'));
+    transcriptEl.textContent = 'Transcript appears here when you run a call…';
+    summaryEl.textContent = '';
+    setBadges(null, null);
     renderLog();
   });
 })();
@@ -383,7 +363,7 @@ backToTop.addEventListener('click', ()=>window.scrollTo({ top:0, behavior:'smoot
 const themeBtn = document.getElementById('themeToggle');
 themeBtn.addEventListener('click', ()=>{
   const root = document.documentElement;
-  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   root.setAttribute('data-theme', next);
   themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
 });

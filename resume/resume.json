@@ -9,7 +9,7 @@
     "linkedin": "https://www.linkedin.com/in/vignesh-jothi",
     "github": "https://github.com/vignesh-jothi"
   },
-  "summary": "Software Engineer with {years}+ years of experience building scalable internal systems using Laravel, PHP, MySQL, Redis, and modern frontend frameworks (React, Next.js). Currently working on high-impact internal platforms used by 400+ daily active users across CX, Finance, Sales, Product, and Visa teams. Experienced in system migration, API optimisation, workflow automation, caching strategies, cron-based processing, AI-assisted backend workflows, and performance tuning. Focused on building reliable, maintainable backend systems that reduce operational load and scale with business growth.",
+  "summary": "Software Engineer with {years}+ years of experience building scalable internal systems using Laravel, PHP, MySQL, Redis, and modern frontend frameworks (React, Next.js). Currently working on high-impact internal platforms used by 400+ daily active users across CX, Finance, Sales, Product, and Visa teams. Experienced in system migration, API optimisation, workflow automation, caching strategies, cron-based processing, AI-assisted backend workflows (OpenAI, Self developed opensource models, MCP agent wiring), and performance tuning. Focused on building reliable, maintainable backend systems that reduce operational load and scale with business growth.",
   "experience": [
     {
       "role": "Jr. Software Developer",
@@ -19,14 +19,13 @@
       "start": "Sep 2024",
       "end": "present",
       "bullets": [
-        "Contributed to the migration of legacy systems to modern PHP and Laravel, improving maintainability and long-term scalability.",
-        "Built backend workflows for AI-powered voice automation, supporting customer follow-ups, lead qualification, and trip-related assistance.",
-        "Optimised API performance and database queries, reducing response time by 40%+ across key modules.",
-        "Designed and maintained backend services supporting 400+ daily active internal users.",
-        "Built workflow automation for CX, Visa, Finance, and Sales operations, reducing manual processing time.",
-        "Implemented Redis-based caching strategies to improve performance and reduce redundant database load.",
-        "Wrote and maintained test coverage using Pest for critical business logic.",
-        "Used AI tools to accelerate development, debugging, documentation, and internal workflow improvements."
+        "Migrated legacy systems to modern PHP and Laravel with zero downtime — the business kept running on old workflows throughout.",
+        "Built AI call-intelligence and voice-automation workflows on OpenAI + Self developed opensource models: call transcription and summarisation, automatic pipeline-stage movement and customer follow-ups that previously ran by hand — so stages stay current and call documentation is consistent without anyone updating it.",
+        "Optimised APIs and database queries for a 40%+ response-time reduction across key modules — agents spend less wall-clock per action and close more cases per shift.",
+        "Designed and owned backend services used by 400+ daily active users across 7 teams (CX, Sales, Product, Visa and Finance) — one platform replaced five departments' spreadsheets, so handoffs between teams stopped getting lost.",
+        "Automated CX, Visa, Finance and Sales workflows — cutting refund cycle time from 3–5 days to under 24 hours, and freeing the Finance team from per-refund busywork.",
+        "Introduced Redis-based caching with Laravel Horizon queues to cut redundant database load.",
+        "Wrote Pest test coverage for critical business logic."
       ]
     },
     {
@@ -37,25 +36,27 @@
       "start": "Oct 2023",
       "end": "Sep 2024",
       "bullets": [
-        "Improved API performance and database query efficiency, achieving 30% system performance gain.",
-        "Implemented security enhancements (authentication hardening, encryption), reducing vulnerabilities.",
+        "Improved API performance and database query efficiency, achieving a 30% system performance gain.",
+        "Hardened authentication and added data encryption, reducing vulnerabilities.",
         "Contributed to scalable backend architecture improvements.",
-        "Assisted in cloud integration efforts, increasing system capacity by ~50%."
+        "Supported cloud integration efforts that grew system capacity by ~50%."
       ]
     }
   ],
   "achievements": [
     { "title": "Top contributor — Plato & LockerRoom", "date": "2024 – 2025", "description": "#1 contributor on both plato-web and LockerRoom internal application." },
     { "title": "10+ modules, 50+ features shipped", "date": "2024 – 2025", "description": "Delivered 10+ major modules and 50+ feature enhancements across Plato and LockerRoom." },
+    { "title": "Trippie launches shipped in under a week", "date": "2025", "description": "Test Arena for Trip Custodians plus a function-calling → MCP migration — fewer failed escalations, faster responses, customers felt it within hours." },
+    { "title": "Unity: 100 conversions in 60 days", "date": "2025", "description": "Contributed to Unity, which crossed 100 conversions from its itineraries within 60 days of launch — a sales-outcome milestone." },
     { "title": "End-to-end LockerRoom ownership", "date": "Dec 2024 → Present", "description": "Took full ownership of the HRM platform — features, bug fixes, and production support — as its primary engineering owner." }
   ],
   "skills": {
     "Architecture": ["System design", "API Design", "Database Optimisation", "Caching Strategies", "Workflow Automation"],
-    "Frontend": ["React", "Next.js"],
     "Backend": ["PHP", "Laravel", "REST APIs", "GraphQL", "MySQL", "Redis", "Cron Jobs", "Queue Systems", "Webhooks"],
+    "AI Integrations": ["Call transcription & summarisation (OpenAI, Self developed opensource models)", "Agent-based workflows (MCP, function calling)", "Voice agent automation"],
+    "Frontend": ["React", "Next.js", "TypeScript"],
     "Security Implementations": ["Data encryption", "Authentication", "Authorization"],
-    "AI Integrations": ["Voice Agent integration", "Agent-based workflow", "Leveraged AI tools for productivity acceleration"],
-    "DevOps & Tools": ["Git", "Linux (Ubuntu)", "Nginx"]
+    "DevOps & Tools": ["Git", "Linux (Ubuntu)", "Nginx", "Docker", "Kubernetes", "AWS"]
   },
   "projects": [
     {
@@ -64,12 +65,21 @@
       "start": "Sep 2024",
       "end": "Present",
       "bullets": [
-        "A centralised CRM platform serving multiple departments (CX, Sales, Product, Visa, Finance).",
-        "Reduced API response time by 40% through query optimisation and caching.",
-        "Supported 400+ daily active users with a stable backend architecture.",
-        "Migrated legacy codebase to modern Laravel versions.",
-        "Built modules for workflow tracking, customer data processing, and operational reporting.",
-        "Implemented background jobs and scheduled tasks to automate repetitive processes."
+        "Architecture: one Laravel backend replaced five departments' spreadsheet sprawl — workflow tracking, customer data processing, and operational reporting on a single model.",
+        "Rolled out department-by-department with no maintenance window; old workflows stayed live until each team was migrated.",
+        "Migrated a legacy codebase to modern Laravel while shipping features on top of it.",
+        "Redis caching and query optimisation sustain 400+ daily active users."
+      ]
+    },
+    {
+      "name": "Trippie",
+      "type": "AI Pre-Trip Assistant",
+      "start": "2025",
+      "end": "Present",
+      "bullets": [
+        "Built an AI assistant for pre-trip customer chats with a dedicated Test Arena so Trip Custodians can safely trial behaviour before it reaches customers.",
+        "Migrated agent tool wiring from function calling to MCP — fewer failed escalations, faster responses.",
+        "Two customer-visible launches shipped in under a week; customers reported feeling the difference within hours."
       ]
     },
     {
@@ -78,10 +88,9 @@
       "start": "Dec 2024",
       "end": "Present",
       "bullets": [
-        "Internal HR management platform for employee data and performance monitoring.",
-        "Reduced manual HR processing time by 50% through automation.",
-        "Improved data visibility and reporting accuracy.",
-        "Contributed to system reliability and performance enhancements."
+        "Sole engineering owner — features, bug fixes, and production support end-to-end.",
+        "Replaced a paper-based HR process with digital employee records and performance tracking.",
+        "Automated recurring HR workflows, cutting manual processing time by 50%."
       ]
     }
   ],
