@@ -98,9 +98,9 @@ function initTestimonialCarousel(grid){
 initTestimonialCarousel(testGrid);
 
 const achGrid = document.getElementById('achGrid');
-ACHIEVEMENTS.forEach(a=>{
+ACHIEVEMENTS.forEach((a,i)=>{
   const card = document.createElement('div');
-  card.className = 'ach-card';
+  card.className = 'ach-card' + (i === 0 ? ' ach-card--featured' : '');
   card.innerHTML = `
     <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
     <div><span class="date">${a.date}</span><h3>${a.title}</h3><p>${a.description}</p></div>`;
@@ -119,7 +119,7 @@ window.addEventListener('scroll', updateScrollProgress, { passive:true });
 updateScrollProgress();
 
 /* ---------- reveal on scroll, staggered within each group ---------- */
-const revealGroups = [document.querySelectorAll('.ach-grid > *')];
+const revealGroups = [document.querySelectorAll('.ach-grid > *'), document.querySelectorAll('.stats > *'), document.querySelectorAll('.mini-grid > *')];
 revealGroups.forEach(group=>{
   group.forEach((el,i)=>{ el.setAttribute('data-reveal',''); el.style.transitionDelay = Math.min(i*70,280)+'ms'; });
 });
@@ -131,10 +131,12 @@ els.forEach(el=>io.observe(el));
 
 /* ---------- animated hero stat counters on scroll into view ---------- */
 const heroStatTargets = [
-  { el: document.querySelectorAll('.stat-card .num')[0], value: yoe, suffix:'+' },
-  { el: document.querySelectorAll('.stat-card .num')[1], value: 400, suffix:'+' },
-  { el: document.querySelectorAll('.stat-card .num')[2], value: 40, suffix:'%+' },
-  { el: document.querySelectorAll('.stat-card .num')[3], value: 7, suffix:'' }
+  { el: document.querySelectorAll('.stat-card .num')[0], value: 400, suffix:'+' },
+  { el: document.querySelectorAll('.stat-card .num')[1], value: 40, suffix:'%+' },
+  { el: document.querySelectorAll('.stat-card .num')[2], value: 24, suffix:'h' },
+  { el: document.querySelectorAll('.stat-card .num')[3], value: 100, suffix:'' },
+  { el: document.querySelectorAll('.stat-card .num')[4], value: 7, suffix:'' },
+  { el: document.querySelectorAll('.stat-card .num')[5], value: 10, suffix:'+' }
 ];
 let heroStatsDone = false;
 const heroStatsIO = new IntersectionObserver((entries)=>{
@@ -154,7 +156,7 @@ const statsBlock = document.querySelector('.stats');
 if(statsBlock) heroStatsIO.observe(statsBlock);
 
 /* ---------- typewriter ---------- */
-const phrases = ["software engineer @ PickYourTrail","spreadsheets → systems","40%+ faster APIs, on purpose","Laravel · PHP · MySQL · Redis"];
+const phrases = ["ai_workflows_in_production();","call → summary → stage move, no human in the loop","400+ daily users run on what I ship","Laravel · PHP · OpenAI · Whisper · MCP"];
 const twEl = document.getElementById('typewriter');
 let pi=0, ci=0, deleting=false;
 function tick(){
@@ -383,7 +385,7 @@ backToTop.addEventListener('click', ()=>window.scrollTo({ top:0, behavior:'smoot
 const themeBtn = document.getElementById('themeToggle');
 themeBtn.addEventListener('click', ()=>{
   const root = document.documentElement;
-  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
   root.setAttribute('data-theme', next);
   themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
 });

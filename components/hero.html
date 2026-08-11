@@ -2,43 +2,50 @@
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="dot" aria-hidden="true"></span><span class="mono">ready_to_deploy_my_next_role();</span></div>
+        <div class="eyebrow"><span class="dot" aria-hidden="true"></span><span class="mono">ai_runs_in_production_here();</span></div>
         <h1><span class="hi">Hey, I'm</span>Vignesh J</h1>
         <div class="typewrap"><span class="tw mono" id="typewriter" aria-live="polite"></span></div>
-        <p class="lede">Backend engineer turning operational friction into self-running systems. At PickYourTrail I build internal platforms with Laravel, PHP, MySQL, Redis, and AI agents for 400+ daily users across 7 teams — cutting API response times by 40%+ and shipping tools like Trippie, Unity, and the Visa Dashboard. Open to backend and platform engineering roles.</p>
-        <div class="cta-row">
+        <p class="lede">Backend engineer who builds AI that does the busywork — transcribes calls, updates pipeline stages, qualifies leads, and moves refunds in hours instead of days. At PickYourTrail, 400+ people across 7 teams run their day on the platforms I build. Open to backend, platform, and AI-systems roles.</p>
+        <div class="hero-proof" data-reveal>
+          <span class="num">400+</span>
+          <span class="txt">daily users across <b>7 teams</b> work on systems I've shipped. Pipeline stages that used to update by hand now update themselves.</span>
+        </div>
+        <div class="cta-row" data-reveal>
           <a class="btn primary" href="mailto:vigneshjothishwaran@gmail.com">Say hey <svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg></a>
           <a class="btn" href="resume/?download" target="_blank" rel="noopener"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#download"></use></svg> Download Resume</a>
           <a class="btn" href="https://github.com/vignesh-jothi" target="_blank" rel="noopener">GitHub</a>
           <a class="btn" href="https://www.linkedin.com/in/vignesh-jothi" target="_blank" rel="noopener">LinkedIn</a>
-          <a class="btn" href="https://vignesh-jothi.github.io/LinkTree/" target="_blank" rel="noopener"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#link"></use></svg> LinkTree</a>
         </div>
       </div>
 
-      <div class="hero-tech-card" aria-hidden="true" data-reveal>
+      <div class="hero-tech-card" data-reveal>
         <div class="tech-window">
           <div class="tech-head">
             <span></span><span></span><span></span>
-            <span class="tech-title mono">stack.yml</span>
+            <span class="tech-title mono">ai-call-pipeline.php</span>
           </div>
           <div class="tech-body">
-            <div class="tech-line"><span class="tech-k">backend:</span> <span class="tech-v">Laravel · PHP · MySQL</span></div>
-            <div class="tech-line"><span class="tech-k">cache:</span> <span class="tech-v">Redis · Horizon</span></div>
-            <div class="tech-line"><span class="tech-k">infra:</span> <span class="tech-v">AWS · Docker · K8s</span></div>
-            <div class="tech-line"><span class="tech-k">ai:</span> <span class="tech-v">OpenAI · Whisper · Agents</span></div>
-            <div class="tech-line"><span class="tech-k">frontend:</span> <span class="tech-v">React · TypeScript</span></div>
-            <div class="tech-cursor mono" aria-hidden="true">_<span></span></div>
+            <div class="tech-line tech-cm">// ai call pipeline — nobody in the loop</div>
+            <div class="tech-line">$audio = <span class="tech-k">CallRecording</span>::latest();</div>
+            <div class="tech-line">$transcript = <span class="tech-k">Whisper</span>::transcribe($audio);</div>
+            <div class="tech-line">$summary = <span class="tech-k">OpenAI</span>::summarize($transcript);</div>
+            <div class="tech-line">$stage = <span class="tech-k">StageRules</span>::apply($summary); <span class="tech-cm">// business rules</span></div>
+            <div class="tech-line"><span class="tech-k">DB</span>::transaction(<span class="tech-k">fn</span> () =&gt; $crm-&gt;move($deal, $stage));</div>
+            <div class="tech-line tech-cm">// agents see the updated deal in Stream, live</div>
+            <div class="tech-cursor mono" aria-hidden="true">_</div>
           </div>
         </div>
-        <div class="floating-pill pill-1 mono">REST APIs</div>
-        <div class="floating-pill pill-2 mono">Queue Systems</div>
-        <div class="floating-pill pill-3 mono">System Design</div>
+        <p class="hero-tech-cap mono">this replaced manual stage updates ↓ <a href="#ai-call">the full story</a></p>
       </div>
     </div>
 
     <div class="hero-skills" data-reveal>
       <div class="skill-marquee">
         <div class="skill-track">
+          <span class="skill-pill">MCP</span>
+          <span class="skill-pill">OpenAI</span>
+          <span class="skill-pill">Whisper</span>
+          <span class="skill-pill">AI Agents</span>
           <span class="skill-pill">Laravel</span>
           <span class="skill-pill">PHP</span>
           <span class="skill-pill">MySQL</span>
@@ -47,14 +54,18 @@
           <span class="skill-pill">AWS</span>
           <span class="skill-pill">Docker</span>
           <span class="skill-pill">Kubernetes</span>
-          <span class="skill-pill">OpenAI</span>
-          <span class="skill-pill">Whisper</span>
-          <span class="skill-pill">AI Agents</span>
           <span class="skill-pill">React</span>
           <span class="skill-pill">TypeScript</span>
           <span class="skill-pill">System Design</span>
           <span class="skill-pill">API Design</span>
+          <span class="skill-pill">Caching Strategies</span>
+          <span class="skill-pill">Async AI Architecture</span>
+          <span class="skill-pill">Workflow Automation</span>
           <span class="skill-pill">Queue-Based Processing</span>
+          <span class="skill-pill">MCP</span>
+          <span class="skill-pill">OpenAI</span>
+          <span class="skill-pill">Whisper</span>
+          <span class="skill-pill">AI Agents</span>
           <span class="skill-pill">Laravel</span>
           <span class="skill-pill">PHP</span>
           <span class="skill-pill">MySQL</span>
@@ -63,23 +74,25 @@
           <span class="skill-pill">AWS</span>
           <span class="skill-pill">Docker</span>
           <span class="skill-pill">Kubernetes</span>
-          <span class="skill-pill">OpenAI</span>
-          <span class="skill-pill">Whisper</span>
-          <span class="skill-pill">AI Agents</span>
           <span class="skill-pill">React</span>
           <span class="skill-pill">TypeScript</span>
           <span class="skill-pill">System Design</span>
           <span class="skill-pill">API Design</span>
+          <span class="skill-pill">Caching Strategies</span>
+          <span class="skill-pill">Async AI Architecture</span>
+          <span class="skill-pill">Workflow Automation</span>
           <span class="skill-pill">Queue-Based Processing</span>
         </div>
       </div>
     </div>
 
     <div class="stats" data-reveal>
-      <div class="stat-card"><div class="num" id="expYearsStat">2+</div><div class="lbl">YEARS SHIPPING SOFTWARE</div></div>
-      <div class="stat-card"><div class="num">400+</div><div class="lbl">DAILY ACTIVE USERS</div></div>
-      <div class="stat-card"><div class="num">40%+</div><div class="lbl">FASTER API RESPONSES</div></div>
-      <div class="stat-card"><div class="num">7</div><div class="lbl">TEAMS SERVED DAILY</div></div>
+      <div class="stat-card hot"><div class="num">400+</div><div class="lbl">DAILY ACTIVE USERS</div><div class="why">CX, Sales, Visa &amp; Finance run their day on it — five spreadsheets, gone.</div></div>
+      <div class="stat-card"><div class="num">40%+</div><div class="lbl">FASTER API RESPONSES</div><div class="why">Agents don't wait on screens — more cases closed per shift.</div></div>
+      <div class="stat-card"><div class="num">24h</div><div class="lbl">REFUND TURNAROUND (WAS 3–5 DAYS)</div><div class="why">Money back in a day instead of a week — fewer disputes, more trust, customers who come back.</div></div>
+      <div class="stat-card"><div class="num">100</div><div class="lbl">CONVERSIONS IN 60 DAYS</div><div class="why">Sales outcomes from Unity itineraries — quoting that closes faster, not later.</div></div>
+      <div class="stat-card"><div class="num">7</div><div class="lbl">TEAMS, ONE SOURCE OF TRUTH</div><div class="why">Lost handoffs between departments stopped being a thing.</div></div>
+      <div class="stat-card"><div class="num">10+</div><div class="lbl">MODULES · 50+ FEATURES</div><div class="why">Shipped in 2 years across Plato, Trippie, Locker Room &amp; the Visa Dashboard.</div></div>
     </div>
   </div>
 </header>

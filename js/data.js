@@ -15,6 +15,14 @@ const TESTIMONIALS = [
     ]
   },
   {
+    tag: "Unity launch",
+    title: "From launch to 100 conversions in 60 days",
+    summary: "Unity became a catalyst for sales teams, helping them improve outcomes and reach their goals through more effective itinerary workflows.",
+    quotes: [
+      { name: "Srivatsa Kannan", role: "Supply ASM, PickYourTrail", quote: "Unity crossed 100 conversions from its itineraries within 60 days of launch." }
+    ]
+  },
+  {
     tag: "Plato experience",
     title: "Making an operational tool more human",
     summary: "Plato is used across PickYourTrail every day. Adding thoughtful animations made routine screens feel more engaging without getting in the way of the work.",
@@ -68,14 +76,6 @@ const TESTIMONIALS = [
     ]
   },
   {
-    tag: "Unity launch",
-    title: "From launch to 100 conversions in 60 days",
-    summary: "Unity became a catalyst for sales teams, helping them improve outcomes and reach their goals through more effective itinerary workflows.",
-    quotes: [
-      { name: "Srivatsa Kannan", role: "Supply ASM, PickYourTrail", quote: "Unity crossed 100 conversions from its itineraries within 60 days of launch." }
-    ]
-  },
-  {
     tag: "LockerRoom",
     title: "Replacing a painful paper process",
     summary: "LockerRoom brought employee and performance workflows into a simpler digital system, reducing the friction of a previously paper-driven process.",
@@ -87,7 +87,7 @@ const TESTIMONIALS = [
 
 const ACHIEVEMENTS = [
   { title: "Rookie of the Year", date: "PickYourTrail", description: "Recognised for delivering the Visa Dashboard, Auto-quote, and Instant Voucher, and for stepping in to support the Refunds team during launch." },
-  { title: "Trippie launches shipped in under a week", date: "PickYourTrail", description: "Delivered a dedicated Test Arena and migrated MCP integrations to function calling, improving escalation reliability and response speed." },
+  { title: "Trippie launches shipped in under a week", date: "PickYourTrail", description: "Delivered a dedicated Test Arena and migrated from function calling to MCP, improving escalation reliability and response speed." },
   { title: "Finance change visibility", date: "PickYourTrail", description: "Built recurring booking-cost updates and change-reason logs so the Finance team can understand what changed and why." },
   { title: "Visa Dashboard launch", date: "PickYourTrail", description: "Helped give the Visa team clearer daily task visibility and a more manageable way to handle allocations." },
   { title: "Quality and launch ownership", date: "PickYourTrail", description: "Recognised for stepping in on short notice for launches and for rigorous edge-case testing that strengthened product quality." },
