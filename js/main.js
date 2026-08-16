@@ -832,6 +832,8 @@ function showPost(slug) {
   const post = posts.find(p => p.slug === slug);
   if (!post) { showBlogListing(); return; }
 
+  document.title = `${post.title} — Vignesh J`;
+
   const articleEl = document.getElementById('singlePostArticle');
   if (!articleEl) return;
 
