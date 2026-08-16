@@ -3,14 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vignesh J — Software Engineer</title>
-<meta name="description" content="Software Engineer building internal platforms, AI-powered workflows, and CRM systems used by 400+ daily users.">
+<title>Vignesh J — Full-Stack &amp; Software Systems Engineer</title>
+<meta name="description" content="Software Engineer with 3 years of experience building scalable full-stack web applications, APIs, and AI workflow platforms used daily by 400+ users.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230A0A0A'/%3E%3Ctext x='12' y='17' font-family='monospace' font-size='14' font-weight='700' fill='%232563EB' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=9">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=16">
 <script>
-  document.documentElement.setAttribute('data-theme','light');
+  (function() {
+    try {
+      var saved = localStorage.getItem('portfolio_theme');
+      var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
 </script>
 </head>
 <body>
@@ -26,13 +35,14 @@
   <main id="main">
     <div data-include="components/hero.html"></div>
     <div data-include="components/about.html"></div>
-    <div data-include="components/achievements.html"></div>
     <div data-include="components/projects.html"></div>
-    <div data-include="components/testimonials.html"></div>
-    <div data-include="components/experience.html"></div>
     <div data-include="components/how-i-think.html"></div>
-    <div data-include="components/growth.html"></div>
-    <div data-include="components/education.html"></div>
+    <div data-include="components/experience.html"></div>
+    <div data-include="components/skills.html"></div>
+    <div data-include="components/resume-section.html"></div>
+    <div data-include="components/achievements.html"></div>
+    <div data-include="components/testimonials.html"></div>
+    <div data-include="components/blog-preview.html"></div>
   </main>
 
   <div data-include="components/contact.html"></div>
@@ -40,8 +50,9 @@
 
 <div data-include="components/blog-view.html"></div>
 
+<script src="js/blog-data.js"></script>
 <script src="js/data.js"></script>
-<script src="js/components.js?v=2"></script>
-<script src="js/main.js?v=7"></script>
+<script src="js/components.js?v=3"></script>
+<script src="js/main.js?v=13"></script>
 </body>
 </html>

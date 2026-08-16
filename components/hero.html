@@ -1,101 +1,319 @@
 <header class="hero">
+  <div class="hero-ambient-mesh" aria-hidden="true">
+    <div class="mesh-orb mesh-orb-1"></div>
+    <div class="mesh-orb mesh-orb-2"></div>
+    <div class="mesh-grid-pattern"></div>
+  </div>
+
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="dot" aria-hidden="true"></span><span class="mono">currently shipping at PickYourTrail</span></div>
-        <h1>
-          <span class="l1 ghost">AI does the busywork.</span>
-          <span class="l2">Refunds that took 3–5 days now move in <span class="heat-word">under 24h.</span></span>
+        <div class="eyebrow" data-reveal>
+          <span class="beacon">
+            <span class="beacon-core"></span>
+            <span class="beacon-ripple"></span>
+          </span>
+          <span class="eyebrow-text">Available for High-Impact Roles</span>
+          <span class="eyebrow-sep">/</span>
+          <span class="eyebrow-loc mono">Chennai, India</span>
+        </div>
+
+        <h1 data-reveal>
+          <span class="l1 ghost">Engineering resilient <br/>full-stack systems.</span>
+          <span class="l2">APIs tuned <span class="gradient-text">40%+ faster</span> &amp; workflows automated for <span class="gradient-text">400+ DAU.</span></span>
         </h1>
-        <p class="subhead">I'm <b>Vignesh</b> — backend engineer in Chennai, turning five departments' spreadsheets into one platform CX, Sales, Finance &amp; Visa run on daily.</p>
-        <p class="subhead subhead-2">I like the unglamorous half of engineering — migrations, caching layers, queue workers: the stuff that quietly keeps a workday from breaking.</p>
+
+        <p class="subhead" data-reveal>
+          I'm <b>Vignesh</b> — full-stack and systems software engineer. I build high-throughput web applications with <b>React, Next.js, TypeScript, Node.js, and Modern CSS</b>, alongside high-concurrency backend services with <b>Laravel, PostgreSQL, Redis, and AI agent architectures</b>.
+        </p>
+
+        <p class="subhead subhead-2" data-reveal>
+          Specialized in zero-downtime database migrations, resilient message queues, multi-tier caching, accessible UI/UX design systems, and autonomous AI workflows that eliminate operational bottlenecks.
+        </p>
+
         <div class="cta-row" data-reveal>
-          <a class="btn primary" href="mailto:vigneshjothishwaran@gmail.com">Say hey <svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg></a>
-          <a class="btn" href="resume/?download" target="_blank" rel="noopener"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#download"></use></svg> Download Resume</a>
-          <a class="btn" href="https://github.com/vignesh-jothi" target="_blank" rel="noopener">github.com</a>
-          <a class="btn" href="https://www.linkedin.com/in/vignesh-jothi" target="_blank" rel="noopener">linkedin.com</a>
+          <a class="btn primary btn-glow" href="#contact">
+            <span>Get In Touch</span>
+            <svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
+          </a>
+          <a class="btn btn-secondary" href="resume/?download" target="_blank" rel="noopener">
+            <svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#download"></use></svg>
+            <span>Download Resume</span>
+          </a>
+          <a class="btn btn-secondary" href="#projects">Explore Work</a>
+          <button type="button" class="btn btn-secondary btn-copy-email" id="heroCopyEmailBtn" aria-label="Copy email address to clipboard" data-email="vigneshjothishwaran@gmail.com">
+            <svg class="btn-icon icon-copy" aria-hidden="true"><use href="icons/icons.svg#copy"></use></svg>
+            <span class="btn-text">Copy Email</span>
+            <span class="copy-tooltip" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20 6 9 17l-5-5"/></svg>
+              Copied to clipboard!
+            </span>
+          </button>
+          <a class="btn btn-ghost" href="https://github.com/vignesh-jothi" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
       </div>
 
       <div class="hero-tech-card" data-reveal>
         <div class="tech-window">
           <div class="tech-head">
-            <span></span><span></span><span></span>
-            <span class="tech-title mono">~/pickyourtrail — ship.log</span>
+            <div class="tech-dots">
+              <span class="dot-red" aria-hidden="true" title="Close"></span>
+              <span class="dot-yellow" aria-hidden="true" title="Minimize"></span>
+              <span class="dot-green" aria-hidden="true" title="Maximize"></span>
+            </div>
+            
+            <div class="tech-tabs" role="tablist" aria-label="System console views">
+              <button class="tech-tab active" role="tab" aria-selected="true" aria-controls="tab-ship" id="btn-tab-ship" data-target="tab-ship">
+                <span class="tab-badge">&gt;_</span>
+                <span class="tab-label">ship.log</span>
+              </button>
+              <button class="tech-tab" role="tab" aria-selected="false" aria-controls="tab-arch" id="btn-tab-arch" data-target="tab-arch">
+                <span class="tab-badge">{ }</span>
+                <span class="tab-label">arch.ts</span>
+              </button>
+              <button class="tech-tab" role="tab" aria-selected="false" aria-controls="tab-telemetry" id="btn-tab-telemetry" data-target="tab-telemetry">
+                <span class="tab-badge">⚡</span>
+                <span class="tab-label">telemetry</span>
+              </button>
+            </div>
+
+            <div class="tech-actions">
+              <button type="button" class="tech-action-btn" id="heroConsoleRerun" title="Replay Execution" aria-label="Replay Terminal Execution">
+                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              </button>
+            </div>
           </div>
-          <div class="tech-body">
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">ai call</span> <span class="t-path">--transcribe --summarise</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> OpenAI + Self developed opensource models · summary written, stage moved <span class="t-dim">— no human in the loop</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">bench api/routes</span> <span class="t-path">--compare=prev</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> avg response time <span class="t-check">down 40%+</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">workflow refunds</span> <span class="t-path">--automate</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> refund cycle <span class="t-dim">3–5 days →</span> <span class="t-heat">under 24h</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">users --active</span> <span class="t-path">--window=24h</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> <span class="t-check">400+</span> daily active users <span class="t-dim">across CX, Finance, Sales, Visa, Product</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">unity --itineraries</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> <span class="t-check">100 conversions</span> within 60 days of launch</div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line t-idle"><span class="t-dim">&gt; standing by for the next thing to optimise</span><span class="t-cursor" aria-hidden="true">█</span></div>
+
+          <!-- Tab 1: Terminal Log -->
+          <div class="tech-body tech-tab-panel show" id="tab-ship" role="tabpanel" aria-labelledby="btn-tab-ship">
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">stack deploy</span>
+                <span class="term-args">--env=prod --services=core,api</span>
+                <span class="term-time">[09:42:15]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-green">✓ SUCCESS</span>
+                <span class="term-desc">Next.js 15 + PostgreSQL · Zero-downtime deploy</span>
+                <span class="term-tag">[18ms]</span>
+              </div>
+            </div>
+
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">ai-agent pipeline</span>
+                <span class="term-args">--protocol=mcp</span>
+                <span class="term-time">[09:42:17]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-blue">✓ AUTOMATED</span>
+                <span class="term-desc">OpenAI + MCP Wiring · Auto CRM transitions</span>
+                <span class="term-tag">0 manual overhead</span>
+              </div>
+            </div>
+
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">benchmark routes</span>
+                <span class="term-args">--caching=redis</span>
+                <span class="term-time">[09:42:19]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-amber">⚡ 40%+ FASTER</span>
+                <span class="term-desc">Redis Caching &amp; PgBouncer query indexing</span>
+                <span class="term-tag">P95 &lt; 120ms</span>
+              </div>
+            </div>
+
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">metrics --active-users</span>
+                <span class="term-args">--window=24h</span>
+                <span class="term-time">[09:42:21]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-purple">👥 400+ DAU</span>
+                <span class="term-desc">7 departments (CX, Sales, Product, Visa, Finance)</span>
+                <span class="term-tag">single truth</span>
+              </div>
+            </div>
+
+            <div class="term-status-line">
+              <span class="term-idle-dot"></span>
+              <span class="term-idle-text">systems operating nominal · ready for dispatch</span>
+              <span class="t-cursor" aria-hidden="true">█</span>
+            </div>
+          </div>
+
+          <!-- Tab 2: Architecture Schema -->
+          <div class="tech-body tech-tab-panel" id="tab-arch" role="tabpanel" aria-labelledby="btn-tab-arch" hidden>
+            <div class="code-editor-header">
+              <span class="file-icon">TS</span>
+              <span class="file-name">src/architecture/platform.config.ts</span>
+              <span class="file-status">● saved</span>
+            </div>
+            <div class="code-editor-body mono">
+              <div class="code-line"><span class="ln">1</span><span class="c-keyword">export interface</span> <span class="c-type">ProductionArchitecture</span> {</div>
+              <div class="code-line"><span class="ln">2</span>  <span class="c-prop">frontend:</span> <span class="c-string">"Next.js 15"</span> | <span class="c-string">"React 19"</span>;</div>
+              <div class="code-line"><span class="ln">3</span>  <span class="c-prop">backend:</span> <span class="c-string">"PHP 8.3 / Laravel 11"</span> | <span class="c-string">"Node.js"</span>;</div>
+              <div class="code-line"><span class="ln">4</span>  <span class="c-prop">database:</span> <span class="c-string">"PostgreSQL 16"</span> + <span class="c-type">ReadReplicas</span>;</div>
+              <div class="code-line"><span class="ln">5</span>  <span class="c-prop">caching:</span> <span class="c-string">"Redis Multi-Tier"</span> + <span class="c-string">"PgBouncer"</span>;</div>
+              <div class="code-line"><span class="ln">6</span>  <span class="c-prop">aiWorkflows:</span> <span class="c-type">MCPProtocol</span>&lt;<span class="c-string">"OpenAI / Tooling"</span>&gt;;</div>
+              <div class="code-line"><span class="ln">7</span>  <span class="c-prop">availability:</span> <span class="c-number">99.98</span>; <span class="c-comment">// zero-downtime</span></div>
+              <div class="code-line"><span class="ln">8</span>}</div>
+              <div class="code-line"><span class="ln">9</span></div>
+              <div class="code-line"><span class="ln">10</span><span class="c-comment">// Auto-orchestrated event pipeline</span></div>
+              <div class="code-line"><span class="ln">11</span><span class="c-keyword">export const</span> <span class="c-func">dispatch</span> = <span class="c-keyword">async</span> (event: <span class="c-type">AppEvent</span>) =&gt; {</div>
+              <div class="code-line"><span class="ln">12</span>  <span class="c-keyword">await</span> queue.dispatch(event).through(cachingLayer);</div>
+              <div class="code-line"><span class="ln">13</span>};</div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Telemetry View -->
+          <div class="tech-body tech-tab-panel" id="tab-telemetry" role="tabpanel" aria-labelledby="btn-tab-telemetry" hidden>
+            <div class="telemetry-grid">
+              <div class="telemetry-card">
+                <div class="telemetry-head">
+                  <span class="telemetry-label">SYSTEM HEALTH</span>
+                  <span class="telemetry-pulse"></span>
+                </div>
+                <div class="telemetry-value t-check">100% HEALTHY</div>
+                <div class="telemetry-bar-wrap"><div class="telemetry-bar-fill bar-green" style="width:100%"></div></div>
+                <div class="telemetry-sub">0 critical alerts in 90 days</div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="telemetry-head">
+                  <span class="telemetry-label">API LATENCY (P95)</span>
+                  <span class="telemetry-pill">&lt; 120ms</span>
+                </div>
+                <div class="telemetry-value t-heat">40%+ FASTER</div>
+                <div class="telemetry-bar-wrap"><div class="telemetry-bar-fill bar-heat" style="width:85%"></div></div>
+                <div class="telemetry-sub">Redis Cache Hit Rate: 94.2%</div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="telemetry-head">
+                  <span class="telemetry-label">ACTIVE DAU</span>
+                  <span class="telemetry-live-tag">LIVE</span>
+                </div>
+                <div class="telemetry-value t-accent" id="telemetryDAU">412 Active</div>
+                <div class="telemetry-bar-wrap"><div class="telemetry-bar-fill bar-accent" style="width:78%"></div></div>
+                <div class="telemetry-sub">7 enterprise department teams</div>
+              </div>
+
+              <div class="telemetry-card">
+                <div class="telemetry-head">
+                  <span class="telemetry-label">AUTOMATION RUNS</span>
+                  <span class="telemetry-pill">24h SLA</span>
+                </div>
+                <div class="telemetry-value">14,280 / mo</div>
+                <div class="telemetry-bar-wrap"><div class="telemetry-bar-fill bar-purple" style="width:92%"></div></div>
+                <div class="telemetry-sub">Refunds + AI CRM summarisation</div>
+              </div>
+            </div>
           </div>
         </div>
-        <p class="hero-tech-cap mono">a live log of things actually shipped ↓ <a href="#ai-call">first AI story</a></p>
+
+        <div class="hero-tech-cap mono">
+          <div class="tech-cap-left">
+            <span class="cap-pulse-dot"></span>
+            <span>telemetry live · 0 errors</span>
+          </div>
+          <a href="#projects" class="tech-cap-link">explore case studies <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
       </div>
     </div>
 
+    <!-- Enhanced Stats Grid -->
     <div class="stats" data-reveal>
-      <div class="stat-card"><div class="num">400+</div><div class="lbl">DAILY ACTIVE USERS</div><div class="why">No more spreadsheet sprawl</div></div>
-      <div class="stat-card"><div class="num">40%+</div><div class="lbl">FASTER API RESPONSES</div><div class="why">more cases closed per shift</div></div>
-      <div class="stat-card hot"><div class="num">24h</div><div class="lbl">REFUND TURNAROUND (WAS 3–5 DAYS)</div><div class="why">money back in a day, disputes down</div></div>
-      <div class="stat-card"><div class="num">100</div><div class="lbl">CONVERSIONS IN 60 DAYS</div><div class="why">sales close faster, not later</div></div>
-      <div class="stat-card"><div class="num">7</div><div class="lbl">TEAMS, ONE SOURCE OF TRUTH</div><div class="why">handoffs stop getting lost</div></div>
-      <div class="stat-card"><div class="num">10+</div><div class="lbl">MODULES · 50+ FEATURES</div><div class="why">shipped in 2 years</div></div>
+      <div class="stat-card">
+        <div class="stat-badge"><span class="badge-icon">👥</span> SCALE</div>
+        <div class="num" id="statDAU">400+</div>
+        <div class="lbl">DAILY ACTIVE USERS</div>
+        <div class="why">Unified platform replacing distributed spreadsheets across 7 teams</div>
+      </div>
+      <div class="stat-card hot">
+        <div class="stat-badge"><span class="badge-icon">⚡</span> PERFORMANCE</div>
+        <div class="num" id="statSpeed">40%+</div>
+        <div class="lbl">FASTER API RESPONSES</div>
+        <div class="why">Redis multi-tier caching &amp; indexed PostgreSQL query tuning</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-badge"><span class="badge-icon">🛡️</span> AUTOMATION</div>
+        <div class="num" id="statRefund">24h</div>
+        <div class="lbl">REFUND TURNAROUND (WAS 3–5 DAYS)</div>
+        <div class="why">Automated CX &amp; Finance pipelines with immutable reason logs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-badge"><span class="badge-icon">🚀</span> IMPACT</div>
+        <div class="num" id="statConv">100</div>
+        <div class="lbl">CONVERSIONS IN 60 DAYS</div>
+        <div class="why">Unity dynamic sales itinerary engine shipped from concept to live</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-badge"><span class="badge-icon">🏢</span> ARCHITECTURE</div>
+        <div class="num" id="statTeams">7</div>
+        <div class="lbl">CROSS-FUNCTIONAL TEAMS</div>
+        <div class="why">Single source of truth platform connecting CX, Sales, Visa, Finance</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-badge"><span class="badge-icon">⭐</span> EXPERIENCE</div>
+        <div class="num" id="statExp">3+</div>
+        <div class="lbl">YEARS FULL-STACK EXP</div>
+        <div class="why">10+ production modules &amp; 50+ enterprise features shipped</div>
+      </div>
     </div>
 
-    <div class="hero-skills" data-reveal>
+    <!-- Categorized Skill Marquee -->
+    <div class="hero-skills" data-reveal aria-label="Technologies and specialties">
       <div class="skill-marquee">
         <div class="skill-track">
-          <span class="skill-pill">MCP</span>
-          <span class="skill-pill">OpenAI</span>
-          <span class="skill-pill">AI Agents</span>
-          <span class="skill-pill">Laravel</span>
-          <span class="skill-pill">PHP</span>
-          <span class="skill-pill">MySQL</span>
-          <span class="skill-pill">Redis</span>
-          <span class="skill-pill">Horizon</span>
-          <span class="skill-pill">AWS</span>
-          <span class="skill-pill">Docker</span>
-          <span class="skill-pill">Kubernetes</span>
-          <span class="skill-pill">React</span>
-          <span class="skill-pill">TypeScript</span>
-          <span class="skill-pill">System Design</span>
-          <span class="skill-pill">API Design</span>
-          <span class="skill-pill">Caching Strategies</span>
-          <span class="skill-pill">Async AI Architecture</span>
-          <span class="skill-pill">Workflow Automation</span>
-          <span class="skill-pill">Queue-Based Processing</span>
-          <span class="skill-pill">MCP</span>
-          <span class="skill-pill">OpenAI</span>
-          <span class="skill-pill">AI Agents</span>
-          <span class="skill-pill">Laravel</span>
-          <span class="skill-pill">PHP</span>
-          <span class="skill-pill">MySQL</span>
-          <span class="skill-pill">Redis</span>
-          <span class="skill-pill">Horizon</span>
-          <span class="skill-pill">AWS</span>
-          <span class="skill-pill">Docker</span>
-          <span class="skill-pill">Kubernetes</span>
-          <span class="skill-pill">React</span>
-          <span class="skill-pill">TypeScript</span>
-          <span class="skill-pill">System Design</span>
-          <span class="skill-pill">API Design</span>
-          <span class="skill-pill">Caching Strategies</span>
-          <span class="skill-pill">Async AI Architecture</span>
-          <span class="skill-pill">Workflow Automation</span>
-          <span class="skill-pill">Queue-Based Processing</span>
+          <!-- Category 1: Frontend & UX -->
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>React 19</span>
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>Next.js 15</span>
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>TypeScript</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>Design Systems</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>Micro-Interactions</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>WCAG / a11y</span>
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>TailwindCSS</span>
+          <!-- Category 2: Backend & Systems -->
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>Laravel</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>PHP 8.3</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>Node.js</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>PostgreSQL</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>Redis Caching</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>GraphQL &amp; REST</span>
+          <!-- Category 3: AI & Cloud -->
+          <span class="skill-pill pill-ai"><span class="pill-dot"></span>MCP Agents</span>
+          <span class="skill-pill pill-ai"><span class="pill-dot"></span>OpenAI Tooling</span>
+          <span class="skill-pill pill-ops"><span class="pill-dot"></span>AWS Cloud</span>
+          <span class="skill-pill pill-ops"><span class="pill-dot"></span>Docker &amp; K8s</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>Core Web Vitals</span>
+
+          <!-- Duplicate for seamless infinite loop -->
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>React 19</span>
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>Next.js 15</span>
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>TypeScript</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>Design Systems</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>Micro-Interactions</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>WCAG / a11y</span>
+          <span class="skill-pill pill-fe"><span class="pill-dot"></span>TailwindCSS</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>Laravel</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>PHP 8.3</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>Node.js</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>PostgreSQL</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>Redis Caching</span>
+          <span class="skill-pill pill-be"><span class="pill-dot"></span>GraphQL &amp; REST</span>
+          <span class="skill-pill pill-ai"><span class="pill-dot"></span>MCP Agents</span>
+          <span class="skill-pill pill-ai"><span class="pill-dot"></span>OpenAI Tooling</span>
+          <span class="skill-pill pill-ops"><span class="pill-dot"></span>AWS Cloud</span>
+          <span class="skill-pill pill-ops"><span class="pill-dot"></span>Docker &amp; K8s</span>
+          <span class="skill-pill pill-ux"><span class="pill-dot"></span>Core Web Vitals</span>
         </div>
       </div>
     </div>
