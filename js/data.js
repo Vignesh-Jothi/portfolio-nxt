@@ -92,11 +92,7 @@ const ACHIEVEMENTS = [
   { title: "Unity milestone", date: "PickYourTrail", description: "Contributed to Unity, which crossed 100 conversions from Unity itineraries within 60 days of launch." }
 ];
 
-const CERTIFICATIONS = [
-  { title: "AWS Certified Developer – Associate", issuer: "Amazon Web Services", date: "2025", badge: "AWS" },
-  { title: "Meta Certified Front-End Developer", issuer: "Meta", date: "2024", badge: "Meta" },
-  { title: "PostgreSQL Database Tuning & Architecture", issuer: "PostgreSQL Professional", date: "2024", badge: "PostgreSQL" }
-];
+const CERTIFICATIONS = [];
 
 /* CHANGE THIS to your own passcode before sharing this file. */
 const ADMIN_PASSCODE = "vignesh2026";

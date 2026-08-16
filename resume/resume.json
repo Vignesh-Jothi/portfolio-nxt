@@ -98,26 +98,7 @@
       "Postman"
     ]
   },
-  "certifications": [
-    {
-      "title": "AWS Certified Developer – Associate",
-      "issuer": "Amazon Web Services (AWS)",
-      "date": "2025",
-      "credentialId": "AWS-DEV-84920"
-    },
-    {
-      "title": "Meta Certified Front-End Developer",
-      "issuer": "Meta / Coursera",
-      "date": "2024",
-      "credentialId": "META-FED-39182"
-    },
-    {
-      "title": "PostgreSQL Performance & Database Tuning",
-      "issuer": "PostgreSQL Professional",
-      "date": "2024",
-      "credentialId": "PG-PERF-10495"
-    }
-  ],
+  "certifications": [],
   "achievements": [
     {
       "title": "Rookie of the Year Award",
