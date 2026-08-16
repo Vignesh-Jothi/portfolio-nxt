@@ -180,21 +180,107 @@ const heroStatsIO = new IntersectionObserver((entries)=>{
 const statsBlock = document.querySelector('.stats');
 if(statsBlock) heroStatsIO.observe(statsBlock);
 
-/* ---------- hero ship.log terminal reveal ---------- */
-const termLines = document.querySelectorAll('.tech-body .tech-line');
-if(termLines.length){
+/* ---------- hero console & terminal interactions ---------- */
+function runTerminalAnimation() {
+  const termLines = document.querySelectorAll('#tab-ship .tech-line');
+  if (!termLines.length) return;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduceMotion){
-    termLines.forEach(l=>l.classList.add('show'));
-  } else {
-    let i = 0;
-    (function next(){
-      if(i >= termLines.length) return;
-      termLines[i].classList.add('show');
-      i++;
-      setTimeout(next, termLines[i-1].classList.contains('t-gap') ? 140 : 260);
-    })();
+  if (reduceMotion) {
+    termLines.forEach(l => l.classList.add('show'));
+    return;
   }
+  termLines.forEach(l => l.classList.remove('show'));
+  let i = 0;
+  function next() {
+    if (i >= termLines.length) return;
+    termLines[i].classList.add('show');
+    i++;
+    setTimeout(next, termLines[i - 1].classList.contains('t-gap') ? 120 : 220);
+  }
+  next();
+}
+
+// Initial terminal reveal
+runTerminalAnimation();
+
+// Console Tab Switcher
+const techTabs = document.querySelectorAll('.tech-tab');
+const techPanels = document.querySelectorAll('.tech-tab-panel');
+techTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const targetId = tab.dataset.target;
+    techTabs.forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    techPanels.forEach(p => {
+      p.classList.remove('show');
+      p.hidden = true;
+    });
+
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    const targetPanel = document.getElementById(targetId);
+    if (targetPanel) {
+      targetPanel.hidden = false;
+      targetPanel.classList.add('show');
+      if (targetId === 'tab-ship') {
+        runTerminalAnimation();
+      }
+    }
+  });
+});
+
+// Console Rerun Button
+const rerunBtn = document.getElementById('heroConsoleRerun');
+if (rerunBtn) {
+  rerunBtn.addEventListener('click', () => {
+    const shipTabBtn = document.getElementById('btn-tab-ship');
+    if (shipTabBtn && !shipTabBtn.classList.contains('active')) {
+      shipTabBtn.click();
+    } else {
+      runTerminalAnimation();
+    }
+  });
+}
+
+// Live Telemetry DAU Counter Simulation
+const telemetryDAUEl = document.getElementById('telemetryDAU');
+if (telemetryDAUEl) {
+  let baseDAU = 412;
+  setInterval(() => {
+    const jitter = Math.floor(Math.random() * 9) - 4; // -4 to +4
+    const current = baseDAU + jitter;
+    telemetryDAUEl.textContent = current + ' Active';
+  }, 4000);
+}
+
+// Hero Copy Email Button
+const heroCopyEmailBtn = document.getElementById('heroCopyEmailBtn');
+if (heroCopyEmailBtn) {
+  heroCopyEmailBtn.addEventListener('click', async () => {
+    const email = heroCopyEmailBtn.dataset.email || 'vigneshjothishwaran@gmail.com';
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = email;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      heroCopyEmailBtn.classList.add('copied');
+      setTimeout(() => {
+        heroCopyEmailBtn.classList.remove('copied');
+      }, 2200);
+    } catch (err) {
+      console.warn('Could not copy email:', err);
+    }
+  });
 }
 
 /* ---------- before/after toggles ---------- */
@@ -387,14 +473,19 @@ if(hamburgerBtn && mobileNav){
 }
 
 /* ---------- active section highlight in nav ---------- */
-const navLinks = document.querySelectorAll('#mainNav a[href^="#"]');
-const navSections = Array.from(navLinks).map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const navLinks = document.querySelectorAll('#mainNav a[href^="#"], #mobileNav a[href^="#"]');
+const navSections = Array.from(document.querySelectorAll('#mainNav a[href^="#"]')).map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
 if(navSections.length && 'IntersectionObserver' in window){
   const navIO = new IntersectionObserver((entries)=>{
+    if(viewBlog && !viewBlog.hidden) return; // Don't highlight portfolio sections when on blog
     entries.forEach(entry=>{
       if(entry.isIntersecting){
         const id = '#' + entry.target.id;
         navLinks.forEach(a=>a.classList.toggle('current', a.getAttribute('href')===id));
+        const navBlogEl = document.getElementById('navBlog');
+        const navBlogMobEl = document.getElementById('navBlogMobile');
+        if(navBlogEl) navBlogEl.classList.remove('current');
+        if(navBlogMobEl) navBlogMobEl.classList.remove('current');
       }
     });
   }, { rootMargin: '-35% 0px -55% 0px' });
@@ -769,6 +860,12 @@ function showPost(slug) {
     };
   }
 
+  const navBlogEl = document.getElementById('navBlog');
+  const navBlogMobEl = document.getElementById('navBlogMobile');
+  if (navBlogEl) navBlogEl.classList.add('current');
+  if (navBlogMobEl) navBlogMobEl.classList.add('current');
+  document.querySelectorAll('#mainNav a, #mobileNav a').forEach(a => a.classList.remove('current'));
+
   // Show/hide views
   if (viewPortfolio && !viewPortfolio.hidden) {
     transitionTo(viewBlog, viewPortfolio, () => {
@@ -789,7 +886,6 @@ function showPost(slug) {
   if (topbarTitle) topbarTitle.textContent = post.title;
 }
 
-
 function setupPostView(post, slug) {
   buildToc(document.getElementById('singlePostArticle'), post.id);
   wireCodeCopy(document.getElementById('singlePostArticle'));
@@ -803,6 +899,13 @@ function setupPostView(post, slug) {
 ────────────────────────────────────────────────────────────── */
 function showBlogListing() {
   if (!viewBlog) return;
+
+  const navBlogEl = document.getElementById('navBlog');
+  const navBlogMobEl = document.getElementById('navBlogMobile');
+  if (navBlogEl) navBlogEl.classList.add('current');
+  if (navBlogMobEl) navBlogMobEl.classList.add('current');
+  document.querySelectorAll('#mainNav a, #mobileNav a').forEach(a => a.classList.remove('current'));
+  document.title = 'Engineering Notes — Vignesh J';
 
   if (viewPortfolio && !viewPortfolio.hidden) {
     transitionTo(viewBlog, viewPortfolio, () => {
@@ -827,14 +930,66 @@ function showBlogListing() {
 /* ──────────────────────────────────────────────────────────────
    PORTFOLIO VIEW (homepage)
 ────────────────────────────────────────────────────────────── */
-function showPortfolio() {
+function showPortfolio(targetHash) {
   if (!viewPortfolio || !viewBlog) return;
-  transitionTo(viewPortfolio, viewBlog, null);
+
+  const navBlogEl = document.getElementById('navBlog');
+  const navBlogMobEl = document.getElementById('navBlogMobile');
+  if (navBlogEl) navBlogEl.classList.remove('current');
+  if (navBlogMobEl) navBlogMobEl.classList.remove('current');
+
+  const isBlogCurrentlyVisible = !viewBlog.hidden;
+
+  const performScroll = () => {
+    if (targetHash) {
+      const el = document.querySelector(targetHash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        document.querySelectorAll('#mainNav a[href^="#"], #mobileNav a[href^="#"]').forEach(a => {
+          a.classList.toggle('current', a.getAttribute('href') === targetHash);
+        });
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  if (isBlogCurrentlyVisible) {
+    transitionTo(viewPortfolio, viewBlog, () => {
+      document.title = 'Vignesh J — Full-Stack & Software Systems Engineer';
+      setTimeout(performScroll, 60);
+    });
+  } else {
+    performScroll();
+  }
+
   const url = new URL(window.location.href);
-  url.search = ''; history.replaceState({}, '', url.toString());
+  url.search = '';
+  if (targetHash) {
+    url.hash = targetHash;
+  } else {
+    url.hash = '';
+  }
+  history.pushState({}, '', url.pathname + (url.hash || ''));
+
   if (readProgressListener) { window.removeEventListener('scroll', readProgressListener, { passive: true }); readProgressListener = null; }
   if (tocObserver) { tocObserver.disconnect(); tocObserver = null; }
 }
+
+/* ── Universal hash navigation across portfolio & blog ──────── */
+document.addEventListener('click', (e) => {
+  const anchor = e.target.closest('a[href^="#"]');
+  if (!anchor) return;
+  const hash = anchor.getAttribute('href');
+  if (!hash || hash === '#' || hash === '#main') return;
+
+  const targetEl = document.querySelector(hash);
+  if (targetEl) {
+    e.preventDefault();
+    if (typeof closeMobileNav === 'function') closeMobileNav();
+    showPortfolio(hash);
+  }
+});
 
 /* ── Wire back-to-blog from single post ───────────────────────── */
 const backToBlogEl = document.getElementById('backToBlog');
@@ -851,13 +1006,18 @@ const backHomeFromListing = document.getElementById('backHomeFromListing');
 if (backHomeFromListing) {
   backHomeFromListing.addEventListener('click', e => {
     e.preventDefault();
-    history.pushState({}, '', window.location.pathname);
     showPortfolio();
   });
 }
 
 const brandHome = document.getElementById('brandHome');
-if (brandHome) brandHome.addEventListener('click', () => { history.pushState({}, '', window.location.pathname); showPortfolio(); });
+if (brandHome) {
+  brandHome.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (typeof closeMobileNav === 'function') closeMobileNav();
+    showPortfolio();
+  });
+}
 
 /* ── Nav links → blog listing ─────────────────────────────────── */
 const navBlog = document.getElementById('navBlog');
@@ -886,9 +1046,14 @@ window.addEventListener('popstate', () => {
   const p = new URLSearchParams(window.location.search);
   const slug = p.get('post');
   const isBlog = p.get('blog');
-  if (slug) { showPost(slug); }
-  else if (isBlog) { showBlogListing(); }
-  else { showPortfolio(); }
+  const hash = window.location.hash;
+  if (slug) {
+    showPost(slug);
+  } else if (isBlog) {
+    showBlogListing();
+  } else {
+    showPortfolio(hash);
+  }
 });
 
 /* ── Initial render ───────────────────────────────────────────── */
@@ -898,8 +1063,10 @@ renderHomeBlogCards();
   const p = new URLSearchParams(window.location.search);
   const slug = p.get('post');
   const isBlog = p.get('blog');
+  const hash = window.location.hash;
   if (slug) { showPost(slug); return; }
-  if (isBlog) { showBlogListing(); }
+  if (isBlog) { showBlogListing(); return; }
+  if (hash) { showPortfolio(hash); }
 })();
 
 } // end initPortfolio

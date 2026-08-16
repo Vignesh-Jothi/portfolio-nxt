@@ -19,13 +19,12 @@
       "start": "Sep 2024",
       "end": "present",
       "bullets": [
-        "Architected and maintained core full-stack platform services powering CRM, operational tracking, and customer experience for 400+ daily active users across 7 cross-functional teams (CX, Sales, Product, Visa, and Finance).",
-        "Engineered AI-assisted call intelligence and workflow pipelines using OpenAI APIs, self-hosted LLMs, and Model Context Protocol (MCP) tool wiring — enabling automated call summarization, sentiment extraction, and automatic CRM pipeline stage transitions without human intervention.",
-        "Optimized REST and GraphQL APIs and database queries across high-frequency endpoints, achieving a 40%+ reduction in average response latency and significantly reducing peak server CPU utilization.",
-        "Automated financial refund pipelines and CX workflows, cutting customer refund turnaround times from 3–5 business days to under 24 hours while establishing immutable reason logs for audit compliance.",
-        "Spearheaded zero-downtime migration of legacy monolithic modules to modern containerized microservices and modern PHP/Laravel & TypeScript services, eliminating operational interruptions.",
-        "Introduced Redis caching tiers, connection pooling, and asynchronous worker queues (Horizon & BullMQ), cutting redundant database load by 50% under peak sales traffic.",
-        "Implemented comprehensive automated testing suites (Pest, Jest) covering mission-critical payment, booking, and visa allocation logic."
+        "Unified Multi-Team Platform: Solved operational fragmentation and manual spreadsheet tracking across 7 departments (CX, Sales, Product, Visa, Finance) by architecting a high-throughput full-stack platform (React, Next.js, Node.js, Laravel, PostgreSQL, Redis) serving 400+ daily active users as the single source of truth.",
+        "Autonomous AI Pipeline Automation: Eliminated manual post-call logging overhead by engineering an event-driven AI workflow using OpenAI APIs and Model Context Protocol (MCP) tool wiring — delivering automated call summarization, sentiment classification, and zero-touch CRM pipeline transitions.",
+        "High-Throughput API & Database Optimization: Solved peak sales database contention and slow endpoints by implementing multi-tier Redis caching, connection pooling (PgBouncer), and SQL index tuning — slashing average API response latency by 40%+ and reducing database CPU load by 50%.",
+        "Automated Refund & Finance Pipelines: Solved 3–5 day manual customer refund delays by engineering automated CX and Finance approval pipelines with immutable audit logs — cutting refund turnaround time to under 24 hours.",
+        "Zero-Downtime Microservices Migration: Solved monolithic scaling bottlenecks by decoupling mission-critical services and executing zero-downtime database and schema migrations with zero operational disruption.",
+        "Mission-Critical Test Automation: Hardened payment, dynamic pricing, and visa allocation modules against edge-case failures by implementing end-to-end automated testing suites (Pest, Jest, Playwright)."
       ]
     },
     {
@@ -36,23 +35,31 @@
       "start": "Oct 2023",
       "end": "Sep 2024",
       "bullets": [
-        "Developed responsive web portals and interactive dashboards using React, TypeScript, Node.js, and PostgreSQL for real-time asset telemetry and tracking.",
-        "Tuned database queries, index strategies, and API response serialization, resulting in a 30% overall backend throughput improvement.",
-        "Hardened application security posture by implementing JWT-based authentication, role-based access control (RBAC), input validation schemas, and AES-256 data encryption for sensitive user records.",
-        "Assisted cloud migration and deployment pipelines on AWS (EC2, S3, RDS), scaling concurrent system handling capacity by ~50%."
+        "Real-Time Telemetry Portals: Solved real-time vehicle and asset tracking visibility challenges by building responsive portals and interactive telemetry dashboards using React, TypeScript, Node.js, and PostgreSQL with sub-second updates.",
+        "Database Query & Throughput Tuning: Solved slow reporting queries over high-frequency time-series tracking data by restructuring indexes and optimizing serialization, improving overall backend API throughput by 30%.",
+        "Enterprise Security & RBAC Hardening: Solved access vulnerabilities by implementing robust JWT authentication, fine-grained role-based access control (RBAC), input sanitization schemas, and AES-256 data encryption for sensitive customer records.",
+        "AWS Cloud Infrastructure Scaling: Assisted infrastructure migration and provisioning on AWS (EC2, S3, RDS), scaling concurrent tracking capacity by ~50%."
       ]
     }
   ],
   "skills": {
     "Frontend": [
-      "React",
-      "Next.js",
+      "React 18 / 19",
+      "Next.js (App Router)",
       "TypeScript",
-      "JavaScript (ES6+)",
+      "JavaScript (ESNext)",
       "TailwindCSS",
-      "HTML5 / CSS3",
+      "Modern CSS (Grid/Flexbox)",
       "Zustand / Redux",
-      "Vite"
+      "Vite / Webpack"
+    ],
+    "UI/UX & Design": [
+      "Design Systems & Tokens",
+      "Micro-Interactions & Animation",
+      "Web Accessibility (WCAG / a11y)",
+      "Responsive Layouts",
+      "Core Web Vitals Optimization",
+      "Figma to Clean Code"
     ],
     "Backend & APIs": [
       "PHP 8.x",
@@ -96,7 +103,7 @@
       "Model Context Protocol (MCP)",
       "LLM Agent Tooling",
       "Pest / PHPUnit",
-      "Jest",
+      "Jest / Playwright",
       "Git / GitHub",
       "Postman"
     ]
