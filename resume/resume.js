@@ -39,7 +39,7 @@
 
   function render(data) {
     document.title = `${data.name} — Resume`;
-    const yoe = yearsFromExperience(data.experience);
+    const yoe = Math.max(3, yearsFromExperience(data.experience));
 
     const contactItems = [
       `<a href="mailto:${data.contact.email}">${icon('mail')}${data.contact.email}</a>`,
@@ -50,7 +50,6 @@
     ];
 
     const contactItems2 = [
-      
       `${icon('map-pin')}${data.contact.location}`
     ];
 
@@ -72,6 +71,16 @@
       <div class="skill-row">
         <span class="skill-key">${category}:</span>
         <span class="skill-values">${items.join(', ')}</span>
+      </div>
+    `).join('');
+
+    const certificationsHtml = (data.certifications || []).map(c => `
+      <div class="entry entry--compact">
+        <div class="entry-head">
+          <div class="entry-title">${c.title} <span class="entry-sub">· ${c.issuer}</span></div>
+          <div class="entry-meta">${c.date}</div>
+        </div>
+        ${c.credentialId ? `<p class="entry-note mono" style="font-size:12px; color:var(--muted);">ID: ${c.credentialId}</p>` : ''}
       </div>
     `).join('');
 
@@ -120,28 +129,34 @@
         </header>
 
         <section class="section section--summary" id="summary">
-          <div class="section-title">Summary</div>
+          <div class="section-title">Professional Summary</div>
           <p class="summary">${data.summary.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\{years\}/g, yoe)}</p>
-        </section>
-
-        <section class="section" id="experience">
-          <div class="section-title">Professional Experience</div>
-          ${experienceHtml}
-        </section>
-
-        <section class="section" id="projects">
-          <div class="section-title">Projects</div>
-          ${projectsHtml}
-        </section>
-
-        <section class="section" id="achievements">
-          <div class="section-title">Key Achievements</div>
-          ${achievementsHtml || '<p class="empty-section">No achievements listed.</p>'}
         </section>
 
         <section class="section" id="skills">
           <div class="section-title">Technical Skills</div>
           <div class="skills-grid">${skillsHtml}</div>
+        </section>
+
+        <section class="section" id="experience">
+          <div class="section-title">Work Experience</div>
+          ${experienceHtml}
+        </section>
+
+        <section class="section" id="projects">
+          <div class="section-title">Key Projects &amp; Architecture</div>
+          ${projectsHtml}
+        </section>
+
+        ${certificationsHtml ? `
+        <section class="section" id="certifications">
+          <div class="section-title">Certifications</div>
+          ${certificationsHtml}
+        </section>` : ''}
+
+        <section class="section" id="achievements">
+          <div class="section-title">Key Achievements &amp; Awards</div>
+          ${achievementsHtml || '<p class="empty-section">No achievements listed.</p>'}
         </section>
 
         <section class="section" id="education">

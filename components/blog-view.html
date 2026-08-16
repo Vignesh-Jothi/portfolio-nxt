@@ -1,10 +1,20 @@
 <div id="view-blog" hidden>
   <div class="wrap blog-header">
-    <a href="#" class="back" id="backHome">← Back to portfolio</a>
-    <h1>Blog</h1>
-    <p class="mono" style="color:var(--muted); font-size:13px;">Notes on backend systems, migrations, and things I've learned shipping them.</p>
+    <a href="#" class="back" id="backHome">← Back to Portfolio</a>
+    <div class="blog-header-content">
+      <span class="tag">// engineering journal</span>
+      <h1>System Design &amp; Software Engineering</h1>
+      <p class="blog-subhead">In-depth guides on building scalable web applications, asynchronous queuing patterns, and maintainable software architecture.</p>
+    </div>
+    <div class="blog-categories" id="blogCategoryFilters">
+      <button class="cat-pill active" data-category="all" type="button">All Articles</button>
+      <button class="cat-pill" data-category="System Design" type="button">System Design</button>
+      <button class="cat-pill" data-category="Backend Engineering" type="button">Backend</button>
+      <button class="cat-pill" data-category="Software Architecture" type="button">Architecture</button>
+    </div>
   </div>
-  <section style="border-bottom:none;">
+
+  <section class="blog-reader-section" style="border-bottom:none;">
     <div class="wrap">
       <div id="postsList"></div>
     </div>

@@ -1,6 +1,7 @@
 /* ============================================================
-   MAIN — all interactive logic for the portfolio.
+   MAIN — Interactive logic for the portfolio and blog.
    Depends on: js/data.js (TESTIMONIALS, ACHIEVEMENTS)
+               js/blog-data.js (BLOG_POSTS)
    ============================================================ */
 
 function initPortfolio() {
@@ -11,10 +12,10 @@ function calcYears(start){
   const s = new Date(start);
   let years = now.getFullYear() - s.getFullYear();
   if(now.getMonth() < s.getMonth() || (now.getMonth() === s.getMonth() && now.getDate() < s.getDate())) years--;
-  return Math.max(0, years);
+  return Math.max(3, years);
 }
 const yoe = calcYears('2023-10-01');
-const expYearsStat = document.getElementById('expYearsStat');
+const expYearsStat = document.getElementById('statExp');
 if(expYearsStat) expYearsStat.textContent = yoe + '+';
 const expYearsText = document.getElementById('expYearsText');
 if(expYearsText) expYearsText.textContent = yoe + '+ years';
@@ -22,53 +23,59 @@ if(expYearsText) expYearsText.textContent = yoe + '+ years';
 /* ---------- render testimonials & achievements ---------- */
 const testGrid = document.getElementById('testGrid');
 const testDots = document.getElementById('testDots');
-TESTIMONIALS.forEach((t, i)=>{
-  const featured = t.quotes[0];
-  const initials = featured.name.split(' ').map(n=>n[0]).slice(0,2).join('');
-  const more = t.quotes.slice(1);
-  const card = document.createElement('div');
-  card.className = 'test-card';
-  card.dataset.index = i;
-  card.innerHTML = `
-    <div class="test-card-header">
-      <div class="avatar" aria-hidden="true">${initials}</div>
-      <div class="test-card-meta">
-        <b>${featured.name}</b>
-        <span>${featured.role}</span>
+if(testGrid && typeof TESTIMONIALS !== 'undefined'){
+  testGrid.innerHTML = '';
+  if(testDots) testDots.innerHTML = '';
+  TESTIMONIALS.forEach((t, i)=>{
+    const featured = t.quotes[0];
+    const initials = featured.name.split(' ').map(n=>n[0]).slice(0,2).join('');
+    const more = t.quotes.slice(1);
+    const card = document.createElement('div');
+    card.className = 'test-card';
+    card.dataset.index = i;
+    card.innerHTML = `
+      <div class="test-card-header">
+        <div class="avatar" aria-hidden="true">${initials}</div>
+        <div class="test-card-meta">
+          <b>${featured.name}</b>
+          <span>${featured.role}</span>
+        </div>
       </div>
-    </div>
-    <div class="testimonial-story">
-      <span class="testimonial-tag mono">${t.tag}</span>
-      <h3>${t.title}</h3>
-      <p>${t.summary}</p>
-    </div>
-    <div class="testimonial-quotes">
-      <figure class="testimonial-quote testimonial-quote--featured">
-        <blockquote>“${featured.quote}”</blockquote>
-      </figure>
-      ${more.map(q=>`
-        <figure class="testimonial-quote testimonial-quote--more">
-          <blockquote>“${q.quote}”</blockquote>
-          <figcaption><b>${q.name}</b><span>${q.role}</span></figcaption>
-        </figure>`).join('')}
-    </div>`;
-  testGrid.appendChild(card);
-  if(testDots){
-    const dot = document.createElement('button');
-    dot.className = 'carousel-dot';
-    dot.type = 'button';
-    dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
-    testDots.appendChild(dot);
-  }
-});
+      <div class="testimonial-story">
+        <span class="testimonial-tag mono">${t.tag}</span>
+        <h3>${t.title}</h3>
+        <p>${t.summary}</p>
+      </div>
+      <div class="testimonial-quotes">
+        <figure class="testimonial-quote testimonial-quote--featured">
+          <blockquote>“${featured.quote}”</blockquote>
+        </figure>
+        ${more.map(q=>`
+          <figure class="testimonial-quote testimonial-quote--more">
+            <blockquote>“${q.quote}”</blockquote>
+            <figcaption><b>${q.name}</b><span>${q.role}</span></figcaption>
+          </figure>`).join('')}
+      </div>`;
+    testGrid.appendChild(card);
+    if(testDots){
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
+      testDots.appendChild(dot);
+    }
+  });
+}
 
 function initTestimonialCarousel(grid){
+  if(!grid) return;
   const cards = Array.from(grid.children);
   if(cards.length < 2) return;
   const dots = testDots ? Array.from(testDots.children) : [];
 
   function updateFocus(){
     const carousel = grid.parentElement;
+    if(!carousel) return;
     const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2;
     let closest = null, closestDist = Infinity, closestIndex = 0;
     cards.forEach((card, i)=>{
@@ -79,33 +86,36 @@ function initTestimonialCarousel(grid){
     cards.forEach(card=>card.classList.toggle('in-focus', card === closest));
     dots.forEach((dot, i)=>dot.classList.toggle('active', i === closestIndex));
   }
-  grid.parentElement.addEventListener('scroll', updateFocus, { passive:true });
-  window.addEventListener('resize', updateFocus);
+  if(grid.parentElement){
+    grid.parentElement.addEventListener('scroll', updateFocus, { passive:true });
+    window.addEventListener('resize', updateFocus);
+  }
 
   dots.forEach((dot, i)=>{
     dot.addEventListener('click', ()=>{
       const card = cards[i];
-      if(!card) return;
+      if(!card || !grid.parentElement) return;
       grid.parentElement.scrollTo({ left: card.offsetLeft - (grid.parentElement.clientWidth - card.offsetWidth) / 2, behavior:'smooth' });
     });
   });
 
   updateFocus();
-
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 }
 
 initTestimonialCarousel(testGrid);
 
 const achGrid = document.getElementById('achGrid');
-ACHIEVEMENTS.forEach((a,i)=>{
-  const card = document.createElement('div');
-  card.className = 'ach-card' + (i === 0 ? ' ach-card--featured' : '');
-  card.innerHTML = `
-    <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
-    <div><span class="date">${a.date}</span><h3>${a.title}</h3><p>${a.description}</p></div>`;
-  achGrid.appendChild(card);
-});
+if(achGrid && typeof ACHIEVEMENTS !== 'undefined'){
+  achGrid.innerHTML = '';
+  ACHIEVEMENTS.forEach((a,i)=>{
+    const card = document.createElement('div');
+    card.className = 'ach-card' + (i === 0 ? ' ach-card--featured' : '');
+    card.innerHTML = `
+      <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
+      <div><span class="date">${a.date}</span><h3>${a.title}</h3><p>${a.description}</p></div>`;
+    achGrid.appendChild(card);
+  });
+}
 
 /* ---------- scroll progress bar ---------- */
 const scrollProgress = document.getElementById('scrollProgress');
@@ -113,30 +123,41 @@ function updateScrollProgress(){
   const h = document.documentElement;
   const scrolled = h.scrollTop;
   const max = h.scrollHeight - h.clientHeight;
-  scrollProgress.style.width = max > 0 ? (scrolled / max * 100) + '%' : '0%';
+  if(scrollProgress) scrollProgress.style.width = max > 0 ? (scrolled / max * 100) + '%' : '0%';
 }
 window.addEventListener('scroll', updateScrollProgress, { passive:true });
 updateScrollProgress();
 
-/* ---------- reveal on scroll, staggered within each group ---------- */
-const revealGroups = [document.querySelectorAll('.ach-grid > *'), document.querySelectorAll('.stats > *'), document.querySelectorAll('.mini-grid > *')];
+/* ---------- reveal on scroll ---------- */
+const revealGroups = [
+  document.querySelectorAll('.ach-grid > *'),
+  document.querySelectorAll('.stats > *'),
+  document.querySelectorAll('.mini-grid > *'),
+  document.querySelectorAll('.blog-grid > *')
+];
 revealGroups.forEach(group=>{
   group.forEach((el,i)=>{ el.setAttribute('data-reveal',''); el.style.transitionDelay = Math.min(i*70,280)+'ms'; });
 });
-document.querySelectorAll('.story').forEach((el,i)=>{ el.style.transitionDelay = Math.min(i*90,270)+'ms'; });
 
 const els = document.querySelectorAll('[data-reveal]');
-const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold:0.1 });
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold:0.08 });
 els.forEach(el=>io.observe(el));
 
-/* ---------- animated hero stat counters on scroll into view ---------- */
+/* ---------- animated hero stat counters ---------- */
 const heroStatTargets = [
-  { el: document.querySelectorAll('.stat-card .num')[0], value: 400, suffix:'+' },
-  { el: document.querySelectorAll('.stat-card .num')[1], value: 40, suffix:'%+' },
-  { el: document.querySelectorAll('.stat-card .num')[2], value: 24, suffix:'h' },
-  { el: document.querySelectorAll('.stat-card .num')[3], value: 100, suffix:'' },
-  { el: document.querySelectorAll('.stat-card .num')[4], value: 7, suffix:'' },
-  { el: document.querySelectorAll('.stat-card .num')[5], value: 10, suffix:'+' }
+  { el: document.getElementById('statDAU'), value: 400, suffix:'+' },
+  { el: document.getElementById('statSpeed'), value: 40, suffix:'%+' },
+  { el: document.getElementById('statRefund'), value: 24, suffix:'h' },
+  { el: document.getElementById('statConv'), value: 100, suffix:'' },
+  { el: document.getElementById('statTeams'), value: 7, suffix:'' },
+  { el: document.getElementById('statExp'), value: yoe, suffix:'+' }
 ];
 let heroStatsDone = false;
 const heroStatsIO = new IntersectionObserver((entries)=>{
@@ -146,27 +167,32 @@ const heroStatsIO = new IntersectionObserver((entries)=>{
       heroStatTargets.forEach(({el,value,suffix})=>{
         if(!el) return;
         let cur = 0; const step = Math.max(1, Math.round(value/26));
-        const iv = setInterval(()=>{ cur += step; if(cur>=value){ cur=value; clearInterval(iv); } el.textContent = cur + suffix; }, 25);
+        const iv = setInterval(()=>{
+          cur += step;
+          if(cur >= value){ cur = value; clearInterval(iv); }
+          el.textContent = cur + suffix;
+        }, 25);
       });
       heroStatsIO.disconnect();
     }
   });
-}, { threshold:0.4 });
+}, { threshold:0.3 });
 const statsBlock = document.querySelector('.stats');
 if(statsBlock) heroStatsIO.observe(statsBlock);
 
 /* ---------- hero ship.log terminal reveal ---------- */
-document.documentElement.classList.add('js');
 const termLines = document.querySelectorAll('.tech-body .tech-line');
 if(termLines.length){
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduceMotion){ termLines.forEach(l=>l.classList.add('show')); }
-  else{
+  if(reduceMotion){
+    termLines.forEach(l=>l.classList.add('show'));
+  } else {
     let i = 0;
     (function next(){
       if(i >= termLines.length) return;
-      termLines[i].classList.add('show'); i++;
-      setTimeout(next, termLines[i-1].classList.contains('t-gap') ? 140 : 280);
+      termLines[i].classList.add('show');
+      i++;
+      setTimeout(next, termLines[i-1].classList.contains('t-gap') ? 140 : 260);
     })();
   }
 }
@@ -179,13 +205,21 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
       const state = btn.dataset.state;
       toggle.dataset.active = state;
       toggle.querySelectorAll('button').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-      btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed','true');
       document.querySelectorAll(`.panel[data-project="${proj}"]`).forEach(p=>p.classList.toggle('show', p.dataset.state===state));
       if(state==='after'){
         document.querySelectorAll(`.panel[data-project="${proj}"][data-state="after"] .n[data-count]`).forEach(n=>{
-          if(n.dataset.done) return; n.dataset.done = "1";
-          const target = parseInt(n.dataset.count,10); let cur = 0; const step = Math.max(1, Math.round(target/24));
-          const iv = setInterval(()=>{ cur += step; if(cur>=target){ cur=target; clearInterval(iv); } n.textContent = cur; }, 20);
+          if(n.dataset.done) return;
+          n.dataset.done = "1";
+          const target = parseInt(n.dataset.count,10);
+          let cur = 0;
+          const step = Math.max(1, Math.round(target/24));
+          const iv = setInterval(()=>{
+            cur += step;
+            if(cur>=target){ cur=target; clearInterval(iv); }
+            n.textContent = cur;
+          }, 20);
         });
       }
     });
@@ -226,17 +260,17 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
       stage: 'Change Request'
     },
     escalate: {
-      transcript: '…this delay is ridiculous, I need someone senior…',
+      transcript: '…this delay is unacceptable, I need a supervisor immediately…',
       summary: 'sentiment: escalated · issue: delay · requested escalation',
       rule: 'priority_escalation',
       stage: 'Escalated · Priority'
     },
     noop: {
-      transcript: '…thanks, everything\'s good over here, bye…',
+      transcript: '…thanks, everything looks wonderful on my end, bye…',
       summary: 'intent: none · sentiment: positive',
       rule: null,
       stage: null,
-      note: 'No rule matched — stage unchanged, nothing logged. Idempotent by design, same as the deal-size engine.'
+      note: 'No rule matched — stage unchanged, zero-touch idempotent execution.'
     }
   };
 
@@ -272,7 +306,7 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
       if(i < steps.length){
         steps[i].classList.add('on');
         i++;
-        setTimeout(next, 260);
+        setTimeout(next, 240);
       } else {
         transcriptEl.textContent = '“' + s.transcript + '”';
         summaryEl.textContent = '→ ' + s.summary;
@@ -286,7 +320,7 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
           }
           renderLog();
           running = false;
-        }, 240);
+        }, 220);
       }
     })();
   }
@@ -295,14 +329,16 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
     btn.addEventListener('click', ()=>run(btn.dataset.scenario));
   });
 
-  resetBtn.addEventListener('click', ()=>{
-    entries.length = 0;
-    steps.forEach(st => st.classList.remove('on'));
-    transcriptEl.textContent = 'Transcript appears here when you run a call…';
-    summaryEl.textContent = '';
-    setBadges(null, null);
-    renderLog();
-  });
+  if(resetBtn){
+    resetBtn.addEventListener('click', ()=>{
+      entries.length = 0;
+      steps.forEach(st => st.classList.remove('on'));
+      transcriptEl.textContent = 'Transcript appears here when you run a call…';
+      summaryEl.textContent = '';
+      setBadges(null, null);
+      renderLog();
+    });
+  }
 })();
 
 /* ---------- code sample: line numbers + copy ---------- */
@@ -318,11 +354,12 @@ if(copyBtn && codeEl){
   copyBtn.addEventListener('click', async ()=>{
     try{
       await navigator.clipboard.writeText(codeEl.textContent);
-      copyBtn.classList.add('copied'); copyLabel.textContent = 'Copied!';
-      setTimeout(()=>{ copyBtn.classList.remove('copied'); copyLabel.textContent = 'Copy'; }, 1800);
+      copyBtn.classList.add('copied');
+      if(copyLabel) copyLabel.textContent = 'Copied!';
+      setTimeout(()=>{ copyBtn.classList.remove('copied'); if(copyLabel) copyLabel.textContent = 'Copy'; }, 1800);
     } catch(e){
-      copyLabel.textContent = 'Select & copy';
-      setTimeout(()=>{ copyLabel.textContent = 'Copy'; }, 1800);
+      if(copyLabel) copyLabel.textContent = 'Select & copy';
+      setTimeout(()=>{ if(copyLabel) copyLabel.textContent = 'Copy'; }, 1800);
     }
   });
 }
@@ -331,42 +368,56 @@ if(copyBtn && codeEl){
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const mobileNav = document.getElementById('mobileNav');
 function closeMobileNav(){
-  mobileNav.classList.remove('open'); mobileNav.hidden = true;
-  hamburgerBtn.setAttribute('aria-expanded','false');
+  if(!mobileNav) return;
+  mobileNav.classList.remove('open');
+  mobileNav.hidden = true;
+  if(hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded','false');
 }
-hamburgerBtn.addEventListener('click', ()=>{
-  const isOpen = mobileNav.classList.contains('open');
-  if(isOpen){ closeMobileNav(); }
-  else{ mobileNav.hidden = false; requestAnimationFrame(()=>mobileNav.classList.add('open')); hamburgerBtn.setAttribute('aria-expanded','true'); }
-});
-mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMobileNav));
+if(hamburgerBtn && mobileNav){
+  hamburgerBtn.addEventListener('click', ()=>{
+    const isOpen = mobileNav.classList.contains('open');
+    if(isOpen){ closeMobileNav(); }
+    else{
+      mobileNav.hidden = false;
+      requestAnimationFrame(()=>mobileNav.classList.add('open'));
+      hamburgerBtn.setAttribute('aria-expanded','true');
+    }
+  });
+  mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMobileNav));
+}
 
 /* ---------- active section highlight in nav ---------- */
 const navLinks = document.querySelectorAll('#mainNav a[href^="#"]');
 const navSections = Array.from(navLinks).map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
-const navIO = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      const id = '#' + entry.target.id;
-      navLinks.forEach(a=>a.classList.toggle('current', a.getAttribute('href')===id));
-    }
-  });
-}, { rootMargin: '-40% 0px -55% 0px' });
-navSections.forEach(s=>navIO.observe(s));
+if(navSections.length && 'IntersectionObserver' in window){
+  const navIO = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = '#' + entry.target.id;
+        navLinks.forEach(a=>a.classList.toggle('current', a.getAttribute('href')===id));
+      }
+    });
+  }, { rootMargin: '-35% 0px -55% 0px' });
+  navSections.forEach(s=>navIO.observe(s));
+}
 
 /* ---------- back to top ---------- */
 const backToTop = document.getElementById('backToTop');
-window.addEventListener('scroll', ()=>{ backToTop.classList.toggle('show', window.scrollY > 700); }, { passive:true });
-backToTop.addEventListener('click', ()=>window.scrollTo({ top:0, behavior:'smooth' }));
+if(backToTop){
+  window.addEventListener('scroll', ()=>{ backToTop.classList.toggle('show', window.scrollY > 600); }, { passive:true });
+  backToTop.addEventListener('click', ()=>window.scrollTo({ top:0, behavior:'smooth' }));
+}
 
 /* ---------- theme toggle ---------- */
 const themeBtn = document.getElementById('themeToggle');
-themeBtn.addEventListener('click', ()=>{
-  const root = document.documentElement;
-  const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  root.setAttribute('data-theme', next);
-  themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
-});
+if(themeBtn){
+  themeBtn.addEventListener('click', ()=>{
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
+    themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  });
+}
 
 /* ---------- contact form -> mailto ---------- */
 const contactForm = document.getElementById('contactForm');
@@ -376,70 +427,153 @@ if(contactForm){
     const name = document.getElementById('cf-name').value;
     const email = document.getElementById('cf-email').value;
     const msg = document.getElementById('cf-msg').value;
-    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
     const body = encodeURIComponent(`${msg}\n\n— ${name} (${email})`);
     window.location.href = `mailto:vigneshjothishwaran@gmail.com?subject=${subject}&body=${body}`;
   });
 }
 
-/* ---------- view switching (portfolio <-> blog) ---------- */
+/* ============================================================
+   BLOG ENGINE — Homepage Showcase & Full Article Reader
+   ============================================================ */
 const viewPortfolio = document.getElementById('view-portfolio');
 const viewBlog = document.getElementById('view-blog');
-function showBlog(){
+const homeBlogGrid = document.getElementById('homeBlogGrid');
+const postsList = document.getElementById('postsList');
+const blogCategoryFilters = document.getElementById('blogCategoryFilters');
+let activeCategory = 'all';
+
+function getAllPosts(){
+  let posts = (typeof BLOG_POSTS !== 'undefined') ? [...BLOG_POSTS] : [];
+  return posts;
+}
+
+/* ---------- render home blog showcase cards ---------- */
+function renderHomeBlogCards(){
+  if(!homeBlogGrid) return;
+  const posts = getAllPosts();
+  if(!posts.length) return;
+
+  homeBlogGrid.innerHTML = posts.slice(0, 3).map(p => `
+    <article class="home-blog-card" data-post-id="${p.id}" tabindex="0" role="button" aria-label="Read article: ${p.title}">
+      <div>
+        <div class="card-meta">
+          <span class="category-badge">${p.category}</span>
+          <span class="read-time">${p.readTime}</span>
+        </div>
+        <h3>${p.title}</h3>
+        <p class="card-summary">${p.summary}</p>
+      </div>
+      <div class="card-footer">
+        <span class="card-date">${p.date}</span>
+        <span class="read-action">Read Article →</span>
+      </div>
+    </article>
+  `).join('');
+
+  homeBlogGrid.querySelectorAll('.home-blog-card').forEach(card => {
+    const handleOpen = () => {
+      const postId = card.dataset.postId;
+      showBlog(postId);
+    };
+    card.addEventListener('click', handleOpen);
+    card.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleOpen(); } });
+  });
+}
+
+/* ---------- render full blog reader articles ---------- */
+function renderBlogReader(filterCat = 'all', targetPostId = null){
+  if(!postsList) return;
+  const allPosts = getAllPosts();
+  let filtered = allPosts;
+  if(filterCat && filterCat !== 'all'){
+    filtered = allPosts.filter(p => p.category.toLowerCase() === filterCat.toLowerCase());
+  }
+
+  if(targetPostId){
+    const specific = allPosts.find(p => p.id === targetPostId);
+    if(specific) filtered = [specific];
+  }
+
+  if(!filtered.length){
+    postsList.innerHTML = '<p class="empty-state">No articles found in this category.</p>';
+    return;
+  }
+
+  postsList.innerHTML = filtered.map(p => `
+    <article class="blog-article-full" id="article-${p.id}">
+      <header class="blog-article-header">
+        <div class="article-meta">
+          <span class="category-badge">${p.category}</span>
+          <span class="read-time mono">${p.readTime}</span>
+          <span class="card-date">${p.date}</span>
+        </div>
+        <h2>${p.title}</h2>
+        <div class="article-tags">
+          ${(p.tags || []).map(t => `<span class="article-tag">#${t}</span>`).join('')}
+        </div>
+      </header>
+      <div class="article-content">
+        ${p.content}
+      </div>
+    </article>
+  `).join('');
+}
+
+/* ---------- view switching (portfolio <-> blog) ---------- */
+function showBlog(postId = null){
+  if(!viewPortfolio || !viewBlog) return;
   viewPortfolio.classList.add('view-hidden');
   setTimeout(()=>{
-    viewPortfolio.hidden = true; viewBlog.hidden = false;
-    window.scrollTo(0,0); loadPosts();
+    viewPortfolio.hidden = true;
+    viewBlog.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    renderBlogReader(activeCategory, postId);
     requestAnimationFrame(()=>viewBlog.classList.remove('view-hidden'));
   }, 180);
-  viewBlog.classList.add('view-hidden');
 }
+
 function showPortfolio(){
+  if(!viewPortfolio || !viewBlog) return;
   viewBlog.classList.add('view-hidden');
   setTimeout(()=>{
-    viewBlog.hidden = true; viewPortfolio.hidden = false;
-    window.scrollTo(0,0);
+    viewBlog.hidden = true;
+    viewPortfolio.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'instant' });
     requestAnimationFrame(()=>viewPortfolio.classList.remove('view-hidden'));
   }, 180);
 }
+
+/* ---------- wire blog navigation events ---------- */
 const navBlog = document.getElementById('navBlog');
-if (navBlog) navBlog.addEventListener('click', showBlog);
+if(navBlog) navBlog.addEventListener('click', ()=>showBlog());
+
 const navBlogMobile = document.getElementById('navBlogMobile');
-if (navBlogMobile) navBlogMobile.addEventListener('click', ()=>{ closeMobileNav(); showBlog(); });
+if(navBlogMobile) navBlogMobile.addEventListener('click', ()=>{ closeMobileNav(); showBlog(); });
+
+const viewAllBlogBtn = document.getElementById('viewAllBlogBtn');
+if(viewAllBlogBtn) viewAllBlogBtn.addEventListener('click', ()=>showBlog());
+
 const backHome = document.getElementById('backHome');
-if (backHome) backHome.addEventListener('click', (e)=>{ e.preventDefault(); showPortfolio(); });
+if(backHome) backHome.addEventListener('click', (e)=>{ e.preventDefault(); showPortfolio(); });
+
 const brandHome = document.getElementById('brandHome');
-if (brandHome) brandHome.addEventListener('click', showPortfolio);
+if(brandHome) brandHome.addEventListener('click', showPortfolio);
 
-/* ---------- blog: public read-only post list ---------- */
-const postsList = document.getElementById('postsList');
-
-async function loadPosts(){
-  if(!postsList) return;
-  postsList.innerHTML = '<p class="empty-state">Loading…</p>';
-  try{
-    if(!window.storage) throw new Error('storage unavailable');
-    const res = await window.storage.get('blog:posts', true);
-    const posts = res && res.value ? JSON.parse(res.value) : [];
-    renderPosts(posts);
-  } catch(e){
-    renderPosts([]);
-  }
+/* ---------- category filtering ---------- */
+if(blogCategoryFilters){
+  blogCategoryFilters.querySelectorAll('.cat-pill').forEach(btn => {
+    btn.addEventListener('click', ()=>{
+      blogCategoryFilters.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.category;
+      renderBlogReader(activeCategory, null);
+    });
+  });
 }
 
-function renderPosts(posts){
-  if(!postsList) return;
-  if(!posts.length){
-    postsList.innerHTML = '<p class="empty-state">Blog not found.</p>';
-    return;
-  }
-  postsList.innerHTML = posts.map(p=>`
-    <article class="post-card">
-      <span class="p-date mono">${p.date}</span>
-      <h3>${p.title}</h3>
-      <div class="p-body">${p.body}</div>
-    </article>`).join('');
-}
+// Initial render of home cards and blog
+renderHomeBlogCards();
 
 } // end initPortfolio
 

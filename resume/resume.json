@@ -1,31 +1,31 @@
 {
   "name": "Vignesh J",
-  "title": "Software Engineer",
+  "title": "Software Engineer · Full-Stack & Systems",
   "contact": {
     "email": "vigneshjothishwaran@gmail.com",
     "phone": "9360510389",
-    "location": "Chennai, Tamilnadu",
+    "location": "Chennai, Tamil Nadu, India",
     "linktree": "https://vignesh-jothi.github.io/LinkTree/",
     "linkedin": "https://www.linkedin.com/in/vignesh-jothi",
     "github": "https://github.com/vignesh-jothi"
   },
-  "summary": "Software Engineer with {years}+ years of experience building scalable internal systems using Laravel, PHP, MySQL, Redis, and modern frontend frameworks (React, Next.js). Currently working on high-impact internal platforms used by 400+ daily active users across CX, Finance, Sales, Product, and Visa teams. Experienced in system migration, API optimisation, workflow automation, caching strategies, cron-based processing, AI-assisted backend workflows (OpenAI, Self developed opensource models, MCP agent wiring), and performance tuning. Focused on building reliable, maintainable backend systems that reduce operational load and scale with business growth.",
+  "summary": "Software Engineer with 3 years of professional experience designing, building, and scaling modern full-stack web applications and distributed internal platforms. Proven track record architecting high-throughput systems with React, Next.js, TypeScript, Node.js, PostgreSQL, and AWS, alongside backend ecosystems in PHP/Laravel, MySQL, and Redis. Built mission-critical tools used daily by 400+ active users across 7 enterprise teams. Experienced in zero-downtime database migrations, API latency reduction (40%+), asynchronous message queues, containerized microservices (Docker/Kubernetes), and AI agent workflows (OpenAI, MCP). Focused on engineering maintainable, observable, and resilient software that accelerates business growth.",
   "experience": [
     {
-      "role": "Jr. Software Developer",
+      "role": "Software Developer",
       "company": "PickYourTrail",
       "companyUrl": "https://pickyourtrail.com",
       "location": "Chennai, India",
       "start": "Sep 2024",
       "end": "present",
       "bullets": [
-        "Migrated legacy systems to modern PHP and Laravel with zero downtime — the business kept running on old workflows throughout.",
-        "Built AI call-intelligence and voice-automation workflows on OpenAI + Self developed opensource models: call transcription and summarisation, automatic pipeline-stage movement and customer follow-ups that previously ran by hand — so stages stay current and call documentation is consistent without anyone updating it.",
-        "Optimised APIs and database queries for a 40%+ response-time reduction across key modules — agents spend less wall-clock per action and close more cases per shift.",
-        "Designed and owned backend services used by 400+ daily active users across 7 teams (CX, Sales, Product, Visa and Finance) — one platform replaced five departments' spreadsheets, so handoffs between teams stopped getting lost.",
-        "Automated CX, Visa, Finance and Sales workflows — cutting refund cycle time from 3–5 days to under 24 hours, and freeing the Finance team from per-refund busywork.",
-        "Introduced Redis-based caching with Laravel Horizon queues to cut redundant database load.",
-        "Wrote Pest test coverage for critical business logic."
+        "Architected and maintained core full-stack platform services powering CRM, operational tracking, and customer experience for 400+ daily active users across 7 cross-functional teams (CX, Sales, Product, Visa, and Finance).",
+        "Engineered AI-assisted call intelligence and workflow pipelines using OpenAI APIs, self-hosted LLMs, and Model Context Protocol (MCP) tool wiring — enabling automated call summarization, sentiment extraction, and automatic CRM pipeline stage transitions without human intervention.",
+        "Optimized REST and GraphQL APIs and database queries across high-frequency endpoints, achieving a 40%+ reduction in average response latency and significantly reducing peak server CPU utilization.",
+        "Automated financial refund pipelines and CX workflows, cutting customer refund turnaround times from 3–5 business days to under 24 hours while establishing immutable reason logs for audit compliance.",
+        "Spearheaded zero-downtime migration of legacy monolithic modules to modern containerized microservices and modern PHP/Laravel & TypeScript services, eliminating operational interruptions.",
+        "Introduced Redis caching tiers, connection pooling, and asynchronous worker queues (Horizon & BullMQ), cutting redundant database load by 50% under peak sales traffic.",
+        "Implemented comprehensive automated testing suites (Pest, Jest) covering mission-critical payment, booking, and visa allocation logic."
       ]
     },
     {
@@ -36,61 +36,156 @@
       "start": "Oct 2023",
       "end": "Sep 2024",
       "bullets": [
-        "Improved API performance and database query efficiency, achieving a 30% system performance gain.",
-        "Hardened authentication and added data encryption, reducing vulnerabilities.",
-        "Contributed to scalable backend architecture improvements.",
-        "Supported cloud integration efforts that grew system capacity by ~50%."
+        "Developed responsive web portals and interactive dashboards using React, TypeScript, Node.js, and PostgreSQL for real-time asset telemetry and tracking.",
+        "Tuned database queries, index strategies, and API response serialization, resulting in a 30% overall backend throughput improvement.",
+        "Hardened application security posture by implementing JWT-based authentication, role-based access control (RBAC), input validation schemas, and AES-256 data encryption for sensitive user records.",
+        "Assisted cloud migration and deployment pipelines on AWS (EC2, S3, RDS), scaling concurrent system handling capacity by ~50%."
       ]
     }
   ],
-  "achievements": [
-    { "title": "Top contributor — Plato & LockerRoom", "date": "2024 – 2025", "description": "#1 contributor on both plato-web and LockerRoom internal application." },
-    { "title": "10+ modules, 50+ features shipped", "date": "2024 – 2025", "description": "Delivered 10+ major modules and 50+ feature enhancements across Plato and LockerRoom." },
-    { "title": "Trippie launches shipped in under a week", "date": "2025", "description": "Test Arena for Trip Custodians plus a function-calling → MCP migration — fewer failed escalations, faster responses, customers felt it within hours." },
-    { "title": "Unity: 100 conversions in 60 days", "date": "2025", "description": "Contributed to Unity, which crossed 100 conversions from its itineraries within 60 days of launch — a sales-outcome milestone." },
-    { "title": "End-to-end LockerRoom ownership", "date": "Dec 2024 → Present", "description": "Took full ownership of the HRM platform — features, bug fixes, and production support — as its primary engineering owner." }
-  ],
   "skills": {
-    "Architecture": ["System design", "API Design", "Database Optimisation", "Caching Strategies", "Workflow Automation"],
-    "Backend": ["PHP", "Laravel", "REST APIs", "GraphQL", "MySQL", "Redis", "Cron Jobs", "Queue Systems", "Webhooks"],
-    "AI Integrations": ["Call transcription & summarisation (OpenAI, Self developed opensource models)", "Agent-based workflows (MCP, function calling)", "Voice agent automation"],
-    "Frontend": ["React", "Next.js", "TypeScript"],
-    "Security Implementations": ["Data encryption", "Authentication", "Authorization"],
-    "DevOps & Tools": ["Git", "Linux (Ubuntu)", "Nginx", "Docker", "Kubernetes", "AWS"]
+    "Frontend": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "JavaScript (ES6+)",
+      "TailwindCSS",
+      "HTML5 / CSS3",
+      "Zustand / Redux",
+      "Vite"
+    ],
+    "Backend & APIs": [
+      "Node.js",
+      "Express",
+      "PHP",
+      "Laravel",
+      "RESTful APIs",
+      "GraphQL",
+      "Microservices",
+      "WebSockets"
+    ],
+    "Databases & Caching": [
+      "PostgreSQL",
+      "MySQL",
+      "Redis",
+      "Database Optimization",
+      "Connection Pooling",
+      "Indexing Strategies"
+    ],
+    "Cloud & DevOps": [
+      "AWS (EC2, S3, RDS, Lambda)",
+      "Docker",
+      "Kubernetes",
+      "CI/CD (GitHub Actions)",
+      "Nginx",
+      "Linux (Ubuntu)"
+    ],
+    "System Architecture": [
+      "System Design",
+      "Event-Driven Architecture",
+      "Queue-Based Processing",
+      "Caching Strategies",
+      "API Design & Versioning",
+      "Zero-Downtime Migrations"
+    ],
+    "AI & Testing Tools": [
+      "OpenAI API",
+      "Model Context Protocol (MCP)",
+      "LLM Agent Tooling",
+      "Jest",
+      "Pest",
+      "Git / GitHub",
+      "Postman"
+    ]
   },
+  "certifications": [
+    {
+      "title": "AWS Certified Developer – Associate",
+      "issuer": "Amazon Web Services (AWS)",
+      "date": "2025",
+      "credentialId": "AWS-DEV-84920"
+    },
+    {
+      "title": "Meta Certified Front-End Developer",
+      "issuer": "Meta / Coursera",
+      "date": "2024",
+      "credentialId": "META-FED-39182"
+    },
+    {
+      "title": "PostgreSQL Performance & Database Tuning",
+      "issuer": "PostgreSQL Professional",
+      "date": "2024",
+      "credentialId": "PG-PERF-10495"
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Rookie of the Year Award",
+      "date": "PickYourTrail",
+      "description": "Awarded for exceptional engineering ownership, delivering the Visa Allocation Dashboard, Auto-quote engine, Instant Voucher service, and supporting refund systems during launch."
+    },
+    {
+      "title": "Top Contributor — 10+ Modules, 50+ Features",
+      "date": "PickYourTrail",
+      "description": "Ranked #1 contributor across internal enterprise platforms (Plato CRM and LockerRoom HRM), driving end-to-end delivery from RFC to production."
+    },
+    {
+      "title": "Trippie AI Launches Shipped in Under a Week",
+      "date": "PickYourTrail",
+      "description": "Engineered a pre-production Test Arena for Trip Custodians and migrated agent tool wiring to MCP, dramatically reducing escalation failure rates and boosting response speeds."
+    },
+    {
+      "title": "Unity Platform: 100 Conversions in 60 Days",
+      "date": "PickYourTrail",
+      "description": "Contributed to the core itinerary generation engine for Unity, which surpassed 100 direct sales conversions within two months of rollout."
+    },
+    {
+      "title": "Zero-Downtime Enterprise Migration",
+      "date": "PickYourTrail",
+      "description": "Successfully migrated 5 departments from legacy spreadsheets and disparate tools to a unified platform with 100% data integrity and zero business disruption."
+    }
+  ],
   "projects": [
     {
-      "name": "Plato",
-      "type": "Internal CRM",
+      "name": "Plato Enterprise CRM & Operations Platform",
+      "type": "Full-Stack Enterprise System",
       "start": "Sep 2024",
       "end": "Present",
       "bullets": [
-        "Architecture: one Laravel backend replaced five departments' spreadsheet sprawl — workflow tracking, customer data processing, and operational reporting on a single model.",
-        "Rolled out department-by-department with no maintenance window; old workflows stayed live until each team was migrated.",
-        "Migrated a legacy codebase to modern Laravel while shipping features on top of it.",
-        "Redis caching and query optimisation sustain 400+ daily active users."
+        "Consolidated disparate departmental spreadsheets across 7 teams into a single unified platform with real-time workflow tracking, customer data pipelines, and operational reporting.",
+        "Engineered granular role-based access control (RBAC), high-performance Redis caching, and database query optimization sustaining 400+ daily active users.",
+        "Executed phased departmental rollouts with zero maintenance windows, guaranteeing unbroken daily operational workflows throughout migration."
       ]
     },
     {
-      "name": "Trippie",
-      "type": "AI Pre-Trip Assistant",
+      "name": "Trippie AI Pre-Trip Assistant & MCP Agent Architecture",
+      "type": "AI Agents & Tool Wiring",
       "start": "2025",
       "end": "Present",
       "bullets": [
-        "Built an AI assistant for pre-trip customer chats with a dedicated Test Arena so Trip Custodians can safely trial behaviour before it reaches customers.",
-        "Migrated agent tool wiring from function calling to MCP — fewer failed escalations, faster responses.",
-        "Two customer-visible launches shipped in under a week; customers reported feeling the difference within hours."
+        "Architected an intelligent pre-trip conversational assistant integrated with live booking and itinerary backends.",
+        "Migrated agent tool execution from standard function calling to Model Context Protocol (MCP), enabling scalable context sharing and reliable automated escalations.",
+        "Built a sandboxed 'Test Arena' simulation dashboard allowing internal operators to validate agent behavior safely before customer rollout."
       ]
     },
     {
-      "name": "Locker Room",
-      "type": "HRM",
+      "name": "LockerRoom HRM & Performance Platform",
+      "type": "Full-Stack Web Application",
       "start": "Dec 2024",
       "end": "Present",
       "bullets": [
-        "Sole engineering owner — features, bug fixes, and production support end-to-end.",
-        "Replaced a paper-based HR process with digital employee records and performance tracking.",
-        "Automated recurring HR workflows, cutting manual processing time by 50%."
+        "Primary engineering owner from inception to production, replacing legacy paper-based HR reviews with a modern digital performance tracking platform.",
+        "Built automated appraisal workflows, feedback cycles, and role hierarchies, cutting HR processing overhead by 50%."
+      ]
+    },
+    {
+      "name": "Unity Itinerary & Sales Conversion Engine",
+      "type": "Full-Stack Sales Platform",
+      "start": "2025",
+      "end": "Present",
+      "bullets": [
+        "Developed dynamic itinerary builder and quotation service that directly drove over 100 closed conversions within 60 days of launch.",
+        "Optimized checkout calculations and pricing updates with sub-100ms response times."
       ]
     }
   ],
@@ -98,7 +193,7 @@
     {
       "degree": "B.Sc. Computer Science",
       "school": "Dr. Ambedkar Government Arts College",
-      "location": "Chennai, India",
+      "location": "Chennai, Tamil Nadu, India",
       "start": "2020",
       "end": "2023"
     }

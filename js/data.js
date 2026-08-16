@@ -1,12 +1,10 @@
 /* ============================================================
-   DATA — replace these with your real content.
-   Kept as plain JS objects (JSON-shaped) so it's a quick
-   find-and-replace, no markup editing needed.
+   DATA — Global portfolio content & testimonials.
    ============================================================ */
 
 const TESTIMONIALS = [
   {
-    tag: "Trippie launch",
+    tag: "Trippie Launch",
     title: "A faster, smoother Trippie experience",
     summary: "Two launches shipped in under a week: a Test Arena for Trip Custodians and a migration from function calling to MCP, reducing failed escalations and making responses faster.",
     quotes: [
@@ -15,7 +13,7 @@ const TESTIMONIALS = [
     ]
   },
   {
-    tag: "Unity launch",
+    tag: "Unity Launch",
     title: "From launch to 100 conversions in 60 days",
     summary: "Unity became a catalyst for sales teams, helping them improve outcomes and reach their goals through more effective itinerary workflows.",
     quotes: [
@@ -23,7 +21,7 @@ const TESTIMONIALS = [
     ]
   },
   {
-    tag: "Plato experience",
+    tag: "Plato Experience",
     title: "Making an operational tool more human",
     summary: "Plato is used across PickYourTrail every day. Adding thoughtful animations made routine screens feel more engaging without getting in the way of the work.",
     quotes: [
@@ -33,7 +31,7 @@ const TESTIMONIALS = [
     ]
   },
   {
-    tag: "BLS launch",
+    tag: "BLS Launch",
     title: "Stepping in when launch pressure was highest",
     summary: "When requirements arrived at short notice, Vignesh joined late the night before launch to provide the extra engineering support the team needed.",
     quotes: [
@@ -42,7 +40,7 @@ const TESTIMONIALS = [
     ]
   },
   {
-    tag: "Quality ownership",
+    tag: "Quality Ownership",
     title: "Testing beyond the happy path",
     summary: "The work went beyond reaching the finish line: it included probing edge conditions, validating assumptions, and turning feedback into a more reliable product.",
     quotes: [
@@ -50,7 +48,7 @@ const TESTIMONIALS = [
     ]
   },
   {
-    tag: "Product ownership",
+    tag: "Product Ownership",
     title: "Turning unfamiliar systems into shipped outcomes",
     summary: "A consistent approach to legacy and unfamiliar code: understand the system deeply, then take responsibility for the fix or feature through delivery.",
     quotes: [
@@ -59,7 +57,7 @@ const TESTIMONIALS = [
     ]
   },
   {
-    tag: "Finance workflows",
+    tag: "Finance Workflows",
     title: "Making booking-cost changes traceable",
     summary: "Recurring booking-cost updates and reason logs now give Finance a dependable view of what changed, when it changed, and why.",
     quotes: [
@@ -92,6 +90,12 @@ const ACHIEVEMENTS = [
   { title: "Visa Dashboard launch", date: "PickYourTrail", description: "Helped give the Visa team clearer daily task visibility and a more manageable way to handle allocations." },
   { title: "Quality and launch ownership", date: "PickYourTrail", description: "Recognised for stepping in on short notice for launches and for rigorous edge-case testing that strengthened product quality." },
   { title: "Unity milestone", date: "PickYourTrail", description: "Contributed to Unity, which crossed 100 conversions from Unity itineraries within 60 days of launch." }
+];
+
+const CERTIFICATIONS = [
+  { title: "AWS Certified Developer – Associate", issuer: "Amazon Web Services", date: "2025", badge: "AWS" },
+  { title: "Meta Certified Front-End Developer", issuer: "Meta", date: "2024", badge: "Meta" },
+  { title: "PostgreSQL Database Tuning & Architecture", issuer: "PostgreSQL Professional", date: "2024", badge: "PostgreSQL" }
 ];
 
 /* CHANGE THIS to your own passcode before sharing this file. */
