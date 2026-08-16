@@ -1,22 +1,91 @@
 <div id="view-blog" hidden>
-  <div class="wrap blog-header">
-    <a href="#" class="back" id="backHome">← Back to Portfolio</a>
-    <div class="blog-header-content">
-      <span class="tag">// engineering journal</span>
-      <h1>System Design &amp; Software Engineering</h1>
-      <p class="blog-subhead">In-depth guides on building scalable web applications, asynchronous queuing patterns, and maintainable software architecture.</p>
+
+  <!-- ══ SUB-VIEW 1: Blog Index (?blog=1) ═══════════════════ -->
+  <div id="blogListingView">
+
+    <!-- Top-bar -->
+    <div class="blog-topbar wrap">
+      <a href="#" class="back" id="backHomeFromListing">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back to Portfolio
+      </a>
+      <div class="blog-topbar-right">
+        <span class="blog-url-badge">/blog</span>
+      </div>
     </div>
-    <div class="blog-categories" id="blogCategoryFilters">
-      <button class="cat-pill active" data-category="all" type="button">All Articles</button>
-      <button class="cat-pill" data-category="System Design" type="button">System Design</button>
-      <button class="cat-pill" data-category="Backend Engineering" type="button">Backend</button>
-      <button class="cat-pill" data-category="Software Architecture" type="button">Architecture</button>
+
+    <!-- Hero -->
+    <header class="blog-hero">
+      <div class="wrap">
+        <div class="blog-hero-inner">
+          <span class="tag">// Laravel &amp; Backend Engineering</span>
+          <h1>Engineering Notes</h1>
+          <p class="blog-subhead">In-depth guides on building production Laravel APIs, scalable architecture, queue workflows, and zero-downtime deployment — from real-world engineering experience.</p>
+          <div class="blog-hero-meta">
+            <span class="blog-article-count" id="blogArticleCount">4 Articles</span>
+            <span class="blog-hero-sep">·</span>
+            <span class="blog-hero-stack">PHP · Laravel · Redis · Horizon</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sticky filter bar -->
+    <div class="blog-filter-bar">
+      <div class="wrap">
+        <div class="blog-categories" id="blogCategoryFilters">
+          <button class="cat-pill active" data-category="all" type="button">All Articles</button>
+          <button class="cat-pill" data-category="System Design" type="button">System Design</button>
+          <button class="cat-pill" data-category="Backend Engineering" type="button">Backend</button>
+          <button class="cat-pill" data-category="Software Architecture" type="button">Architecture</button>
+        </div>
+      </div>
     </div>
+
+    <!-- Article index grid -->
+    <section class="blog-index-section">
+      <div class="wrap">
+        <div id="blogIndexGrid"></div>
+      </div>
+    </section>
+
   </div>
 
-  <section class="blog-reader-section" style="border-bottom:none;">
-    <div class="wrap">
-      <div id="postsList"></div>
+  <!-- ══ SUB-VIEW 2: Single Post (?post=slug) ════════════════ -->
+  <div id="blogPostView" hidden>
+
+    <!-- Sticky post topbar -->
+    <div class="post-topbar" id="postTopbar">
+      <div class="wrap post-topbar-inner">
+        <a href="#" class="back" id="backToBlog">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          All Articles
+        </a>
+        <span class="post-topbar-title" id="postTopbarTitle"></span>
+        <div class="post-topbar-actions">
+          <button class="share-btn" id="postShareBtn" type="button">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            <span id="postShareLabel">Share</span>
+          </button>
+        </div>
+      </div>
+      <div class="post-read-progress" id="postReadProgress"></div>
     </div>
-  </section>
+
+    <!-- Post layout: TOC sidebar + article -->
+    <div class="wrap post-layout">
+      <aside class="blog-toc-sidebar" id="blogTocSidebar" aria-label="Table of contents">
+        <div class="blog-toc-inner">
+          <p class="blog-toc-label">On this page</p>
+          <nav id="blogTocNav"></nav>
+        </div>
+      </aside>
+      <main id="singlePostArticle" aria-live="polite"></main>
+    </div>
+
+    <!-- Prev / Next post nav -->
+    <div class="post-footer-nav wrap" id="postFooterNav"></div>
+
+  </div>
+
 </div>

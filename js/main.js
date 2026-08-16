@@ -434,35 +434,96 @@ if(contactForm){
 }
 
 /* ============================================================
-   BLOG ENGINE — Homepage Showcase & Full Article Reader
+   BLOG ENGINE
+   Routes:  / (portfolio)  |  ?blog=1 (index)  |  ?post=slug (article)
    ============================================================ */
-const viewPortfolio = document.getElementById('view-portfolio');
-const viewBlog = document.getElementById('view-blog');
-const homeBlogGrid = document.getElementById('homeBlogGrid');
-const postsList = document.getElementById('postsList');
+const viewPortfolio  = document.getElementById('view-portfolio');
+const viewBlog       = document.getElementById('view-blog');
+const blogListingView = document.getElementById('blogListingView');
+const blogPostView   = document.getElementById('blogPostView');
+const homeBlogGrid   = document.getElementById('homeBlogGrid');
+const blogIndexGrid  = document.getElementById('blogIndexGrid');
 const blogCategoryFilters = document.getElementById('blogCategoryFilters');
+const blogArticleCount = document.getElementById('blogArticleCount');
 let activeCategory = 'all';
+let tocObserver = null;
+let readProgressListener = null;
 
-function getAllPosts(){
-  let posts = (typeof BLOG_POSTS !== 'undefined') ? [...BLOG_POSTS] : [];
-  return posts;
+/* ── Helpers ──────────────────────────────────────────────────── */
+function getAllPosts() {
+  return (typeof BLOG_POSTS !== 'undefined') ? [...BLOG_POSTS] : [];
 }
 
-/* ---------- render home blog showcase cards ---------- */
-function renderHomeBlogCards(){
-  if(!homeBlogGrid) return;
-  const posts = getAllPosts();
-  if(!posts.length) return;
+function buildUrl(params) {
+  const url = new URL(window.location.href);
+  url.search = '';
+  url.hash = '';
+  Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+  return url.toString();
+}
 
-  homeBlogGrid.innerHTML = posts.slice(0, 3).map(p => `
-    <article class="home-blog-card" data-post-id="${p.id}" tabindex="0" role="button" aria-label="Read article: ${p.title}">
+/* ── Share toast ──────────────────────────────────────────────── */
+function ensureToast() {
+  let t = document.getElementById('shareToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'shareToast'; t.className = 'share-toast';
+    t.setAttribute('aria-live', 'polite');
+    document.body.appendChild(t);
+  }
+  return t;
+}
+function showToast(msg = 'Copied!') {
+  const t = ensureToast();
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ── Clipboard ────────────────────────────────────────────────── */
+async function copyToClipboard(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch {
+    const el = Object.assign(document.createElement('textarea'), { value: text });
+    Object.assign(el.style, { position:'fixed', opacity:'0' });
+    document.body.appendChild(el); el.select(); document.execCommand('copy');
+    document.body.removeChild(el); return true;
+  }
+}
+
+/* ── Transition helpers ───────────────────────────────────────── */
+function transitionTo(showEl, hideEl, cb) {
+  if (hideEl) hideEl.classList.add('view-hidden');
+  setTimeout(() => {
+    if (hideEl) { hideEl.hidden = true; hideEl.classList.remove('view-hidden'); }
+    if (showEl) { showEl.hidden = false; }
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (cb) cb();
+    if (showEl) requestAnimationFrame(() => showEl.classList.remove('view-hidden'));
+  }, 180);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   HOMEPAGE CARDS (portfolio page preview)
+────────────────────────────────────────────────────────────── */
+function renderHomeBlogCards() {
+  if (!homeBlogGrid) return;
+  const posts = getAllPosts();
+  if (!posts.length) return;
+
+  homeBlogGrid.innerHTML = posts.slice(0, 3).map((p, i) => `
+    <article class="home-blog-card" data-slug="${p.slug}"
+      tabindex="0" role="button" aria-label="Read: ${p.title}">
       <div>
+        <div class="card-num">${String(i + 1).padStart(2, '0')}</div>
         <div class="card-meta">
           <span class="category-badge">${p.category}</span>
           <span class="read-time">${p.readTime}</span>
         </div>
         <h3>${p.title}</h3>
         <p class="card-summary">${p.summary}</p>
+        <div class="card-tags">
+          ${(p.tags || []).slice(0, 3).map(t => `<span class="card-tag-pill">#${t}</span>`).join('')}
+        </div>
       </div>
       <div class="card-footer">
         <span class="card-date">${p.date}</span>
@@ -472,108 +533,340 @@ function renderHomeBlogCards(){
   `).join('');
 
   homeBlogGrid.querySelectorAll('.home-blog-card').forEach(card => {
-    const handleOpen = () => {
-      const postId = card.dataset.postId;
-      showBlog(postId);
-    };
-    card.addEventListener('click', handleOpen);
-    card.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleOpen(); } });
+    const go = () => { const slug = card.dataset.slug; history.pushState({}, '', buildUrl({ post: slug })); showPost(slug); };
+    card.addEventListener('click', go);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
   });
 }
 
-/* ---------- render full blog reader articles ---------- */
-function renderBlogReader(filterCat = 'all', targetPostId = null){
-  if(!postsList) return;
-  const allPosts = getAllPosts();
-  let filtered = allPosts;
-  if(filterCat && filterCat !== 'all'){
-    filtered = allPosts.filter(p => p.category.toLowerCase() === filterCat.toLowerCase());
-  }
+/* ──────────────────────────────────────────────────────────────
+   BLOG INDEX — listing view (?blog=1)
+────────────────────────────────────────────────────────────── */
+function renderBlogIndex(filterCat = 'all') {
+  if (!blogIndexGrid) return;
+  const all = getAllPosts();
+  const posts = filterCat === 'all' ? all : all.filter(p => p.category.toLowerCase() === filterCat.toLowerCase());
 
-  if(targetPostId){
-    const specific = allPosts.find(p => p.id === targetPostId);
-    if(specific) filtered = [specific];
-  }
+  if (blogArticleCount) blogArticleCount.textContent = posts.length + (posts.length === 1 ? ' Article' : ' Articles');
 
-  if(!filtered.length){
-    postsList.innerHTML = '<p class="empty-state">No articles found in this category.</p>';
+  if (!posts.length) {
+    blogIndexGrid.innerHTML = '<p class="empty-state">No articles in this category.</p>';
     return;
   }
 
-  postsList.innerHTML = filtered.map(p => `
-    <article class="blog-article-full" id="article-${p.id}">
-      <header class="blog-article-header">
-        <div class="article-meta">
+  blogIndexGrid.innerHTML = posts.map((p, i) => `
+    <a class="blog-index-card" href="${buildUrl({ post: p.slug })}" data-slug="${p.slug}"
+      style="animation-delay:${i * 60}ms"
+      role="article" aria-label="Read: ${p.title}">
+      <div>
+        <div class="blog-index-card-num">${String(i + 1).padStart(2, '0')}</div>
+        <div class="blog-index-card-meta">
           <span class="category-badge">${p.category}</span>
-          <span class="read-time mono">${p.readTime}</span>
+          <span class="read-time">${p.readTime}</span>
           <span class="card-date">${p.date}</span>
         </div>
         <h2>${p.title}</h2>
-        <div class="article-tags">
-          ${(p.tags || []).map(t => `<span class="article-tag">#${t}</span>`).join('')}
+        <p class="blog-index-card-summary">${p.summary}</p>
+        <div class="blog-index-card-tags">
+          ${(p.tags || []).slice(0, 4).map(t => `<span class="article-tag">#${t}</span>`).join('')}
         </div>
-      </header>
-      <div class="article-content">
-        ${p.content}
       </div>
-    </article>
+      <div class="blog-index-card-arrow" aria-hidden="true">→</div>
+    </a>
   `).join('');
-}
 
-/* ---------- view switching (portfolio <-> blog) ---------- */
-function showBlog(postId = null){
-  if(!viewPortfolio || !viewBlog) return;
-  viewPortfolio.classList.add('view-hidden');
-  setTimeout(()=>{
-    viewPortfolio.hidden = true;
-    viewBlog.hidden = false;
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    renderBlogReader(activeCategory, postId);
-    requestAnimationFrame(()=>viewBlog.classList.remove('view-hidden'));
-  }, 180);
-}
-
-function showPortfolio(){
-  if(!viewPortfolio || !viewBlog) return;
-  viewBlog.classList.add('view-hidden');
-  setTimeout(()=>{
-    viewBlog.hidden = true;
-    viewPortfolio.hidden = false;
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    requestAnimationFrame(()=>viewPortfolio.classList.remove('view-hidden'));
-  }, 180);
-}
-
-/* ---------- wire blog navigation events ---------- */
-const navBlog = document.getElementById('navBlog');
-if(navBlog) navBlog.addEventListener('click', ()=>showBlog());
-
-const navBlogMobile = document.getElementById('navBlogMobile');
-if(navBlogMobile) navBlogMobile.addEventListener('click', ()=>{ closeMobileNav(); showBlog(); });
-
-const viewAllBlogBtn = document.getElementById('viewAllBlogBtn');
-if(viewAllBlogBtn) viewAllBlogBtn.addEventListener('click', ()=>showBlog());
-
-const backHome = document.getElementById('backHome');
-if(backHome) backHome.addEventListener('click', (e)=>{ e.preventDefault(); showPortfolio(); });
-
-const brandHome = document.getElementById('brandHome');
-if(brandHome) brandHome.addEventListener('click', showPortfolio);
-
-/* ---------- category filtering ---------- */
-if(blogCategoryFilters){
-  blogCategoryFilters.querySelectorAll('.cat-pill').forEach(btn => {
-    btn.addEventListener('click', ()=>{
-      blogCategoryFilters.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeCategory = btn.dataset.category;
-      renderBlogReader(activeCategory, null);
+  // Intercept clicks for SPA navigation
+  blogIndexGrid.querySelectorAll('.blog-index-card').forEach(card => {
+    card.addEventListener('click', e => {
+      e.preventDefault();
+      const slug = card.dataset.slug;
+      history.pushState({}, '', buildUrl({ post: slug }));
+      showPost(slug);
     });
   });
 }
 
-// Initial render of home cards and blog
+/* ──────────────────────────────────────────────────────────────
+   SINGLE POST VIEW (?post=slug)
+────────────────────────────────────────────────────────────── */
+function buildToc(article, postId) {
+  const tocNav = document.getElementById('blogTocNav');
+  if (!tocNav) return;
+  tocNav.innerHTML = '';
+  const heads = [];
+
+  article.querySelectorAll('.article-content h3').forEach((h3, idx) => {
+    if (!h3.id) h3.id = `h-${postId}-${idx}`;
+    const a = document.createElement('a');
+    a.href = '#' + h3.id;
+    a.className = 'toc-link';
+    // Get text without the CSS ::before marker char
+    a.textContent = (h3.textContent || '').trim();
+    a.addEventListener('click', e => { e.preventDefault(); h3.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    tocNav.appendChild(a);
+    heads.push({ el: h3, link: a });
+  });
+
+  if (tocObserver) tocObserver.disconnect();
+  if (!heads.length) return;
+
+  tocObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const h = heads.find(h => h.el === entry.target);
+      if (!h) return;
+      heads.forEach(x => x.link.classList.remove('toc-active'));
+      h.link.classList.add('toc-active');
+    });
+  }, { rootMargin: '-8% 0px -78% 0px' });
+
+  heads.forEach(h => tocObserver.observe(h.el));
+}
+
+function wireCodeCopy(container) {
+  container.querySelectorAll('.code-block').forEach(block => {
+    const header = block.querySelector('.code-block-header');
+    if (!header || header.querySelector('.code-copy-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'code-copy-btn'; btn.type = 'button';
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span>`;
+    header.appendChild(btn);
+    btn.addEventListener('click', async () => {
+      const code = block.querySelector('code');
+      if (!code) return;
+      await copyToClipboard(code.innerText);
+      btn.classList.add('copied'); btn.querySelector('span').textContent = 'Copied!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.querySelector('span').textContent = 'Copy'; }, 1800);
+    });
+  });
+}
+
+function wireReadProgress() {
+  const bar = document.getElementById('postReadProgress');
+  const article = document.getElementById('singlePostArticle');
+  if (!bar || !article) return;
+  if (readProgressListener) window.removeEventListener('scroll', readProgressListener, { passive: true });
+  readProgressListener = () => {
+    const rect = article.getBoundingClientRect();
+    const total = article.offsetHeight - window.innerHeight;
+    if (total <= 0) { bar.style.width = '100%'; return; }
+    const scrolled = Math.max(0, -rect.top);
+    bar.style.width = Math.min(100, (scrolled / total) * 100) + '%';
+  };
+  window.addEventListener('scroll', readProgressListener, { passive: true });
+}
+
+function wirePostTopbarTitle() {
+  const titleEl = document.getElementById('postTopbarTitle');
+  const article = document.getElementById('singlePostArticle');
+  if (!titleEl || !article) return;
+  const h2 = article.querySelector('h2');
+  if (!h2) return;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => titleEl.classList.toggle('visible', !e.isIntersecting));
+  }, { rootMargin: '-80px 0px 0px 0px' });
+  io.observe(h2);
+}
+
+function renderPostFooterNav(slug) {
+  const navEl = document.getElementById('postFooterNav');
+  if (!navEl) return;
+  const posts = getAllPosts();
+  const idx = posts.findIndex(p => p.slug === slug);
+  if (idx < 0) { navEl.innerHTML = ''; return; }
+  const prev = posts[idx - 1];
+  const next = posts[idx + 1];
+  navEl.innerHTML = `
+    ${prev ? `<a class="post-nav-btn prev" href="${buildUrl({ post: prev.slug })}" data-slug="${prev.slug}">
+      <span class="post-nav-dir">← Previous</span>
+      <span class="post-nav-title">${prev.title}</span>
+    </a>` : '<div></div>'}
+    ${next ? `<a class="post-nav-btn next" href="${buildUrl({ post: next.slug })}" data-slug="${next.slug}">
+      <span class="post-nav-dir">Next →</span>
+      <span class="post-nav-title">${next.title}</span>
+    </a>` : '<div></div>'}
+  `;
+  navEl.querySelectorAll('.post-nav-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const s = btn.dataset.slug;
+      history.pushState({}, '', buildUrl({ post: s }));
+      showPost(s);
+    });
+  });
+}
+
+function showPost(slug) {
+  if (!viewBlog) return;
+  const posts = getAllPosts();
+  const post = posts.find(p => p.slug === slug);
+  if (!post) { showBlogListing(); return; }
+
+  const articleEl = document.getElementById('singlePostArticle');
+  if (!articleEl) return;
+
+  // Render article HTML
+  articleEl.innerHTML = `
+    <article class="blog-article-full" id="article-${post.id}">
+      <header class="blog-article-header">
+        <div class="article-meta">
+          <span class="category-badge">${post.category}</span>
+          <span class="read-time mono">${post.readTime}</span>
+          <span class="card-date">${post.date}</span>
+        </div>
+        <h2>${post.title}</h2>
+        <div class="article-tags">
+          ${(post.tags || []).map(t => `<span class="article-tag">#${t}</span>`).join('')}
+        </div>
+      </header>
+      <div class="article-content">${post.content}</div>
+    </article>
+  `;
+
+  // Wire post share button
+  const shareBtn = document.getElementById('postShareBtn');
+  const shareLabel = document.getElementById('postShareLabel');
+  if (shareBtn) {
+    shareBtn.onclick = async () => {
+      await copyToClipboard(window.location.href);
+      if (shareLabel) shareLabel.textContent = 'Copied!';
+      shareBtn.classList.add('copied');
+      showToast(`Share link for "${post.title}" copied!`);
+      setTimeout(() => { shareBtn.classList.remove('copied'); if (shareLabel) shareLabel.textContent = 'Share'; }, 2000);
+    };
+  }
+
+  // Show/hide views
+  if (viewPortfolio && !viewPortfolio.hidden) {
+    transitionTo(viewBlog, viewPortfolio, () => {
+      blogListingView.hidden = true;
+      blogPostView.hidden = false;
+      setupPostView(post, slug);
+    });
+  } else {
+    viewBlog.hidden = false;
+    blogListingView.hidden = true;
+    blogPostView.hidden = false;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setupPostView(post, slug);
+  }
+
+  // Update topbar title text
+  const topbarTitle = document.getElementById('postTopbarTitle');
+  if (topbarTitle) topbarTitle.textContent = post.title;
+}
+
+function setupPostView(post, slug) {
+  buildToc(document.getElementById('singlePostArticle'), post.id);
+  wireCodeCopy(document.getElementById('singlePostArticle'));
+  wireReadProgress();
+  wirePostTopbarTitle();
+  renderPostFooterNav(slug);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BLOG LISTING VIEW (?blog=1)
+────────────────────────────────────────────────────────────── */
+function showBlogListing() {
+  if (!viewBlog) return;
+
+  if (viewPortfolio && !viewPortfolio.hidden) {
+    transitionTo(viewBlog, viewPortfolio, () => {
+      blogListingView.hidden = false;
+      blogPostView.hidden = true;
+      renderBlogIndex(activeCategory);
+    });
+  } else {
+    viewBlog.hidden = false;
+    blogListingView.hidden = false;
+    blogPostView.hidden = true;
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    renderBlogIndex(activeCategory);
+    requestAnimationFrame(() => viewBlog.classList.remove('view-hidden'));
+  }
+
+  // Cleanup read progress listener if navigating back
+  if (readProgressListener) { window.removeEventListener('scroll', readProgressListener, { passive: true }); readProgressListener = null; }
+  if (tocObserver) { tocObserver.disconnect(); tocObserver = null; }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   PORTFOLIO VIEW (homepage)
+────────────────────────────────────────────────────────────── */
+function showPortfolio() {
+  if (!viewPortfolio || !viewBlog) return;
+  transitionTo(viewPortfolio, viewBlog, null);
+  const url = new URL(window.location.href);
+  url.search = ''; history.replaceState({}, '', url.toString());
+  if (readProgressListener) { window.removeEventListener('scroll', readProgressListener, { passive: true }); readProgressListener = null; }
+  if (tocObserver) { tocObserver.disconnect(); tocObserver = null; }
+}
+
+/* ── Wire back-to-blog from single post ───────────────────────── */
+const backToBlogEl = document.getElementById('backToBlog');
+if (backToBlogEl) {
+  backToBlogEl.addEventListener('click', e => {
+    e.preventDefault();
+    history.pushState({}, '', buildUrl({ blog: '1' }));
+    showBlogListing();
+  });
+}
+
+/* ── Wire back-to-portfolio from listing ──────────────────────── */
+const backHomeFromListing = document.getElementById('backHomeFromListing');
+if (backHomeFromListing) {
+  backHomeFromListing.addEventListener('click', e => {
+    e.preventDefault();
+    history.pushState({}, '', window.location.pathname);
+    showPortfolio();
+  });
+}
+
+const brandHome = document.getElementById('brandHome');
+if (brandHome) brandHome.addEventListener('click', () => { history.pushState({}, '', window.location.pathname); showPortfolio(); });
+
+/* ── Nav links → blog listing ─────────────────────────────────── */
+const navBlog = document.getElementById('navBlog');
+if (navBlog) navBlog.addEventListener('click', () => { history.pushState({}, '', buildUrl({ blog: '1' })); showBlogListing(); });
+
+const navBlogMobile = document.getElementById('navBlogMobile');
+if (navBlogMobile) navBlogMobile.addEventListener('click', () => { closeMobileNav(); history.pushState({}, '', buildUrl({ blog: '1' })); showBlogListing(); });
+
+const viewAllBlogBtn = document.getElementById('viewAllBlogBtn');
+if (viewAllBlogBtn) viewAllBlogBtn.addEventListener('click', () => { history.pushState({}, '', buildUrl({ blog: '1' })); showBlogListing(); });
+
+/* ── Category filters (listing view) ─────────────────────────── */
+if (blogCategoryFilters) {
+  blogCategoryFilters.querySelectorAll('.cat-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      blogCategoryFilters.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.category;
+      renderBlogIndex(activeCategory);
+    });
+  });
+}
+
+/* ── Browser back / forward ───────────────────────────────────── */
+window.addEventListener('popstate', () => {
+  const p = new URLSearchParams(window.location.search);
+  const slug = p.get('post');
+  const isBlog = p.get('blog');
+  if (slug) { showPost(slug); }
+  else if (isBlog) { showBlogListing(); }
+  else { showPortfolio(); }
+});
+
+/* ── Initial render ───────────────────────────────────────────── */
 renderHomeBlogCards();
+
+(function handleInitialUrl() {
+  const p = new URLSearchParams(window.location.search);
+  const slug = p.get('post');
+  const isBlog = p.get('blog');
+  if (slug) { showPost(slug); return; }
+  if (isBlog) { showBlogListing(); }
+})();
 
 } // end initPortfolio
 
@@ -584,3 +877,6 @@ if (window.__componentsLoaded) {
 } else {
   document.addEventListener('DOMContentLoaded', initPortfolio);
 }
+
+
+

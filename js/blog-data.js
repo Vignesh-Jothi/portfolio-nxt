@@ -8,7 +8,7 @@
 const BLOG_POSTS = [
   {
     id: "scaling-laravel-apps",
-    slug: "designing-scalable-laravel-applications",
+    slug: "scaling-laravel",
     title: "Designing Scalable Laravel Applications: Architecture Patterns for High-Throughput Systems",
     category: "System Design",
     date: "Jan 20, 2026",
@@ -117,7 +117,7 @@ class ProductRepository
   },
   {
     id: "laravel-queues-horizon",
-    slug: "laravel-queues-horizon-async-workflows",
+    slug: "laravel-queues",
     title: "Mastering Laravel Queues & Horizon: Building Fault-Tolerant Async Workflows",
     category: "Backend Engineering",
     date: "Dec 14, 2025",
@@ -267,7 +267,7 @@ php artisan queue:flush</code></pre>
   },
   {
     id: "maintainable-laravel-architecture",
-    slug: "structuring-maintainable-laravel-systems",
+    slug: "laravel-architecture",
     title: "Structuring Maintainable Laravel Systems: Clean Architecture & API Best Practices",
     category: "Software Architecture",
     date: "Nov 28, 2025",
@@ -431,7 +431,7 @@ it('rejects a duplicate refund with 409 Conflict', function () {
   },
   {
     id: "laravel-backend-api",
-    slug: "building-scalable-backend-apis-with-laravel",
+    slug: "laravel-api",
     title: "Building Production‑Grade Laravel APIs: Sanctum Auth, Caching & Deployment",
     category: "Backend Engineering",
     date: "Aug 16, 2026",
