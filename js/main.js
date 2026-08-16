@@ -182,20 +182,20 @@ if(statsBlock) heroStatsIO.observe(statsBlock);
 
 /* ---------- hero console & terminal interactions ---------- */
 function runTerminalAnimation() {
-  const termLines = document.querySelectorAll('#tab-ship .tech-line');
-  if (!termLines.length) return;
+  const termEntries = document.querySelectorAll('#tab-ship .term-entry, #tab-ship .term-status-line');
+  if (!termEntries.length) return;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) {
-    termLines.forEach(l => l.classList.add('show'));
+    termEntries.forEach(l => l.classList.add('show'));
     return;
   }
-  termLines.forEach(l => l.classList.remove('show'));
+  termEntries.forEach(l => l.classList.remove('show'));
   let i = 0;
   function next() {
-    if (i >= termLines.length) return;
-    termLines[i].classList.add('show');
+    if (i >= termEntries.length) return;
+    termEntries[i].classList.add('show');
     i++;
-    setTimeout(next, termLines[i - 1].classList.contains('t-gap') ? 120 : 220);
+    setTimeout(next, 160);
   }
   next();
 }
@@ -500,15 +500,38 @@ if(backToTop){
 }
 
 /* ---------- theme toggle ---------- */
-const themeBtn = document.getElementById('themeToggle');
-if(themeBtn){
-  themeBtn.addEventListener('click', ()=>{
-    const root = document.documentElement;
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', next);
-    themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+function initThemeState() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const themeBtns = document.querySelectorAll('#themeToggle, .theme-toggle');
+  themeBtns.forEach(btn => {
+    btn.setAttribute('aria-label', current === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
   });
 }
+
+function toggleThemeMode() {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try {
+    localStorage.setItem('portfolio_theme', next);
+  } catch(e) {}
+
+  const themeBtns = document.querySelectorAll('#themeToggle, .theme-toggle');
+  themeBtns.forEach(btn => {
+    btn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  });
+}
+
+document.addEventListener('click', (e) => {
+  const themeBtnEl = e.target.closest('#themeToggle, .theme-toggle');
+  if (themeBtnEl) {
+    e.preventDefault();
+    toggleThemeMode();
+  }
+});
+
+initThemeState();
 
 /* ---------- contact form -> mailto ---------- */
 const contactForm = document.getElementById('contactForm');

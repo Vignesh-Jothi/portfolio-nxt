@@ -57,66 +57,119 @@
         <div class="tech-window">
           <div class="tech-head">
             <div class="tech-dots">
-              <span class="dot-red" aria-hidden="true"></span>
-              <span class="dot-yellow" aria-hidden="true"></span>
-              <span class="dot-green" aria-hidden="true"></span>
+              <span class="dot-red" aria-hidden="true" title="Close"></span>
+              <span class="dot-yellow" aria-hidden="true" title="Minimize"></span>
+              <span class="dot-green" aria-hidden="true" title="Maximize"></span>
             </div>
             
             <div class="tech-tabs" role="tablist" aria-label="System console views">
               <button class="tech-tab active" role="tab" aria-selected="true" aria-controls="tab-ship" id="btn-tab-ship" data-target="tab-ship">
-                <span class="tab-badge">&gt;_</span> ship.log
+                <span class="tab-badge">&gt;_</span>
+                <span class="tab-label">ship.log</span>
               </button>
               <button class="tech-tab" role="tab" aria-selected="false" aria-controls="tab-arch" id="btn-tab-arch" data-target="tab-arch">
-                <span class="tab-badge">{ }</span> arch.ts
+                <span class="tab-badge">{ }</span>
+                <span class="tab-label">arch.ts</span>
               </button>
               <button class="tech-tab" role="tab" aria-selected="false" aria-controls="tab-telemetry" id="btn-tab-telemetry" data-target="tab-telemetry">
-                <span class="tab-badge">⚡</span> telemetry
+                <span class="tab-badge">⚡</span>
+                <span class="tab-label">telemetry</span>
               </button>
             </div>
 
             <div class="tech-actions">
               <button type="button" class="tech-action-btn" id="heroConsoleRerun" title="Replay Execution" aria-label="Replay Terminal Execution">
-                <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                <span>Rerun</span>
+                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
               </button>
             </div>
           </div>
 
           <!-- Tab 1: Terminal Log -->
           <div class="tech-body tech-tab-panel show" id="tab-ship" role="tabpanel" aria-labelledby="btn-tab-ship">
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">stack deploy</span> <span class="t-path">--env=prod --services=nextjs,node,postgres,redis</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> TypeScript + Next.js + Node.js + PostgreSQL · zero-downtime deployment <span class="t-dim">— healthy</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">ai-agent pipeline</span> <span class="t-path">--protocol=mcp --summarise</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> OpenAI + MCP tool wiring · auto stage updates &amp; call summarisation <span class="t-dim">— no manual overhead</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">benchmark routes</span> <span class="t-path">--compare=before-caching</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> Redis caching &amp; query indexing · avg response time <span class="t-check">down 40%+</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">workflow refunds</span> <span class="t-path">--automate</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> refund turnaround <span class="t-dim">3–5 days →</span> <span class="t-heat">under 24h</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line"><span class="t-prompt">$</span> <span class="t-cmd">metrics --active-users</span> <span class="t-path">--window=24h</span></div>
-            <div class="tech-line"><span class="t-check">✓</span> <span class="t-check">400+</span> daily active users <span class="t-dim">across CX, Finance, Sales, Visa, Product</span></div>
-            <div class="tech-line t-gap" aria-hidden="true"></div>
-            <div class="tech-line t-idle"><span class="t-dim">&gt; systems operating nominal · standing by</span><span class="t-cursor" aria-hidden="true">█</span></div>
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">stack deploy</span>
+                <span class="term-args">--env=prod --services=core,api</span>
+                <span class="term-time">[09:42:15]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-green">✓ SUCCESS</span>
+                <span class="term-desc">Next.js 15 + PostgreSQL · Zero-downtime deploy</span>
+                <span class="term-tag">[18ms]</span>
+              </div>
+            </div>
+
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">ai-agent pipeline</span>
+                <span class="term-args">--protocol=mcp</span>
+                <span class="term-time">[09:42:17]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-blue">✓ AUTOMATED</span>
+                <span class="term-desc">OpenAI + MCP Wiring · Auto CRM transitions</span>
+                <span class="term-tag">0 manual overhead</span>
+              </div>
+            </div>
+
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">benchmark routes</span>
+                <span class="term-args">--caching=redis</span>
+                <span class="term-time">[09:42:19]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-amber">⚡ 40%+ FASTER</span>
+                <span class="term-desc">Redis Caching &amp; PgBouncer query indexing</span>
+                <span class="term-tag">P95 &lt; 120ms</span>
+              </div>
+            </div>
+
+            <div class="term-entry">
+              <div class="term-cmd-row">
+                <span class="term-prompt">$</span>
+                <span class="term-cmd">metrics --active-users</span>
+                <span class="term-args">--window=24h</span>
+                <span class="term-time">[09:42:21]</span>
+              </div>
+              <div class="term-out-row">
+                <span class="term-badge badge-purple">👥 400+ DAU</span>
+                <span class="term-desc">7 departments (CX, Sales, Product, Visa, Finance)</span>
+                <span class="term-tag">single truth</span>
+              </div>
+            </div>
+
+            <div class="term-status-line">
+              <span class="term-idle-dot"></span>
+              <span class="term-idle-text">systems operating nominal · ready for dispatch</span>
+              <span class="t-cursor" aria-hidden="true">█</span>
+            </div>
           </div>
 
           <!-- Tab 2: Architecture Schema -->
           <div class="tech-body tech-tab-panel" id="tab-arch" role="tabpanel" aria-labelledby="btn-tab-arch" hidden>
-            <div class="code-block mono">
-              <div class="code-row"><span class="c-keyword">interface</span> <span class="c-type">ProductionArchitecture</span> {</div>
-              <div class="code-row indent-1"><span class="c-prop">frontend:</span> <span class="c-string">"Next.js 15 (App Router)"</span> | <span class="c-string">"React 19"</span>;</div>
-              <div class="code-row indent-1"><span class="c-prop">backend:</span> <span class="c-string">"PHP 8.3 / Laravel 11"</span> | <span class="c-string">"Node.js"</span>;</div>
-              <div class="code-row indent-1"><span class="c-prop">caching:</span> <span class="c-string">"Redis Cluster (Multi-Tier Caching)"</span>;</div>
-              <div class="code-row indent-1"><span class="c-prop">database:</span> <span class="c-string">"PostgreSQL + Read Replicas"</span>;</div>
-              <div class="code-row indent-1"><span class="c-prop">aiWorkflows:</span> <span class="c-type">MCPProtocol</span> &lt; <span class="c-string">"OpenAI / Tooling"</span> &gt;;</div>
-              <div class="code-row indent-1"><span class="c-prop">availability:</span> <span class="c-number">99.98</span>; <span class="c-comment">// zero-downtime migrations</span></div>
-              <div class="code-row">}</div>
-              <div class="code-row c-comment">// Auto-orchestrated event-driven queue pipeline</div>
-              <div class="code-row"><span class="c-keyword">export const</span> <span class="c-func">dispatchPipeline</span> = <span class="c-keyword">async</span> (event: <span class="c-type">AppEvent</span>) =&gt; {</div>
-              <div class="code-row indent-1"><span class="c-keyword">await</span> queue.dispatch(event).through(cachingMiddleware);</div>
-              <div class="code-row">};</div>
+            <div class="code-editor-header">
+              <span class="file-icon">TS</span>
+              <span class="file-name">src/architecture/platform.config.ts</span>
+              <span class="file-status">● saved</span>
+            </div>
+            <div class="code-editor-body mono">
+              <div class="code-line"><span class="ln">1</span><span class="c-keyword">export interface</span> <span class="c-type">ProductionArchitecture</span> {</div>
+              <div class="code-line"><span class="ln">2</span>  <span class="c-prop">frontend:</span> <span class="c-string">"Next.js 15"</span> | <span class="c-string">"React 19"</span>;</div>
+              <div class="code-line"><span class="ln">3</span>  <span class="c-prop">backend:</span> <span class="c-string">"PHP 8.3 / Laravel 11"</span> | <span class="c-string">"Node.js"</span>;</div>
+              <div class="code-line"><span class="ln">4</span>  <span class="c-prop">database:</span> <span class="c-string">"PostgreSQL 16"</span> + <span class="c-type">ReadReplicas</span>;</div>
+              <div class="code-line"><span class="ln">5</span>  <span class="c-prop">caching:</span> <span class="c-string">"Redis Multi-Tier"</span> + <span class="c-string">"PgBouncer"</span>;</div>
+              <div class="code-line"><span class="ln">6</span>  <span class="c-prop">aiWorkflows:</span> <span class="c-type">MCPProtocol</span>&lt;<span class="c-string">"OpenAI / Tooling"</span>&gt;;</div>
+              <div class="code-line"><span class="ln">7</span>  <span class="c-prop">availability:</span> <span class="c-number">99.98</span>; <span class="c-comment">// zero-downtime</span></div>
+              <div class="code-line"><span class="ln">8</span>}</div>
+              <div class="code-line"><span class="ln">9</span></div>
+              <div class="code-line"><span class="ln">10</span><span class="c-comment">// Auto-orchestrated event pipeline</span></div>
+              <div class="code-line"><span class="ln">11</span><span class="c-keyword">export const</span> <span class="c-func">dispatch</span> = <span class="c-keyword">async</span> (event: <span class="c-type">AppEvent</span>) =&gt; {</div>
+              <div class="code-line"><span class="ln">12</span>  <span class="c-keyword">await</span> queue.dispatch(event).through(cachingLayer);</div>
+              <div class="code-line"><span class="ln">13</span>};</div>
             </div>
           </div>
 
@@ -166,10 +219,13 @@
           </div>
         </div>
 
-        <p class="hero-tech-cap mono">
-          <span>live engineering telemetry &amp; logs ↓</span>
-          <a href="#projects">explore case studies →</a>
-        </p>
+        <div class="hero-tech-cap mono">
+          <div class="tech-cap-left">
+            <span class="cap-pulse-dot"></span>
+            <span>telemetry live · 0 errors</span>
+          </div>
+          <a href="#projects" class="tech-cap-link">explore case studies <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
       </div>
     </div>
 
