@@ -511,13 +511,14 @@ function renderHomeBlogCards() {
   if (!posts.length) return;
 
   homeBlogGrid.innerHTML = posts.slice(0, 3).map((p, i) => `
-    <article class="home-blog-card" data-slug="${p.slug}"
+    <article class="home-blog-card reveal-item" data-slug="${p.slug}"
+      style="animation-delay:${i * 80}ms"
       tabindex="0" role="button" aria-label="Read: ${p.title}">
       <div>
         <div class="card-num">${String(i + 1).padStart(2, '0')}</div>
         <div class="card-meta">
           <span class="category-badge">${p.category}</span>
-          <span class="read-time">${p.readTime}</span>
+          <span class="read-time mono">${p.readTime}</span>
         </div>
         <h3>${p.title}</h3>
         <p class="card-summary">${p.summary}</p>
@@ -526,11 +527,16 @@ function renderHomeBlogCards() {
         </div>
       </div>
       <div class="card-footer">
-        <span class="card-date">${p.date}</span>
+        <span class="card-date mono">${p.date}</span>
         <span class="read-action">Read Article →</span>
       </div>
     </article>
   `).join('');
+
+  // Trigger reveal animations
+  requestAnimationFrame(() => {
+    homeBlogGrid.querySelectorAll('.reveal-item').forEach(el => el.classList.add('revealed'));
+  });
 
   homeBlogGrid.querySelectorAll('.home-blog-card').forEach(card => {
     const go = () => { const slug = card.dataset.slug; history.pushState({}, '', buildUrl({ post: slug })); showPost(slug); };
@@ -555,15 +561,15 @@ function renderBlogIndex(filterCat = 'all') {
   }
 
   blogIndexGrid.innerHTML = posts.map((p, i) => `
-    <a class="blog-index-card" href="${buildUrl({ post: p.slug })}" data-slug="${p.slug}"
-      style="animation-delay:${i * 60}ms"
+    <a class="blog-index-card reveal-item" href="${buildUrl({ post: p.slug })}" data-slug="${p.slug}"
+      style="animation-delay:${i * 70}ms"
       role="article" aria-label="Read: ${p.title}">
-      <div>
+      <div class="blog-index-card-inner">
         <div class="blog-index-card-num">${String(i + 1).padStart(2, '0')}</div>
         <div class="blog-index-card-meta">
           <span class="category-badge">${p.category}</span>
-          <span class="read-time">${p.readTime}</span>
-          <span class="card-date">${p.date}</span>
+          <span class="read-time mono">${p.readTime}</span>
+          <span class="card-date mono">${p.date}</span>
         </div>
         <h2>${p.title}</h2>
         <p class="blog-index-card-summary">${p.summary}</p>
@@ -574,6 +580,11 @@ function renderBlogIndex(filterCat = 'all') {
       <div class="blog-index-card-arrow" aria-hidden="true">→</div>
     </a>
   `).join('');
+
+  // Trigger cascade reveal
+  requestAnimationFrame(() => {
+    blogIndexGrid.querySelectorAll('.reveal-item').forEach(el => el.classList.add('revealed'));
+  });
 
   // Intercept clicks for SPA navigation
   blogIndexGrid.querySelectorAll('.blog-index-card').forEach(card => {
@@ -600,9 +611,14 @@ function buildToc(article, postId) {
     const a = document.createElement('a');
     a.href = '#' + h3.id;
     a.className = 'toc-link';
-    // Get text without the CSS ::before marker char
     a.textContent = (h3.textContent || '').trim();
-    a.addEventListener('click', e => { e.preventDefault(); h3.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const topOffset = 80;
+      const elementPosition = h3.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - topOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    });
     tocNav.appendChild(a);
     heads.push({ el: h3, link: a });
   });
@@ -618,7 +634,7 @@ function buildToc(article, postId) {
       heads.forEach(x => x.link.classList.remove('toc-active'));
       h.link.classList.add('toc-active');
     });
-  }, { rootMargin: '-8% 0px -78% 0px' });
+  }, { rootMargin: '-10% 0px -70% 0px' });
 
   heads.forEach(h => tocObserver.observe(h.el));
 }
@@ -678,11 +694,11 @@ function renderPostFooterNav(slug) {
   const next = posts[idx + 1];
   navEl.innerHTML = `
     ${prev ? `<a class="post-nav-btn prev" href="${buildUrl({ post: prev.slug })}" data-slug="${prev.slug}">
-      <span class="post-nav-dir">← Previous</span>
+      <span class="post-nav-dir">← Previous Article</span>
       <span class="post-nav-title">${prev.title}</span>
     </a>` : '<div></div>'}
     ${next ? `<a class="post-nav-btn next" href="${buildUrl({ post: next.slug })}" data-slug="${next.slug}">
-      <span class="post-nav-dir">Next →</span>
+      <span class="post-nav-dir">Next Article →</span>
       <span class="post-nav-title">${next.title}</span>
     </a>` : '<div></div>'}
   `;
@@ -705,16 +721,23 @@ function showPost(slug) {
   const articleEl = document.getElementById('singlePostArticle');
   if (!articleEl) return;
 
-  // Render article HTML
+  // Render article HTML with enhanced breadcrumb and author meta
   articleEl.innerHTML = `
     <article class="blog-article-full" id="article-${post.id}">
       <header class="blog-article-header">
+        <nav class="article-breadcrumb" aria-label="Breadcrumb">
+          <a href="#" class="breadcrumb-link" id="breadcrumbBlogLink">Engineering Notes</a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">${post.category}</span>
+        </nav>
+        <h2>${post.title}</h2>
         <div class="article-meta">
           <span class="category-badge">${post.category}</span>
-          <span class="read-time mono">${post.readTime}</span>
-          <span class="card-date">${post.date}</span>
+          <span class="read-time mono">⏱ ${post.readTime}</span>
+          <span class="card-date mono">📅 ${post.date}</span>
+          <span class="blog-hero-sep">·</span>
+          <span class="article-author mono">✍️ Vignesh Jothi</span>
         </div>
-        <h2>${post.title}</h2>
         <div class="article-tags">
           ${(post.tags || []).map(t => `<span class="article-tag">#${t}</span>`).join('')}
         </div>
@@ -722,6 +745,16 @@ function showPost(slug) {
       <div class="article-content">${post.content}</div>
     </article>
   `;
+
+  // Breadcrumb link click to return to blog index
+  const breadcrumbBlogLink = articleEl.querySelector('#breadcrumbBlogLink');
+  if (breadcrumbBlogLink) {
+    breadcrumbBlogLink.addEventListener('click', e => {
+      e.preventDefault();
+      history.pushState({}, '', buildUrl({ blog: '1' }));
+      showBlogListing();
+    });
+  }
 
   // Wire post share button
   const shareBtn = document.getElementById('postShareBtn');
@@ -731,7 +764,7 @@ function showPost(slug) {
       await copyToClipboard(window.location.href);
       if (shareLabel) shareLabel.textContent = 'Copied!';
       shareBtn.classList.add('copied');
-      showToast(`Share link for "${post.title}" copied!`);
+      showToast(`Share link copied for "${post.title}"!`);
       setTimeout(() => { shareBtn.classList.remove('copied'); if (shareLabel) shareLabel.textContent = 'Share'; }, 2000);
     };
   }
@@ -755,6 +788,7 @@ function showPost(slug) {
   const topbarTitle = document.getElementById('postTopbarTitle');
   if (topbarTitle) topbarTitle.textContent = post.title;
 }
+
 
 function setupPostView(post, slug) {
   buildToc(document.getElementById('singlePostArticle'), post.id);

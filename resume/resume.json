@@ -55,11 +55,12 @@
       "Vite"
     ],
     "Backend & APIs": [
-      "Node.js",
-      "Express",
-      "PHP",
+      "PHP 8.x",
       "Laravel",
+      "Laravel Horizon",
+      "Sanctum & JWT Auth",
       "RESTful APIs",
+      "Node.js",
       "GraphQL",
       "Microservices",
       "WebSockets"
@@ -68,8 +69,9 @@
       "PostgreSQL",
       "MySQL",
       "Redis",
-      "Database Optimization",
-      "Connection Pooling",
+      "Database Read Replicas",
+      "Connection Pooling (PgBouncer)",
+      "SQL Query Optimization",
       "Indexing Strategies"
     ],
     "Cloud & DevOps": [
@@ -77,23 +79,24 @@
       "Docker",
       "Kubernetes",
       "CI/CD (GitHub Actions)",
-      "Nginx",
+      "Nginx & PHP-FPM",
       "Linux (Ubuntu)"
     ],
     "System Architecture": [
       "System Design",
       "Event-Driven Architecture",
-      "Queue-Based Processing",
-      "Caching Strategies",
+      "Laravel Queues & Workers",
+      "Multi-Tier Caching",
       "API Design & Versioning",
-      "Zero-Downtime Migrations"
+      "Zero-Downtime Deployments",
+      "Idempotent Workflows"
     ],
     "AI & Testing Tools": [
       "OpenAI API",
       "Model Context Protocol (MCP)",
       "LLM Agent Tooling",
+      "Pest / PHPUnit",
       "Jest",
-      "Pest",
       "Git / GitHub",
       "Postman"
     ]
