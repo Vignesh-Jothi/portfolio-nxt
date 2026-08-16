@@ -53,7 +53,7 @@ if(testGrid && typeof TESTIMONIALS !== 'undefined'){
         ${more.map(q=>`
           <figure class="testimonial-quote testimonial-quote--more">
             <blockquote>“${q.quote}”</blockquote>
-            <figcaption><b>${q.name}</b><span>${q.role}</span></figcaption>
+            <figcaption><b>${q.name}</b><span>- ${q.role}</span></figcaption>
           </figure>`).join('')}
       </div>`;
     testGrid.appendChild(card);

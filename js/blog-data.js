@@ -1,319 +1,572 @@
 /* ============================================================
-   BLOG POSTS DATA — Reusable data structure for system design
-   and software engineering articles.
+   BLOG POSTS DATA — Reusable data structure for backend
+   and software engineering articles (Laravel / PHP stack).
    Adding new articles in the future requires only appending to
    this array without touching HTML markup.
    ============================================================ */
 
 const BLOG_POSTS = [
   {
-    id: "scaling-web-apps",
-    slug: "designing-scalable-web-applications",
-    title: "Designing Scalable Web Applications: Architecture Patterns for High-Throughput Systems",
+    id: "scaling-laravel-apps",
+    slug: "designing-scalable-laravel-applications",
+    title: "Designing Scalable Laravel Applications: Architecture Patterns for High-Throughput Systems",
     category: "System Design",
     date: "Jan 20, 2026",
     readTime: "8 min read",
-    summary: "A practical guide to architecting resilient web platforms capable of handling 500k+ daily requests — covering stateless compute, connection pooling, database read-replicas, and multi-tier caching.",
-    tags: ["System Design", "Scalability", "PostgreSQL", "Redis", "Node.js", "AWS"],
+    summary: "A practical guide to architecting resilient Laravel platforms capable of handling 500k+ daily requests — covering stateless sessions, connection pooling, database read-replicas, and multi-tier caching with Redis.",
+    tags: ["System Design", "Laravel", "Scalability", "PostgreSQL", "Redis", "PHP", "AWS"],
     content: `
-      <p class="lead">Scaling a web application is rarely about swapping in faster hardware or blindly switching to microservices. In production, scalability is a discipline of identifying bottlenecks, isolating state, and eliminating synchronous dependencies before they degrade user experience.</p>
+      <p class="lead">Scaling a Laravel application is rarely about swapping in faster hardware or blindly switching to microservices. In production, scalability is a discipline of identifying bottlenecks, isolating state, and eliminating synchronous dependencies before they degrade user experience.</p>
       
       <h3>1. The Stateless Application Tier</h3>
-      <p>The single most important principle when scaling the application layer is <strong>zero in-memory session state</strong>. When user sessions, cached tokens, or transient states reside in Node.js server memory, horizontal scaling behind a Layer 7 Load Balancer (ALB) becomes fragile.</p>
+      <p>The single most important principle when scaling the application layer is <strong>zero in-memory session state</strong>. When user sessions reside on a single PHP-FPM instance, horizontal scaling behind a Layer 7 Load Balancer (ALB) becomes fragile. Laravel makes this trivially easy to fix.</p>
       
       <div class="code-block">
-        <div class="code-block-header"><span class="code-lang">TypeScript / Express</span><span class="code-title">Stateless Session Handling via Redis Token Store</span></div>
-        <pre><code>// Centralized session management using Redis
-import { createClient } from 'redis';
-import session from 'express-session';
-import RedisStore from 'connect-redis';
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Stateless Session Handling via Redis Driver</span></div>
+        <pre><code>// config/session.php — switch driver to redis
+return [
+    'driver'     => env('SESSION_DRIVER', 'redis'),
+    'lifetime'   => 10080, // 7 days in minutes
+    'encrypt'    => true,
+    'secure'     => env('SESSION_SECURE_COOKIE', true),
+    'same_site'  => 'lax',
+    'connection' => 'session', // dedicated Redis connection
+];
 
-const redisClient = createClient({ url: process.env.REDIS_URL });
-await redisClient.connect();
-
-export const sessionMiddleware = session({
-  store: new RedisStore({ client: redisClient, prefix: 'sess:' }),
-  secret: process.env.SESSION_SECRET!,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    sameSite: 'lax'
-  }
-});</code></pre>
+// config/database.php — dedicated session connection
+'redis' => [
+    'session' => [
+        'url'      => env('REDIS_URL'),
+        'database' => env('REDIS_SESSION_DB', '1'),
+    ],
+],</code></pre>
       </div>
 
-      <p>With externalized session state, autoscaling groups can spin instances up or down based on CPU utilization or queue backlog without dropping active user connections or requiring sticky routing.</p>
+      <p>With externalized session state, autoscaling groups can spin instances up or down based on CPU utilization without dropping active user sessions or requiring sticky routing.</p>
 
       <h3>2. Database Scaling: Connection Pooling &amp; Read Replicas</h3>
-      <p>In 90% of web systems, the database becomes the first true wall. Relational databases like <strong>PostgreSQL</strong> create a dedicated backend process for each TCP connection, consuming memory and causing context-switching overhead.</p>
+      <p>In 90% of web systems, the database becomes the first true wall. Laravel's Eloquent ORM natively supports <strong>read/write connection splitting</strong>, routing SELECT queries to replica nodes automatically.</p>
 
       <div class="callout callout-info">
         <div class="callout-title">💡 Production Bottleneck: Connection Churn</div>
-        <p>Opening and closing SSL connections on serverless functions or microservices can saturate PostgreSQL process limits within seconds. Introducing <strong>PgBouncer</strong> or AWS RDS Proxy maintains a warm pool of pooled database connections, reducing database CPU load by over 40%.</p>
+        <p>PHP-FPM processes open and close connections on every request. Fronting MySQL or PostgreSQL with <strong>PgBouncer</strong> (for Postgres) or <strong>ProxySQL</strong> (for MySQL) maintains a warm pool, reducing database CPU load by over 40%.</p>
       </div>
 
-      <p>To scale read queries which typically outnumber writes 10-to-1:</p>
-      <ul>
-        <li><strong>Primary-Replica Topologies:</strong> Direct all write operations (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>) to the Primary node, while routing idempotent read traffic to read replicas via asynchronous replication.</li>
-        <li><strong>CQRS-Lite Query Routing:</strong> Implement repository layers that automatically route read-only queries to replica pools while retaining write-consistency on transactions.</li>
-      </ul>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Read/Write Split in database.php</span></div>
+        <pre><code>// config/database.php
+'mysql' => [
+    'read' => [
+        'host' => [
+            env('DB_READ_HOST_1', '10.0.1.10'),
+            env('DB_READ_HOST_2', '10.0.1.11'),
+        ],
+    ],
+    'write' => [
+        'host' => env('DB_WRITE_HOST', '10.0.1.5'),
+    ],
+    'sticky'    => true,   // use write connection within same request
+    'driver'    => 'mysql',
+    'database'  => env('DB_DATABASE', 'app'),
+    'username'  => env('DB_USERNAME', 'forge'),
+    'password'  => env('DB_PASSWORD', ''),
+    'charset'   => 'utf8mb4',
+    'collation' => 'utf8mb4_unicode_ci',
+],</code></pre>
+      </div>
 
       <h3>3. Multi-Tier Caching &amp; The Cache-Aside Pattern</h3>
-      <p>The fastest database query is the one that never executes. A robust multi-tier caching strategy comprises:</p>
-      <ol>
-        <li><strong>Edge/CDN Caching (Cloudflare/CloudFront):</strong> Cache static assets and public cacheable API responses with optimal <code>Cache-Control</code> headers and <code>stale-while-revalidate</code>.</li>
-        <li><strong>In-Memory Distributed Cache (Redis):</strong> Store hot entity records, serialized API responses, and rate limit counters with explicit TTLs.</li>
-      </ol>
+      <p>The fastest database query is the one that never executes. Laravel's Cache facade makes the cache-aside pattern elegant and readable:</p>
 
       <div class="code-block">
-        <div class="code-block-header"><span class="code-lang">TypeScript</span><span class="code-title">Cache-Aside Pattern with Single-Flight Stampede Protection</span></div>
-        <pre><code>async function getCachedEntity&lt;T&gt;(
-  key: string,
-  fetcher: () => Promise&lt;T&gt;,
-  ttlSeconds: number = 300
-): Promise&lt;T&gt; {
-  const cached = await redis.get(key);
-  if (cached) {
-    return JSON.parse(cached) as T;
-  }
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Cache-Aside Pattern with remember()</span></div>
+        <pre><code>use Illuminate\Support\Facades\Cache;
 
-  // Fetch fresh data from persistent storage
-  const freshData = await fetcher();
-  
-  if (freshData) {
-    await redis.set(key, JSON.stringify(freshData), { EX: ttlSeconds });
-  }
-  
-  return freshData;
+class ProductRepository
+{
+    public function findById(int $id): ?Product
+    {
+        return Cache::remember(
+            key: "product:{$id}",
+            ttl: now()->addMinutes(30),
+            callback: fn () => Product::with('variants')->findOrFail($id)
+        );
+    }
+
+    public function update(int $id, array $data): Product
+    {
+        $product = Product::findOrFail($id);
+        $product->update($data);
+
+        // Invalidate on write
+        Cache::forget("product:{$id}");
+
+        return $product->fresh();
+    }
 }</code></pre>
       </div>
 
       <h3>4. Resiliency: Circuit Breakers and Graceful Degradation</h3>
-      <p>When third-party integrations (payment gateways, AI services, SMS APIs) fail or experience high latency, cascading failures can bring down the entire system. Implementing <strong>Circuit Breakers</strong> (e.g., via <code>opossum</code> or resilience middleware) prevents request queues from exhausting system resources when external dependencies falter.</p>
+      <p>When third-party integrations (payment gateways, AI services, SMS APIs) fail, cascading failures can bring down the entire system. Laravel's <strong>retry helpers</strong> and custom middleware let you implement circuit-breaker patterns that return cached or degraded responses instead of propagating exceptions to the user.</p>
 
       <div class="callout callout-success">
         <div class="callout-title">Key Architectural Takeaway</div>
-        <p>Design every component with failure in mind: keep instances stateless, protect databases behind connection poolers and replicas, leverage Redis cache-aside, and decouple long-running operations into background queues.</p>
+        <p>Design every component with failure in mind: keep instances stateless via Redis sessions, protect databases behind connection poolers and read replicas, leverage Laravel's Cache remember(), and decouple long-running operations into Horizon-managed background queues.</p>
       </div>
     `
   },
   {
-    id: "queues-caching-async-workflows",
-    slug: "understanding-queues-caching-and-asynchronous-workflows",
-    title: "Understanding Queues, Caching, and Asynchronous Workflows in Production",
+    id: "laravel-queues-horizon",
+    slug: "laravel-queues-horizon-async-workflows",
+    title: "Mastering Laravel Queues & Horizon: Building Fault-Tolerant Async Workflows",
     category: "Backend Engineering",
     date: "Dec 14, 2025",
     readTime: "9 min read",
-    summary: "How to decouple synchronous web requests using Redis Streams, BullMQ, and message queues to build fault-tolerant, idempotent background workflows that scale reliably.",
-    tags: ["Queues", "Redis", "BullMQ", "Architecture", "Node.js", "Docker"],
+    summary: "How to decouple synchronous web requests using Laravel Jobs, queues, and Horizon to build fault-tolerant, idempotent background workflows that scale reliably in production.",
+    tags: ["Laravel", "Queues", "Horizon", "Redis", "PHP", "Backend", "Docker"],
     content: `
-      <p class="lead">In high-traffic systems, keeping the request-response cycle fast is non-negotiable. If an API endpoint attempts to send confirmation emails, process media files, generate invoices, or execute AI transcriptions inline, response times balloon and timeouts inevitably occur. Asynchronous queue architectures solve this by transforming synchronous bottlenecks into resilient background pipelines.</p>
+      <p class="lead">In high-traffic systems, keeping the request-response cycle fast is non-negotiable. If a Laravel controller attempts to send confirmation emails, process media files, generate invoices, or execute AI transcriptions inline, response times balloon and timeouts inevitably occur. Laravel's queue system—especially with Horizon—transforms these bottlenecks into resilient background pipelines.</p>
 
-      <h3>1. The Anatomy of Background Queue Processing</h3>
-      <p>A message queue architecture decouples the <strong>Producer</strong> (the web HTTP handler) from the <strong>Consumer</strong> (the worker process). The producer simply validates the payload, pushes an event to the queue (such as Redis or SQS), and returns an immediate <code>202 Accepted</code> or job ticket to the client.</p>
+      <h3>1. Dispatching Jobs: The Producer Side</h3>
+      <p>A Laravel Job decouples the <strong>HTTP handler</strong> (producer) from the <strong>worker process</strong> (consumer). The controller validates the payload, dispatches the job, and returns an immediate <code>202 Accepted</code> to the client.</p>
 
       <div class="code-block">
-        <div class="code-block-header"><span class="code-lang">TypeScript / BullMQ</span><span class="code-title">Producer: Enqueueing Background Job</span></div>
-        <pre><code>import { Queue } from 'bullmq';
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Controller — Dispatching a Background Job</span></div>
+        <pre><code>// app/Http/Controllers/ReportController.php
+use App\Jobs\GenerateExportReport;
 
-const exportQueue = new Queue('data-export-queue', {
-  connection: { host: '127.0.0.1', port: 6379 }
-});
+class ReportController extends Controller
+{
+    public function store(ExportReportRequest $request): JsonResponse
+    {
+        GenerateExportReport::dispatch(
+            userId:    $request->user()->id,
+            dateRange: $request->validated('date_range'),
+            format:    $request->validated('format'),
+        )->onQueue('reports');
 
-// Fast HTTP Endpoint handler
-export async function handleReportExport(req: Request, res: Response) {
-  const { userId, dateRange, format } = req.body;
-  
-  // Enqueue job with unique idempotency key
-  const job = await exportQueue.add('generate-report', {
-    userId,
-    dateRange,
-    format
-  }, {
-    attempts: 3,
-    backoff: {
-      type: 'exponential',
-      delay: 2000 // 2s, 4s, 8s
-    },
-    removeOnComplete: true
-  });
-
-  return res.status(202).json({
-    status: 'queued',
-    jobId: job.id,
-    message: 'Report is generating in background'
-  });
+        return response()->json([
+            'status'  => 'queued',
+            'message' => 'Report is generating in the background',
+        ], 202);
+    }
 }</code></pre>
       </div>
 
-      <h3>2. Guaranteeing Idempotency: Solving Duplicate Processing</h3>
-      <p>In distributed systems, the network is unreliable. When worker nodes crash mid-job or message acknowledgments get lost, queue brokers will redeliver the message (<strong>at-least-once delivery</strong>). Without idempotency, a payment could be charged twice or a duplicate refund initiated.</p>
+      <h3>2. Implementing the Job: Idempotency First</h3>
+      <p>In distributed systems, the network is unreliable. Queue brokers deliver messages <strong>at least once</strong>. Without idempotency, a payment could be charged twice or a duplicate email sent. Always check completion state before executing side effects.</p>
 
       <div class="callout callout-warning">
-        <div class="callout-title">⚠️ The Golden Rule of Queue Consumers</div>
-        <p>Never assume a job will execute exactly once. Always design worker tasks so that executing the same job payload multiple times produces the exact same outcome without unintended side effects.</p>
+        <div class="callout-title">⚠️ The Golden Rule of Queue Jobs</div>
+        <p>Never assume a job will execute exactly once. Design every <code>handle()</code> method so that processing the same payload multiple times produces the exact same outcome without unintended side effects.</p>
       </div>
 
       <div class="code-block">
-        <div class="code-block-header"><span class="code-lang">TypeScript / Worker</span><span class="code-title">Idempotent Worker Implementation</span></div>
-        <pre><code>import { Worker, Job } from 'bullmq';
-import { db } from '../db';
-import { redis } from '../cache';
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Idempotent Job with ShouldBeUnique & Retry Logic</span></div>
+        <pre><code>// app/Jobs/GenerateExportReport.php
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-export const reportWorker = new Worker('data-export-queue', async (job: Job) => {
-  const lockKey = \`lock:job:\${job.id}\`;
-  
-  // Acquire distributed lock with 60s auto-release
-  const acquired = await redis.set(lockKey, 'processing', { NX: true, EX: 60 });
-  if (!acquired) {
-    console.log(\`Job \${job.id} is already in progress by another worker.\`);
-    return;
-  }
+class GenerateExportReport implements ShouldBeUnique
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-  try {
-    // Check if task was already marked completed in DB
-    const existing = await db.reports.findUnique({ where: { jobId: job.id } });
-    if (existing && existing.status === 'COMPLETED') {
-      return existing;
+    public int    $tries   = 3;
+    public int    $backoff = 60;    // seconds between retries
+    public int    $timeout = 300;   // 5 minutes max execution
+
+    public function __construct(
+        public readonly int    $userId,
+        public readonly array  $dateRange,
+        public readonly string $format,
+    ) {}
+
+    // Unique lock key — prevents duplicate jobs for same user+range
+    public function uniqueId(): string
+    {
+        return "{$this->userId}:{$this->dateRange['from']}:{$this->dateRange['to']}";
     }
 
-    // Perform heavy processing
-    const fileUrl = await generateReportFile(job.data);
-    
-    // Save state transactionally
-    await db.reports.create({
-      data: { jobId: job.id, fileUrl, status: 'COMPLETED' }
-    });
-  } finally {
-    await redis.del(lockKey);
-  }
-});</code></pre>
+    public function handle(ReportService $service): void
+    {
+        // Guard: skip if already completed
+        $existing = ExportReport::whereUserId($this->userId)
+            ->whereDateRange($this->dateRange)
+            ->whereStatus('completed')
+            ->first();
+
+        if ($existing) {
+            return;
+        }
+
+        $fileUrl = $service->generate($this->userId, $this->dateRange, $this->format);
+
+        ExportReport::create([
+            'user_id'  => $this->userId,
+            'file_url' => $fileUrl,
+            'status'   => 'completed',
+        ]);
+    }
+
+    public function failed(\Throwable $e): void
+    {
+        ExportReport::updateOrCreate(
+            ['user_id' => $this->userId],
+            ['status' => 'failed', 'error' => $e->getMessage()]
+        );
+    }
+}</code></pre>
       </div>
 
-      <h3>3. Preventing the Cache Stampede (Thundering Herd)</h3>
-      <p>When a heavily requested cached key expires during peak traffic, hundreds of concurrent requests may simultaneously query the underlying database to refresh the cache. This phenomenon—the <strong>Cache Stampede</strong>—can knock databases offline.</p>
-      
-      <p>Two battle-tested techniques to prevent stampedes:</p>
-      <ul>
-        <li><strong>Probabilistic Early Expiration (XFetch):</strong> Recompute the cached item asynchronously before it officially expires based on remaining TTL and computation cost.</li>
-        <li><strong>Distributed Mutex Lock:</strong> Ensure only the first requesting thread performs the DB query while other concurrent threads wait or receive stale data temporarily.</li>
-      </ul>
+      <h3>3. Laravel Horizon: Real-Time Queue Visibility</h3>
+      <p>Horizon is Laravel's Redis-backed queue dashboard. It provides live job throughput, failure tracking, and fine-grained worker auto-scaling configuration:</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">config/horizon.php — Auto-Balanced Supervisor</span></div>
+        <pre><code>// config/horizon.php
+'environments' => [
+    'production' => [
+        'supervisor-reports' => [
+            'connection'      => 'redis',
+            'queue'           => ['reports', 'default'],
+            'balance'         => 'auto',
+            'minProcesses'    => 2,
+            'maxProcesses'    => 20,
+            'balanceCooldown' => 3,
+            'tries'           => 3,
+            'timeout'         => 360,
+        ],
+        'supervisor-notifications' => [
+            'connection' => 'redis',
+            'queue'      => ['notifications'],
+            'balance'    => 'simple',
+            'processes'  => 5,
+            'tries'      => 5,
+        ],
+    ],
+],</code></pre>
+      </div>
 
       <h3>4. Dead-Letter Queues (DLQ) &amp; Observability</h3>
-      <p>When a worker repeatedly fails (e.g. malformed data or permanent external API rejection), jobs should transition to a <strong>Dead-Letter Queue (DLQ)</strong> after exhausting configured exponential retries. This isolates poisoned messages, triggers alerts (via Slack/PagerDuty), and allows developers to replay failed tasks once bugs are patched.</p>
+      <p>When a job repeatedly fails, Laravel records it in the <code>failed_jobs</code> table after exhausting configured retries. Use Artisan to inspect, replay, or flush failed jobs:</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">Bash</span><span class="code-title">Artisan — Inspect & Replay Failed Jobs</span></div>
+        <pre><code># List all failed jobs
+php artisan queue:failed
+
+# Retry a specific failed job
+php artisan queue:retry 5
+
+# Replay all failed jobs in batch
+php artisan queue:retry all
+
+# Flush the dead-letter table (use with care)
+php artisan queue:flush</code></pre>
+      </div>
     `
   },
   {
-    id: "maintainable-fullstack-architecture",
-    slug: "structuring-maintainable-fullstack-systems",
-    title: "Structuring Maintainable Full-Stack Systems: From Clean Architecture to Next.js & Node.js",
+    id: "maintainable-laravel-architecture",
+    slug: "structuring-maintainable-laravel-systems",
+    title: "Structuring Maintainable Laravel Systems: Clean Architecture & API Best Practices",
     category: "Software Architecture",
     date: "Nov 28, 2025",
     readTime: "9 min read",
-    summary: "A blueprint for structuring scalable TypeScript applications across the stack — combining clean layered architecture in Node.js with component modularity and type-safety in Next.js.",
-    tags: ["Architecture", "TypeScript", "React", "Next.js", "Node.js", "Clean Code"],
+    summary: "A blueprint for structuring scalable Laravel applications — combining clean layered architecture, Form Requests, Service classes, Repositories, and API Resources for maintainable back-end systems.",
+    tags: ["Laravel", "PHP", "Architecture", "Clean Code", "API", "REST"],
     content: `
-      <p class="lead">Software systems spend 80% of their lifecycle in maintenance. When applications grow from simple proofs of concept to multi-team platforms, architectural clarity dictates whether feature velocity remains high or slows to a painful crawl due to spaghetti code and tight coupling.</p>
+      <p class="lead">Software systems spend 80% of their lifecycle in maintenance. When Laravel applications grow from simple proofs of concept to multi-team platforms, architectural clarity dictates whether feature velocity remains high or slows to a crawl due to fat controllers and tight coupling.</p>
 
-      <h3>1. Layered Backend Architecture (Separation of Concerns)</h3>
-      <p>To avoid massive controllers that handle HTTP parsing, business rules, database queries, and third-party integrations all in one file, enforce a strict three-layer architecture:</p>
+      <h3>1. Layered Architecture: Thin Controllers, Fat Services</h3>
+      <p>The cardinal sin of Laravel development is the <strong>fat controller</strong>: a single class that handles HTTP parsing, business rules, database queries, and third-party integrations. Enforce a strict four-layer architecture instead:</p>
       
       <div class="code-block">
-        <div class="code-block-header"><span class="code-lang">Architecture Map</span><span class="code-title">Request Flow through Architectural Layers</span></div>
-        <pre><code>HTTP Request ──▶ [ Controller / Route ]  (Validation, Status Codes, Cookies)
-                        │
-                        ▼
-                 [ Service Layer ]       (Business Logic, Workflows, Domain Rules)
-                        │
-                        ▼
-                 [ Repository Layer ]    (Database Queries, ORM, Caching, DB Schema)
-                        │
-                        ▼
-                 [ PostgreSQL / Redis ]</code></pre>
+        <div class="code-block-header"><span class="code-lang">Architecture Map</span><span class="code-title">Request Flow through Laravel Layers</span></div>
+        <pre><code>HTTP Request ──▶ [ FormRequest ]       (Validation, Authorization)
+                       │
+                       ▼
+               [ Controller ]           (Coordinate request → service → response)
+                       │
+                       ▼
+               [ Service Layer ]        (Business Logic, Domain Rules, Workflows)
+                       │
+                       ▼
+               [ Repository Layer ]     (Eloquent Queries, DB Caching)
+                       │
+                       ▼
+               [ MySQL / Redis ]</code></pre>
       </div>
 
       <div class="code-block">
-        <div class="code-block-header"><span class="code-lang">TypeScript</span><span class="code-title">Domain Service Layer Example</span></div>
-        <pre><code>// services/RefundService.ts
-export class RefundService {
-  constructor(
-    private refundRepo: IRefundRepository,
-    private paymentGateway: IPaymentGateway,
-    private auditLogger: IAuditLogger
-  ) {}
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Thin Controller + Service Layer Example</span></div>
+        <pre><code>// app/Http/Controllers/RefundController.php
+class RefundController extends Controller
+{
+    public function __construct(private RefundService $refundService) {}
 
-  async processRefund(bookingId: string, amount: number, initiatorId: string) {
-    const booking = await this.refundRepo.findBookingById(bookingId);
-    if (!booking) throw new NotFoundError('Booking not found');
-    if (booking.refundStatus === 'PROCESSED') {
-      throw new ConflictError('Refund already completed');
+    public function store(RefundRequest $request, int $bookingId): JsonResponse
+    {
+        $refund = $this->refundService->processRefund(
+            bookingId:   $bookingId,
+            amount:      $request->validated('amount'),
+            initiatorId: $request->user()->id,
+        );
+
+        return new JsonResponse(new RefundResource($refund), 201);
     }
+}
 
-    // Execute refund via gateway
-    const gatewayTxn = await this.paymentGateway.refund({
-      transactionId: booking.gatewayTxnId,
-      amount
-    });
+// app/Services/RefundService.php
+class RefundService
+{
+    public function __construct(
+        private BookingRepository  $bookings,
+        private PaymentGateway     $gateway,
+        private AuditLogger        $audit,
+    ) {}
 
-    // Update DB & log audit trail atomically
-    const refundRecord = await this.refundRepo.saveRefundTransaction({
-      bookingId,
-      amount,
-      gatewayRef: gatewayTxn.id,
-      initiatorId
-    });
+    public function processRefund(int $bookingId, int $amount, int $initiatorId): Refund
+    {
+        $booking = $this->bookings->findOrFail($bookingId);
 
-    await this.auditLogger.log({
-      action: 'REFUND_PROCESSED',
-      entityId: bookingId,
-      userId: initiatorId,
-      metadata: { amount, gatewayTxnId: gatewayTxn.id }
-    });
+        throw_if(
+            $booking->refund_status === 'processed',
+            ConflictException::class, 'Refund already completed.'
+        );
 
-    return refundRecord;
-  }
+        $txn    = $this->gateway->refund($booking->gateway_txn_id, $amount);
+        $refund = $this->bookings->saveRefund($bookingId, $amount, $txn->id, $initiatorId);
+
+        $this->audit->log('REFUND_PROCESSED', $bookingId, $initiatorId, compact('amount'));
+
+        return $refund;
+    }
 }</code></pre>
       </div>
 
-      <h3>2. End-to-End Type Safety with TypeScript</h3>
-      <p>Sharing type definitions and schema validators (such as <strong>Zod</strong>) between frontend and backend eliminates an entire class of runtime contract bugs. When backend schemas change, TypeScript compiler checks flag outdated frontend consumers immediately at build time.</p>
+      <h3>2. Validation with Form Requests</h3>
+      <p>Laravel <strong>Form Requests</strong> move validation and authorization out of controllers entirely, keeping each layer focused on its single responsibility:</p>
 
       <div class="code-block">
-        <div class="code-block-header"><span class="code-lang">TypeScript / Zod</span><span class="code-title">Shared Validation Contracts</span></div>
-        <pre><code>import { z } from 'zod';
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Form Request — Validation & Authorization</span></div>
+        <pre><code>// app/Http/Requests/RefundRequest.php
+class RefundRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return $this->user()->hasRole('finance_admin');
+    }
 
-export const CreateUserSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  role: z.enum(['ADMIN', 'ENGINEER', 'SUPPORT']),
-  department: z.string()
-});
-
-export type CreateUserInput = z.infer&lt;typeof CreateUserSchema&gt;;</code></pre>
+    public function rules(): array
+    {
+        return [
+            'amount' => ['required', 'integer', 'min:100', 'max:1000000'],
+            'reason' => ['required', 'string', 'max:500'],
+        ];
+    }
+}</code></pre>
       </div>
 
-      <h3>3. Frontend Modularity in Next.js and React</h3>
-      <p>Maintainable React applications follow clean composition principles:</p>
-      <ul>
-        <li><strong>Server Components by Default (Next.js App Router):</strong> Fetch data directly on the server to reduce client-side bundle sizes and avoid waterfall requests.</li>
-        <li><strong>Presentational vs. Container Components:</strong> Keep UI components pure and testable; isolate side effects, state machines, and data hooks into specialized custom hooks.</li>
-        <li><strong>Predictable State Management:</strong> Use localized component state where possible, lightweight global stores (e.g. <code>Zustand</code>) for cross-cutting application state, and <code>TanStack Query</code> for server state caching and deduplication.</li>
-      </ul>
+      <h3>3. API Resources: Shaping Responses</h3>
+      <p>Laravel <strong>API Resources</strong> decouple your database schema from your public API contract, preventing accidental data leaks and enabling versioning:</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">API Resource</span></div>
+        <pre><code>// app/Http/Resources/RefundResource.php
+class RefundResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'           => $this->id,
+            'booking_id'   => $this->booking_id,
+            'amount'       => $this->amount,
+            'currency'     => 'INR',
+            'status'       => $this->status,
+            'initiated_by' => new UserResource($this->whenLoaded('initiator')),
+            'created_at'   => $this->created_at->toIso8601String(),
+        ];
+    }
+}</code></pre>
+      </div>
 
       <h3>4. Testing Strategy: High Confidence, Low Friction</h3>
-      <p>Rather than chasing 100% code coverage on trivial boilerplate, focus testing investment where risk lives:</p>
+      <p>Laravel ships with PHPUnit and Pest support out of the box. Focus testing investment where risk lives:</p>
       <ol>
-        <li><strong>Unit Tests (Jest / Vitest):</strong> Test pure business calculations, domain validation rules, and utility transforms.</li>
-        <li><strong>Integration Tests:</strong> Test database repositories against real containerized PostgreSQL instances (using Docker Testcontainers) and API endpoints with Supertest.</li>
-        <li><strong>E2E Tests (Playwright):</strong> Test critical user journeys (authentication, checkout, core workflow completion).</li>
+        <li><strong>Feature Tests (HTTP layer):</strong> Use <code>actingAs()</code> and <code>assertJson()</code> to test full request-response cycles against a real SQLite or in-memory DB.</li>
+        <li><strong>Unit Tests (Service layer):</strong> Test pure business logic, domain validation rules, and calculation functions with mocked repositories.</li>
+        <li><strong>Browser Tests (Dusk / Pest Browser):</strong> Test critical user journeys end-to-end against a running server.</li>
       </ol>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Pest</span><span class="code-title">Feature Test — Refund API Endpoint</span></div>
+        <pre><code>it('allows a finance admin to initiate a refund', function () {
+    $admin   = User::factory()->financeAdmin()->create();
+    $booking = Booking::factory()->paid()->create();
+
+    actingAs($admin)
+        ->postJson("/api/v1/bookings/{$booking->id}/refunds", [
+            'amount' => 5000,
+            'reason' => 'Customer cancellation within 24 hours',
+        ])
+        ->assertCreated()
+        ->assertJsonStructure(['data' => ['id', 'amount', 'status', 'created_at']]);
+});
+
+it('rejects a duplicate refund with 409 Conflict', function () {
+    $admin   = User::factory()->financeAdmin()->create();
+    $booking = Booking::factory()->refunded()->create();
+
+    actingAs($admin)
+        ->postJson("/api/v1/bookings/{$booking->id}/refunds", ['amount' => 5000])
+        ->assertConflict();
+});</code></pre>
+      </div>
 
       <div class="callout callout-success">
         <div class="callout-title">Summary Checklist</div>
-        <p>A maintainable system separates presentation from domain logic, guarantees end-to-end type safety, keeps frontend components focused and composable, and validates critical paths with automated integration tests.</p>
+        <p>A maintainable Laravel system keeps controllers thin, moves validation into Form Requests, encapsulates domain logic in Services, shields the DB in Repositories, and shapes API responses through Resources — all verified by a lean suite of Pest feature tests.</p>
+      </div>
+    `
+  },
+  {
+    id: "laravel-backend-api",
+    slug: "building-scalable-backend-apis-with-laravel",
+    title: "Building Production‑Grade Laravel APIs: Sanctum Auth, Caching & Deployment",
+    category: "Backend Engineering",
+    date: "Aug 16, 2026",
+    readTime: "10 min read",
+    summary: "A practical guide to building production-grade Laravel REST APIs — covering Sanctum token authentication, rate limiting, Redis caching strategies, horizon-powered queue workers, and zero-downtime deployment on Forge/Vapor.",
+    tags: ["Laravel", "PHP", "API", "Sanctum", "Redis", "Queues", "Deployment"],
+    content: `
+      <p class="lead">Laravel has evolved into one of the most productive frameworks for building production-grade REST APIs. In this post we walk through SPA authentication with Sanctum, API rate limiting, Redis caching, queue-backed async processing, and zero-downtime deployment — all in pure PHP without reaching for Node.js or TypeScript.</p>
+
+      <h3>1. API Authentication with Laravel Sanctum</h3>
+      <p>Sanctum provides a lightweight authentication system for SPAs and mobile apps using <strong>opaque API tokens</strong> or <strong>cookie-based sessions</strong>. Unlike Passport (which implements full OAuth2), Sanctum is simple to set up and sufficient for 95% of API use-cases.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Sanctum Token Issuance & Revocation</span></div>
+        <pre><code>// routes/api.php
+Route::prefix('v1')->group(function () {
+    Route::post('/auth/login',  [AuthController::class, 'login']);
+    Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::apiResource('bookings', BookingController::class);
+        Route::apiResource('bookings.refunds', RefundController::class);
+    });
+});
+
+// app/Http/Controllers/AuthController.php
+class AuthController extends Controller
+{
+    public function login(LoginRequest $request): JsonResponse
+    {
+        if (! Auth::attempt($request->only('email', 'password'))) {
+            throw new AuthenticationException('Invalid credentials.');
+        }
+
+        $user  = Auth::user();
+        $token = $user->createToken(
+            name:      $request->header('User-Agent', 'api-client'),
+            expiresAt: now()->addDays(30),
+        );
+
+        return response()->json([
+            'token'      => $token->plainTextToken,
+            'expires_at' => $token->accessToken->expires_at,
+            'user'       => new UserResource($user),
+        ]);
+    }
+
+    public function logout(Request $request): Response
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->noContent();
+    }
+}</code></pre>
+      </div>
+
+      <h3>2. API Rate Limiting</h3>
+      <p>Laravel's rate limiter (backed by Redis) protects your API from abuse. Define named rate limiters in <code>AppServiceProvider</code> and attach them to route groups:</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Named Rate Limiters in AppServiceProvider</span></div>
+        <pre><code>use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+// In AppServiceProvider::boot()
+RateLimiter::for('api', function (Request $request) {
+    return $request->user()
+        ? Limit::perMinute(120)->by($request->user()->id)
+        : Limit::perMinute(30)->by($request->ip());
+});
+
+RateLimiter::for('auth', function (Request $request) {
+    return Limit::perMinute(5)
+        ->by($request->input('email') . '|' . $request->ip())
+        ->response(fn () => response()->json([
+            'message' => 'Too many login attempts. Please wait 60 seconds.',
+        ], 429));
+});
+
+// In routes/api.php
+Route::middleware(['throttle:api'])->group(function () {
+    Route::apiResource('bookings', BookingController::class);
+});</code></pre>
+      </div>
+
+      <h3>3. Caching API Responses with Redis Tags</h3>
+      <p>Redis-tagged caches let you invalidate <em>groups</em> of related cache keys with a single call — perfect for entity-scoped caching:</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Tagged Cache Invalidation</span></div>
+        <pre><code>// Storing with tags
+Cache::tags(["user:{$userId}", 'bookings'])
+    ->remember("user:{$userId}:bookings:upcoming", 600, function () use ($userId) {
+        return Booking::whereUserId($userId)
+            ->upcoming()
+            ->with(['destination', 'package'])
+            ->get();
+    });
+
+// Invalidate all booking caches for this user on update
+public function updated(Booking $booking): void
+{
+    Cache::tags(["user:{$booking->user_id}", 'bookings'])->flush();
+}</code></pre>
+      </div>
+
+      <h3>4. Zero-Downtime Deployment with Laravel Forge & Octane</h3>
+      <p><strong>Laravel Octane</strong> keeps the application boot in memory across requests, reducing P99 response times from ~120ms to ~8ms. Combined with Forge's atomic deployment pipeline, you get sub-second blue-green deployments:</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">Bash</span><span class="code-title">Forge Deploy Script — Zero-Downtime</span></div>
+        <pre><code>cd /home/forge/app.example.com
+
+git pull origin $FORGE_SITE_BRANCH
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+
+# Rebuild caches atomically
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Reload workers gracefully
+php artisan octane:reload
+php artisan horizon:terminate && php artisan horizon &</code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-title">💡 Why Octane?</div>
+        <p>Standard PHP-FPM boots the entire Laravel framework on every request. Octane boots it once and keeps it resident in memory, delivering a 15x improvement in P99 latency with zero application code changes.</p>
+      </div>
+
+      <div class="callout callout-success">
+        <div class="callout-title">Production-Readiness Checklist</div>
+        <p>A production-grade Laravel API uses Sanctum for stateless token auth, Redis-backed rate limiting, tagged cache invalidation, Horizon-supervised queue workers, and Octane-powered zero-downtime deployments — no Node.js required.</p>
       </div>
     `
   }
