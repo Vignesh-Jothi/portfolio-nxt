@@ -7,12 +7,27 @@
 <meta name="description" content="Resume of Vignesh J, Software Engineer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="resume.css">
+<link rel="stylesheet" href="../css/theme.css?v=2">
+<link rel="stylesheet" href="resume.css?v=7">
 <script>
-  document.documentElement.setAttribute('data-theme','light');
+  /* Same settings as the portfolio: portfolio_theme / portfolio_palette / portfolio_motion */
+  (function () {
+    var root = document.documentElement;
+    try {
+      var saved = localStorage.getItem('portfolio_theme');
+      root.setAttribute('data-theme', saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+      root.setAttribute('data-palette', localStorage.getItem('portfolio_palette') || 'ocean');
+      if (localStorage.getItem('portfolio_motion') === 'off') root.setAttribute('data-motion', 'off');
+    } catch (e) {
+      root.setAttribute('data-theme', 'light');
+      root.setAttribute('data-palette', 'ocean');
+    }
+  })();
 </script>
 </head>
 <body>
+<div class="read-progress no-print" id="readProgress" aria-hidden="true"></div>
+
 <div class="topbar">
   <div class="wrap">
     <a class="brand" href="../" aria-label="Back to portfolio">Vignesh<span class="blink">_</span></a>
@@ -23,6 +38,28 @@
         <a href="#skills">skills</a>
         <a href="#education">education</a>
       </nav>
+      <div class="theme-picker">
+        <button class="icon-btn" id="paletteBtn" type="button" aria-label="Theme options" aria-expanded="false" aria-controls="themePanel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13.5" cy="6.5" r="1.3"/><circle cx="17.5" cy="10.5" r="1.3"/><circle cx="8.5" cy="7.5" r="1.3"/><circle cx="6.5" cy="12.5" r="1.3"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.84-.44-1.13-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.67h2c3.05 0 5.56-2.5 5.56-5.55C21.97 6.01 17.46 2 12 2z"/></svg>
+        </button>
+        <div class="theme-panel" id="themePanel" role="dialog" aria-label="Theme options" hidden>
+          <span class="tp-k">Mode</span>
+          <div class="tp-seg" id="modeSeg" role="radiogroup" aria-label="Colour mode">
+            <button type="button" role="radio" data-mode="light">☀️ Light</button>
+            <button type="button" role="radio" data-mode="dark">🌙 Dark</button>
+            <button type="button" role="radio" data-mode="auto">💻 Auto</button>
+          </div>
+          <span class="tp-k">Accent</span>
+          <div class="tp-swatches" id="paletteSwatches" role="radiogroup" aria-label="Accent colour">
+            <button type="button" role="radio" data-palette="ocean"><i><b></b></i>Ocean</button>
+            <button type="button" role="radio" data-palette="aurora"><i><b></b></i>Aurora</button>
+            <button type="button" role="radio" data-palette="sunset"><i><b></b></i>Sunset</button>
+            <button type="button" role="radio" data-palette="nebula"><i><b></b></i>Nebula</button>
+            <button type="button" role="radio" data-palette="forest"><i><b></b></i>Forest</button>
+          </div>
+          <label class="tp-switch"><input type="checkbox" id="motionToggle" checked> <span>Animations</span></label>
+        </div>
+      </div>
       <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to light theme">
         <svg class="icon-sun" aria-hidden="true"><use href="../icons/icons.svg#sun"></use></svg>
         <svg class="icon-moon" aria-hidden="true"><use href="../icons/icons.svg#moon"></use></svg>
@@ -54,25 +91,56 @@
   </div>
 </div>
 
+<!-- Interactive toolbar (hidden when printing) -->
+<div class="rz-toolbar no-print" id="rzToolbar">
+  <div class="rz-search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="search" id="rzSearch" placeholder="Search my resume (Laravel, MCP…)" aria-label="Search the resume" autocomplete="off">
+    <kbd aria-hidden="true">/</kbd>
+  </div>
+  <div class="rz-quick" role="group" aria-label="Quick filters">
+    <span class="rz-k">Try:</span>
+    <button type="button" class="rz-chip" data-q="AI">🤖 AI</button>
+    <button type="button" class="rz-chip" data-q="MCP">MCP</button>
+    <button type="button" class="rz-chip" data-q="Redis">Redis</button>
+    <button type="button" class="rz-chip" data-q="Pest">Pest</button>
+    <button type="button" class="rz-chip" data-q="Laravel">Laravel</button>
+    <button type="button" class="rz-chip" data-q="voice">Voice</button>
+  </div>
+  <div class="rz-modes">
+    <label class="rz-toggle"><input type="checkbox" id="rzMetrics" checked><span>Highlight impact</span></label>
+    <label class="rz-toggle"><input type="checkbox" id="rzScan"><span>Quick scan</span></label>
+  </div>
+  <div class="rz-status" id="rzStatus" aria-live="polite"></div>
+</div>
+
 <main class="resume-page" id="resumePage">
   <div class="loading" id="loading">Loading resume…</div>
 </main>
 
-<script src="resume.js"></script>
+<div class="rz-toast no-print" id="rzToast" role="status" aria-live="polite"></div>
+
+<script src="../js/theme.js?v=1"></script>
+<script src="resume-fx.js?v=2"></script>
+<script src="resume.js?v=6"></script>
 <script>
   (function(){
     var themeBtn = document.getElementById('themeToggle');
     var hamburger = document.getElementById('hamburgerBtn');
     var mobileNav = document.getElementById('mobileNav');
+    var root = document.documentElement;
 
-    var currentTheme = document.documentElement.getAttribute('data-theme');
-    themeBtn.setAttribute('aria-label', currentTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    function label(){
+      var t = root.getAttribute('data-theme');
+      themeBtn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+    label();
 
     themeBtn.addEventListener('click', function(){
-      var root = document.documentElement;
       var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
-      themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      try { localStorage.setItem('portfolio_theme', next); } catch (e) {}
+      label();
     });
 
     function closeMobileNav(){
@@ -90,18 +158,20 @@
     }
 
     var navLinks = document.querySelectorAll('#mainNav a[href^="#"]');
-    var navSections = Array.prototype.slice.call(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
-    if(navSections.length && 'IntersectionObserver' in window){
-      var navIo = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          if(entry.isIntersecting){
-            var id = '#' + entry.target.id;
-            navLinks.forEach(function(a){ a.classList.toggle('current', a.getAttribute('href') === id); });
-          }
-        });
-      }, { rootMargin: '-40% 0px -55% 0px' });
-      navSections.forEach(function(s){ navIo.observe(s); });
-    }
+    window.addEventListener('resume:rendered', function(){
+      var navSections = Array.prototype.slice.call(navLinks).map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+      if(navSections.length && 'IntersectionObserver' in window){
+        var navIo = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if(entry.isIntersecting){
+              var id = '#' + entry.target.id;
+              navLinks.forEach(function(a){ a.classList.toggle('current', a.getAttribute('href') === id); });
+            }
+          });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        navSections.forEach(function(s){ navIo.observe(s); });
+      }
+    });
   })();
 </script>
 </body>

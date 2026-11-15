@@ -860,11 +860,11 @@ section.alt{ background:var(--bg-alt); }
 .home-blog-card:first-child{
   grid-row: span 2;
   border-radius:20px; padding:var(--s4);
-  background: linear-gradient(145deg, var(--surface) 0%, var(--bg-alt) 100%);
+  background: var(--surface);
 }
 .home-blog-card::before{
   content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg, var(--accent-soft) 0%, transparent 60%);
+  background:transparent;
   opacity:0; transition:opacity .3s ease;
 }
 .home-blog-card:hover::before{ opacity:1; }
@@ -1006,7 +1006,7 @@ section.alt{ background:var(--bg-alt); }
 
 /* Featured first card — full-width hero style */
 .blog-index-card:first-child{
-  background: linear-gradient(135deg, var(--surface) 0%, var(--bg-alt) 100%);
+  background: var(--surface);
   border:1px solid var(--line); border-radius:24px;
   padding:44px 48px; margin-bottom:32px;
   position:relative; overflow:hidden;
@@ -1157,7 +1157,7 @@ section.alt{ background:var(--bg-alt); }
 /* Reading progress bar */
 .post-read-progress{
   height:3px; width:0%;
-  background:linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 60%, #7C3AED));
+  background:var(--accent);
   transition:width .1s linear;
 }
 
@@ -1391,7 +1391,7 @@ section.alt{ background:var(--bg-alt); }
 }
 .post-nav-btn::before{
   content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
-  background:linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 40%, #7C3AED));
+  background:var(--accent);
   transform:scaleX(0); transform-origin:left; transition:transform .3s ease;
 }
 .post-nav-btn.next::before{ transform-origin:right; }

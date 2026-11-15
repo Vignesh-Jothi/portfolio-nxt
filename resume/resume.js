@@ -37,6 +37,14 @@
     return calcYears(earliest);
   }
 
+  function bullet(b) {
+    // "Problem — what I did" (new format) or "Title: detail" (old format)
+    const m = b.match(/^(.{3,140}?) — (.*)$/) || b.match(/^([^:]{3,70}):\s+(.*)$/);
+    if (!m) return `<li class="no-head"><span class="b-rest">${b}</span></li>`;
+    const sep = b.includes(' — ') ? ' — ' : ': ';
+    return `<li><span class="b-head">${m[1]}</span><span class="b-sep">${sep}</span><span class="b-rest">${m[2]}</span></li>`;
+  }
+
   function render(data) {
     document.title = `${data.name} — Resume`;
     const yoe = Math.max(3, yearsFromExperience(data.experience));
@@ -57,12 +65,12 @@
       <div class="entry">
         <div class="entry-head">
           <div>
-            <div class="entry-title"><a href="${job.companyUrl || '#'}" target="_blank" rel="noopener">${job.role}, ${job.company}</a>${svgExternalLink()} </div>
+            <div class="entry-title">${job.role} — ${job.companyUrl ? `<a href="${job.companyUrl}" target="_blank" rel="noopener">${job.company}</a>${svgExternalLink()}` : job.company}</div>
           </div>
           <div class="entry-meta">${job.start} – ${job.end}<br>${job.location}</div>
         </div>
         <ul class="bullets">
-          ${job.bullets.map(b => `<li>${b}</li>`).join('')}
+          ${job.bullets.map(bullet).join('')}
         </ul>
       </div>
     `).join('');
@@ -70,7 +78,7 @@
     const skillsHtml = Object.entries(data.skills).map(([category, items]) => `
       <div class="skill-row">
         <span class="skill-key">${category}:</span>
-        <span class="skill-values">${items.join(', ')}</span>
+        <span class="skill-values">${items.map(i => `<button type="button" class="skill-chip" data-skill="${i.replace(/"/g, '&quot;')}">${i}</button>`).join('<span class="skill-comma">, </span>')}</span>
       </div>
     `).join('');
 
@@ -87,11 +95,12 @@
     const projectsHtml = data.projects.map(proj => `
       <div class="entry">
         <div class="entry-head">
-          <div class="entry-title">${proj.name}, <span class="entry-sub">${proj.type}</span></div>
+          <div class="entry-title">${proj.name}</div>
           <div class="entry-meta">${proj.start} – ${proj.end}</div>
         </div>
+        ${proj.type ? `<p class="entry-desc">${proj.type}</p>` : ''}
         <ul class="bullets">
-          ${proj.bullets.map(b => `<li>${b}</li>`).join('')}
+          ${proj.bullets.map(bullet).join('')}
         </ul>
       </div>
     `).join('');
@@ -118,6 +127,7 @@
     container.innerHTML = `
       <div class="resume-body">
         <header class="resume-header">
+          <span class="rz-avatar" aria-hidden="true">${data.name.split(' ').map(w => w[0]).join('').slice(0, 2)}</span>
           <h1>${data.name}</h1>
           <p class="resume-title">${data.title}</p>
           <div class="contact-row">
@@ -125,6 +135,12 @@
           </div>
           <div class="contact-row" style="margin-top:6px;">
             ${contactItems2.join('<span class="sep">·</span>')}
+          </div>
+          <div class="rz-stats no-print">
+            <div class="rz-stat"><b>${yoe}+</b><span>years shipping</span></div>
+            <div class="rz-stat"><b>400+</b><span>daily active users</span></div>
+            <div class="rz-stat"><b>40%+</b><span>faster APIs</span></div>
+            <div class="rz-stat"><b>10+</b><span>modules shipped</span></div>
           </div>
         </header>
 
@@ -168,10 +184,12 @@
   }
 
   try {
-    const res = await fetch('resume.json');
+    const res = await fetch('resume.json', { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     render(data);
+    window.dispatchEvent(new Event('resume:rendered'));
+    if (window.ResumeFX) window.ResumeFX.init();
 
     const shareBtn = document.getElementById('shareBtn');
     if (shareBtn && !shareBtn.dataset.shareBound) {

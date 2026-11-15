@@ -1,174 +1,19 @@
-<section id="projects" aria-labelledby="projects-h">
+<section id="projects" class="alt" aria-labelledby="projects-h">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <div><span class="tag">// featured engineering</span><h2 id="projects-h">Production Systems &amp; Architecture</h2><p>Selected full-stack and backend systems built to solve high-concurrency bottlenecks, automate workflows, and scale to 400+ daily active users.</p></div>
-    </div>
-
-    <!-- ── AI Call Intelligence · flagship ── -->
-    <div class="story story--flagship" id="ai-call" data-reveal>
-      <div class="story-top">
-        <div>
-          <h3>AI Call Intelligence &amp; Pipeline Automation <span class="ai-badge mono">AI &amp; MCP</span></h3>
-          <div class="meta">TypeScript · Node.js · OpenAI · MCP Tooling · Redis Queue · Plato CRM</div>
-        </div>
-        <div class="toggle" data-active="before" data-project="aicall" role="group" aria-label="Toggle AI Call Intelligence story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
-        </div>
-      </div>
-      <div class="story-body">
-        <div class="panel show" data-project="aicall" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#phone"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#clock"></use></svg></span>
-          </div>
-          <h4>The Problem</h4>
-          <p>Customer agents had to manually listen to 20-30 minute call recordings to extract key intents, quotes, and customer objections. Separately, sales and CX pipeline stages were updated by hand — leading to data entry delays, missed customer follow-ups, and stale CRM analytics.</p>
-          <p class="sub">Manual bottlenecks across hundreds of calls daily cost dozens of hours of agent selling time every shift.</p>
-        </div>
-        <div class="panel" data-project="aicall" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#sparkle"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
-          </div>
-          <h4>What Shipped</h4>
-          <p>Engineered an asynchronous processing pipeline that transcribes audio streams, synthesizes structured summaries with action items, and dynamically applies business stage rules to transition CRM pipeline deals automatically without human intervention.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="n" data-count="100">0</div><div class="l">% AUTOMATED TRANSCRIPTION &amp; SUMMARIZATION</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Sales pipeline updates instantaneously as customer calls conclude.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Standardized, auditable call insights shared seamlessly across CX and Sales.</div></div>
-          </div>
-          <div class="diagram-card">
-            <h4>How the Pipeline Works</h4>
-            <p class="sub">Inbound call audio is enqueued, processed through LLM inference, rule-checked, and synced to CRM state.</p>
-            <div class="diagram-scroll">
-              <div class="diagram-flow" aria-hidden="true">
-                <div class="diagram-step"><span class="n">01</span><span class="t">Call Ingested</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step highlight"><span class="n">02 · AI</span><span class="t">Whisper &amp; LLM Summary</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step highlight"><span class="n">03 · MCP</span><span class="t">Stage Rule Evaluation</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step"><span class="n">04</span><span class="t">PostgreSQL &amp; Redis Update</span></div>
-                <svg class="diagram-arrow" aria-hidden="true"><use href="icons/icons.svg#arrow-right"></use></svg>
-                <div class="diagram-step"><span class="n">05</span><span class="t">Live Stream UI Sync</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div><span class="tag">// featured work</span><h2 id="projects-h">Things I've shipped</h2><p>Production systems used every day. Open any card for the full story.</p></div>
+      <div class="filter-pills" id="projectFilters" role="group" aria-label="Filter projects">
+        <button type="button" class="fpill active" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="fpill" data-filter="ai" aria-pressed="false">AI</button>
+        <button type="button" class="fpill" data-filter="platform" aria-pressed="false">Platforms</button>
+        <button type="button" class="fpill" data-filter="automation" aria-pressed="false">Automation</button>
       </div>
     </div>
 
-    <!-- ── Trippie · flagship ── -->
-    <div class="story" data-reveal>
-      <div class="story-top">
-        <div>
-          <h3>Trippie — AI Pre-Trip Assistant &amp; MCP Architecture <span class="ai-badge mono">AI Agent</span></h3>
-          <div class="meta">Model Context Protocol (MCP) · Next.js · Node.js · Test Arena Simulation</div>
-        </div>
-        <div class="toggle" data-active="before" data-project="trippie" role="group" aria-label="Toggle Trippie story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
-        </div>
-      </div>
-      <div class="story-body">
-        <div class="panel show" data-project="trippie" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#sparkle"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#warning"></use></svg></span>
-          </div>
-          <h4>The Problem</h4>
-          <p>Trippie is the customer-facing AI assistant for travelers pre-trip. When users asked complex questions requiring human escalation, tool calls frequently failed or timed out due to rigid function calling schemas. Furthermore, operators had no staging environment to test agent prompt changes safely.</p>
-          <div class="challenge-tag">⚠ Hardest part: Migrating live tool schemas without disrupting active customer conversations</div>
-        </div>
-        <div class="panel" data-project="trippie" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#award"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#check-circle"></use></svg></span>
-          </div>
-          <h4>What Shipped</h4>
-          <p>Shipped two major releases in under one week: a sandboxed <strong>Test Arena</strong> enabling Trip Custodians to simulate edge-case prompts, and a migration to <strong>Model Context Protocol (MCP)</strong> for modular tool wiring, drastically reducing escalation failures and speeding up latency.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="n" data-count="2">0</div><div class="l">MAJOR RELEASES SHIPPED IN UNDER 7 DAYS</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Escalation failure rate dropped sharply with standardized MCP tool schemas.</div></div>
-            <div class="impact-card"><div class="l" style="margin-top:0; font-size:13px; color:var(--ink);">Customer response latency felt noticeably faster within hours of rollout.</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Plato Platform ── -->
-    <div class="story story--flagship" data-reveal>
-      <div class="story-top">
-        <div>
-          <h3>Plato — Enterprise CRM &amp; Operations Platform</h3>
-          <div class="meta">React · Next.js · Node.js · Laravel · PostgreSQL · Redis · AWS</div>
-        </div>
-        <div class="toggle" data-active="before" data-project="plato" role="group" aria-label="Toggle Plato story view">
-          <button class="active" data-state="before" aria-pressed="true">Before</button>
-          <button data-state="after" aria-pressed="false">After</button>
-        </div>
-      </div>
-      <div class="story-body">
-        <div class="panel show" data-project="plato" data-state="before">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#layout"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#warning"></use></svg></span>
-          </div>
-          <h4>The Problem</h4>
-          <p>Five core business departments (CX, Sales, Product, Visa, Finance) maintained fragmented spreadsheets and disparate legacy databases. Data drifted between handoffs, customer status records collided, and leadership lacked real-time visibility into operational velocity.</p>
-          <div class="challenge-tag">⚠ Hardest part: Phased rollout with zero downtime across 400+ live daily users</div>
-        </div>
-        <div class="panel" data-project="plato" data-state="after">
-          <div class="icon-row" aria-hidden="true">
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#pencil"></use></svg></span>
-            <span class="icon-badge"><svg class="icon"><use href="icons/icons.svg#trend"></use></svg></span>
-          </div>
-          <h4>What Shipped</h4>
-          <p>Architected a consolidated platform with unified data models, granular RBAC permissions, Redis-backed query caching, and automated queue jobs. Replaced spreadsheet sprawl across all 7 departments with zero downtime throughout rollout.</p>
-          <div class="impact-grid">
-            <div class="impact-card"><div class="n" data-count="40">0</div><div class="l">% FASTER API RESPONSE TIME</div></div>
-            <div class="impact-card"><div class="n" data-count="400">0</div><div class="l">DAILY ACTIVE USERS POWERED</div></div>
-            <div class="impact-card"><div class="n" data-count="7">0</div><div class="l">DEPARTMENTS UNIFIED ON ONE PLATFORM</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Mini Grid: Stream, LockerRoom, Deal Engine, Refund Automation ── -->
-    <div class="mini-grid">
-      <div class="mini-story" data-reveal>
-        <div class="mini-head">
-          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#kanban"></use></svg></span>
-          <div><h3>Stream Workspace</h3><span class="meta">React · Next.js · TypeScript</span></div>
-        </div>
-        <p class="mini-line"><span class="bf">5 fragmented browser tabs</span> <span class="arr">→</span> <span class="af">single unified real-time customer workspace</span></p>
-        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#monitor"></use></svg> Eliminated agent context switching across customer actions</div>
-      </div>
-      <div class="mini-story" data-reveal>
-        <div class="mini-head">
-          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#file-text"></use></svg></span>
-          <div><h3>LockerRoom HRM</h3><span class="meta">Full-Stack Owner · React &amp; Node.js</span></div>
-        </div>
-        <p class="mini-line"><span class="bf">Manual paper HR files</span> <span class="arr">→</span> <span class="af">automated digital records &amp; performance reviews</span></p>
-        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#trend"></use></svg> Cut manual HR administrative overhead by 50%</div>
-      </div>
-      <div class="mini-story" data-reveal>
-        <div class="mini-head">
-          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#shield-check"></use></svg></span>
-          <div><h3>Deal Size Calculation Engine</h3><span class="meta">PostgreSQL · Redis · Idempotent</span></div>
-        </div>
-        <p class="mini-line"><span class="bf">Drifting manual calculations</span> <span class="arr">→</span> <span class="af">deterministic recalculation with audit trail</span></p>
-        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#shield-check"></use></svg> 100% auditable reason logs for Finance compliance</div>
-      </div>
-      <div class="mini-story" data-reveal>
-        <div class="mini-head">
-          <span class="icon-badge" aria-hidden="true"><svg class="icon"><use href="icons/icons.svg#lightning"></use></svg></span>
-          <div><h3>Refund Pipeline Automation</h3><span class="meta">Queue Workers · Webhooks · APIs</span></div>
-        </div>
-        <p class="mini-line"><span class="bf">3–5 day turnaround</span> <span class="arr">→</span> <span class="af">automated refund movement in &lt; 24 hours</span></p>
-        <div class="mini-foot"><svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#clock"></use></svg> Freed Finance from repetitive per-refund manual busywork</div>
-      </div>
-    </div>
+    <div class="proj-grid" id="projectGrid"></div>
   </div>
+
+  <dialog class="proj-modal" id="projectModal" aria-labelledby="pmTitle">
+    <div class="pm-inner" id="projectModalBody"></div>
+  </dialog>
 </section>

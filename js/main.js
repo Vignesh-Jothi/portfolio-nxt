@@ -155,8 +155,8 @@ const heroStatTargets = [
   { el: document.getElementById('statDAU'), value: 400, suffix:'+' },
   { el: document.getElementById('statSpeed'), value: 40, suffix:'%+' },
   { el: document.getElementById('statRefund'), value: 24, suffix:'h' },
-  { el: document.getElementById('statConv'), value: 100, suffix:'' },
-  { el: document.getElementById('statTeams'), value: 7, suffix:'' },
+  { el: document.getElementById('statConv'), value: 100, suffix:'+' },
+  { el: document.getElementById('statTeams'), value: 5, suffix:'' },
   { el: document.getElementById('statExp'), value: yoe, suffix:'+' }
 ];
 let heroStatsDone = false;
@@ -312,143 +312,6 @@ document.querySelectorAll('.toggle').forEach(toggle=>{
   });
 });
 
-/* ---------- AI stage-rule engine demo ---------- */
-(function(){
-  const flow = document.getElementById('stageFlow');
-  if(!flow) return;
-  const transcriptEl = document.getElementById('callTranscript');
-  const summaryEl = document.getElementById('callSummary');
-  const stageTag = document.getElementById('stageTag');
-  const ruleTag = document.getElementById('ruleTag');
-  const logList = document.getElementById('ruleLogList');
-  const resetBtn = document.getElementById('ruleReset');
-  const steps = flow.querySelectorAll('.stage-step');
-  const entries = [];
-  let running = false;
-
-  const SCENARIOS = {
-    refund: {
-      transcript: '…I want my money back for the cancelled hotel segment…',
-      summary: 'intent: refund · component: hotel · customer requested cancellation refund',
-      rule: 'refund_request',
-      stage: 'Refund Pending'
-    },
-    confirm: {
-      transcript: '…yes, the 14th works for both of us, please go ahead…',
-      summary: 'intent: confirm · dates: accepted · customer approved itinerary',
-      rule: 'trip_confirmed',
-      stage: 'Confirmed'
-    },
-    change: {
-      transcript: '…can we switch to a beachfront room instead…',
-      summary: 'intent: change · component: hotel · wants an alternative room',
-      rule: 'plan_change',
-      stage: 'Change Request'
-    },
-    escalate: {
-      transcript: '…this delay is unacceptable, I need a supervisor immediately…',
-      summary: 'sentiment: escalated · issue: delay · requested escalation',
-      rule: 'priority_escalation',
-      stage: 'Escalated · Priority'
-    },
-    noop: {
-      transcript: '…thanks, everything looks wonderful on my end, bye…',
-      summary: 'intent: none · sentiment: positive',
-      rule: null,
-      stage: null,
-      note: 'No rule matched — stage unchanged, zero-touch idempotent execution.'
-    }
-  };
-
-  function setBadges(stage, rule){
-    stageTag.textContent = stage ? 'STAGE: ' + stage : 'STAGE: AWAITING';
-    ruleTag.textContent = rule ? 'RULE: ' + rule : 'RULE: —';
-    stageTag.classList.toggle('moved', !!stage);
-    ruleTag.classList.toggle('moved', !!rule);
-  }
-
-  function renderLog(){
-    if(!entries.length){ logList.innerHTML = '<p class="log-empty">No stage moves recorded yet. Run a call above.</p>'; return; }
-    logList.innerHTML = entries.map(e => `
-      <div class="log-entry">
-        <div class="log-left">
-          <span class="log-reason">${e.rule}</span>
-          ${e.stage ? `<span class="log-stage">moved → ${e.stage}</span>` : `<span class="log-stage muted">${e.note}</span>`}
-        </div>
-        <span class="log-time mono">${e.time}</span>
-      </div>`).join('');
-  }
-
-  function run(key){
-    if(running) return;
-    const s = SCENARIOS[key];
-    if(!s) return;
-    running = true;
-    steps.forEach(st => st.classList.remove('on'));
-    transcriptEl.textContent = '';
-    summaryEl.textContent = '';
-    let i = 0;
-    (function next(){
-      if(i < steps.length){
-        steps[i].classList.add('on');
-        i++;
-        setTimeout(next, 240);
-      } else {
-        transcriptEl.textContent = '“' + s.transcript + '”';
-        summaryEl.textContent = '→ ' + s.summary;
-        setTimeout(()=>{
-          const now = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-          if(s.rule){
-            setBadges(s.stage, s.rule);
-            entries.unshift({ rule: s.rule, stage: s.stage, time: now });
-          } else {
-            entries.unshift({ rule: s.rule || 'no_match', stage: null, note: s.note, time: now });
-          }
-          renderLog();
-          running = false;
-        }, 220);
-      }
-    })();
-  }
-
-  document.querySelectorAll('.sim-btn[data-scenario]').forEach(btn=>{
-    btn.addEventListener('click', ()=>run(btn.dataset.scenario));
-  });
-
-  if(resetBtn){
-    resetBtn.addEventListener('click', ()=>{
-      entries.length = 0;
-      steps.forEach(st => st.classList.remove('on'));
-      transcriptEl.textContent = 'Transcript appears here when you run a call…';
-      summaryEl.textContent = '';
-      setBadges(null, null);
-      renderLog();
-    });
-  }
-})();
-
-/* ---------- code sample: line numbers + copy ---------- */
-const codeEl = document.getElementById('codeSampleText');
-const lineNumbersEl = document.getElementById('codeLineNumbers');
-if(codeEl && lineNumbersEl){
-  const lineCount = codeEl.textContent.split('\n').length;
-  lineNumbersEl.innerHTML = Array.from({length:lineCount}, (_,i)=>`<div>${i+1}</div>`).join('');
-}
-const copyBtn = document.getElementById('copyCodeBtn');
-const copyLabel = document.getElementById('copyCodeLabel');
-if(copyBtn && codeEl){
-  copyBtn.addEventListener('click', async ()=>{
-    try{
-      await navigator.clipboard.writeText(codeEl.textContent);
-      copyBtn.classList.add('copied');
-      if(copyLabel) copyLabel.textContent = 'Copied!';
-      setTimeout(()=>{ copyBtn.classList.remove('copied'); if(copyLabel) copyLabel.textContent = 'Copy'; }, 1800);
-    } catch(e){
-      if(copyLabel) copyLabel.textContent = 'Select & copy';
-      setTimeout(()=>{ if(copyLabel) copyLabel.textContent = 'Copy'; }, 1800);
-    }
-  });
-}
 
 /* ---------- mobile menu ---------- */
 const hamburgerBtn = document.getElementById('hamburgerBtn');

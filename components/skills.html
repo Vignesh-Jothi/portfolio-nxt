@@ -1,83 +1,25 @@
 <section id="skills" aria-labelledby="skills-h">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <div><span class="tag">// technical toolbox</span><h2 id="skills-h">Technical Skills &amp; Stack</h2><p>Core technologies, frontend design systems, frameworks, and architectural patterns I use to build scalable full-stack products.</p></div>
+      <div><span class="tag">// toolbox</span><h2 id="skills-h">Skills &amp; stack</h2><p>Pick an area, then tap a skill to see where I've used it.</p></div>
     </div>
-    <div class="skills-wrapper" data-reveal>
-      <div class="skill-group">
-        <span class="k">FRONTEND &amp; WEB APPS</span>
-        <div class="chips">
-          <span class="chip">React 18 / 19</span>
-          <span class="chip">Next.js (App Router)</span>
-          <span class="chip">TypeScript</span>
-          <span class="chip">JavaScript (ESNext)</span>
-          <span class="chip">TailwindCSS</span>
-          <span class="chip">Modern CSS (Grid/Flexbox)</span>
-          <span class="chip">Zustand / Redux</span>
-          <span class="chip">Vite / Webpack</span>
-          <span class="chip">HTML5 Semantic APIs</span>
+
+    <div class="skills-v2" data-reveal>
+      <div class="skills-radar-card">
+        <svg class="skills-radar" id="skillsRadar" viewBox="-40 0 400 300" role="img" aria-label="Relative strength across skill areas"></svg>
+        <div class="level-legend">
+          <span><i class="lv lv3"></i>Daily driver</span>
+          <span><i class="lv lv2"></i>Shipped in prod</span>
+          <span><i class="lv lv1"></i>Familiar</span>
         </div>
       </div>
-      <div class="skill-group">
-        <span class="k">UI/UX &amp; INTERACTION DESIGN</span>
-        <div class="chips">
-          <span class="chip">Design Systems &amp; Tokens</span>
-          <span class="chip">Micro-Interactions</span>
-          <span class="chip">Web Accessibility (WCAG / a11y)</span>
-          <span class="chip">Responsive Layouts</span>
-          <span class="chip">Core Web Vitals (LCP/INP)</span>
-          <span class="chip">CSS Motion &amp; Keyframes</span>
-          <span class="chip">Figma to Production Code</span>
-          <span class="chip">User Flow Optimization</span>
+
+      <div class="skills-board">
+        <div class="filter-pills" id="skillTabs" role="tablist" aria-label="Skill areas"></div>
+        <div class="skill-detail" id="skillDetail" aria-live="polite">
+          <span class="sd-hint">👇 Tap a skill to see the projects behind it.</span>
         </div>
-      </div>
-      <div class="skill-group">
-        <span class="k">BACKEND &amp; APIS</span>
-        <div class="chips">
-          <span class="chip">PHP 8.x / Laravel</span>
-          <span class="chip">Node.js</span>
-          <span class="chip">RESTful APIs</span>
-          <span class="chip">GraphQL</span>
-          <span class="chip">Laravel Horizon</span>
-          <span class="chip">Sanctum &amp; JWT Auth</span>
-          <span class="chip">WebSockets</span>
-          <span class="chip">Microservices</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <span class="k">DATABASES &amp; CACHING</span>
-        <div class="chips">
-          <span class="chip">PostgreSQL</span>
-          <span class="chip">MySQL</span>
-          <span class="chip">Redis</span>
-          <span class="chip">Connection Pooling (PgBouncer)</span>
-          <span class="chip">SQL Query Optimization</span>
-          <span class="chip">Database Read Replicas</span>
-          <span class="chip">Indexing Strategies</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <span class="k">CLOUD &amp; DEVOPS</span>
-        <div class="chips">
-          <span class="chip">AWS (EC2, S3, RDS, Lambda)</span>
-          <span class="chip">Docker</span>
-          <span class="chip">Kubernetes</span>
-          <span class="chip">GitHub Actions CI/CD</span>
-          <span class="chip">Nginx &amp; PHP-FPM</span>
-          <span class="chip">Linux (Ubuntu)</span>
-        </div>
-      </div>
-      <div class="skill-group">
-        <span class="k">AI WORKFLOWS &amp; TESTING</span>
-        <div class="chips">
-          <span class="chip">Model Context Protocol (MCP)</span>
-          <span class="chip">OpenAI API</span>
-          <span class="chip">LLM Agent Tooling</span>
-          <span class="chip">Pest / PHPUnit</span>
-          <span class="chip">Jest / Playwright</span>
-          <span class="chip">Postman</span>
-          <span class="chip">Git / GitHub</span>
-        </div>
+        <div class="skill-tiles" id="skillTiles" role="tabpanel"></div>
       </div>
     </div>
   </div>
