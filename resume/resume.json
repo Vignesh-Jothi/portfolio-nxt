@@ -1,6 +1,6 @@
 {
   "name": "Vignesh J",
-  "title": "Software Engineer · Full-Stack & Systems",
+  "title": "Backend-Focused Software Engineer",
   "contact": {
     "email": "vigneshjothishwaran@gmail.com",
     "phone": "9360510389",
@@ -9,176 +9,103 @@
     "linkedin": "https://www.linkedin.com/in/vignesh-jothi",
     "github": "https://github.com/vignesh-jothi"
   },
-  "summary": "Software Engineer with 3 years of professional experience designing, building, and scaling modern full-stack web applications and distributed internal platforms. Proven track record architecting high-throughput systems with React, Next.js, TypeScript, Node.js, PostgreSQL, and AWS, alongside backend ecosystems in PHP/Laravel, MySQL, and Redis. Built mission-critical tools used daily by 400+ active users across 7 enterprise teams. Experienced in zero-downtime database migrations, API latency reduction (40%+), asynchronous message queues, containerized microservices (Docker/Kubernetes), and AI agent workflows (OpenAI, MCP). Focused on engineering maintainable, observable, and resilient software that accelerates business growth.",
+  "summary": "Backend-focused Software Engineer with 3 years of experience designing and maintaining scalable internal platforms using **Laravel, PHP, MySQL, and Redis**, with working frontend experience in **React and Next.js**. Built and optimized backend services supporting 400+ daily active users across CX, Finance, Sales, Product, and Visa teams, cutting API response times by over 40% through query optimization and caching. Experienced in legacy system migration, workflow automation, AI agent and voice workflows, and cron-based processing. Focused on building reliable, maintainable systems that reduce operational load and scale with business growth.",
   "experience": [
     {
-      "role": "Software Developer",
+      "role": "Jr. Software Developer",
       "company": "PickYourTrail",
       "companyUrl": "https://pickyourtrail.com",
       "location": "Chennai, India",
       "start": "Sep 2024",
-      "end": "present",
+      "end": "Present",
       "bullets": [
-        "Unified Multi-Team Platform: Solved operational fragmentation and manual spreadsheet tracking across 7 departments (CX, Sales, Product, Visa, Finance) by architecting a high-throughput full-stack platform (React, Next.js, Node.js, Laravel, PostgreSQL, Redis) serving 400+ daily active users as the single source of truth.",
-        "Autonomous AI Pipeline Automation: Eliminated manual post-call logging overhead by engineering an event-driven AI workflow using OpenAI APIs and Model Context Protocol (MCP) tool wiring — delivering automated call summarization, sentiment classification, and zero-touch CRM pipeline transitions.",
-        "High-Throughput API & Database Optimization: Solved peak sales database contention and slow endpoints by implementing multi-tier Redis caching, connection pooling (PgBouncer), and SQL index tuning — slashing average API response latency by 40%+ and reducing database CPU load by 50%.",
-        "Automated Refund & Finance Pipelines: Solved 3–5 day manual customer refund delays by engineering automated CX and Finance approval pipelines with immutable audit logs — cutting refund turnaround time to under 24 hours.",
-        "Zero-Downtime Microservices Migration: Solved monolithic scaling bottlenecks by decoupling mission-critical services and executing zero-downtime database and schema migrations with zero operational disruption.",
-        "Mission-Critical Test Automation: Hardened payment, dynamic pricing, and visa allocation modules against edge-case failures by implementing end-to-end automated testing suites (Pest, Jest, Playwright)."
+        "Legacy PHP codebase was becoming hard to maintain and slowing delivery — migrated core systems to modern PHP and Laravel, improving maintainability and long-term scalability for platforms used by 400+ daily active users.",
+        "Customer follow-ups, lead qualification, and trip assistance were handled manually — built backend workflows powering AI-based voice automation, using LLM agent tooling and orchestration to automate these touchpoints end-to-end.",
+        "Manual post-call logging was creating overhead for CX and Sales teams — engineered an AI agent workflow using the OpenAI API and Model Context Protocol (MCP) tool wiring to automate post-call summarization and CRM pipeline transitions.",
+        "Key modules had slow API response times — optimized API performance and database queries, cutting response time by 40%+ across key modules.",
+        "No shared backend served CX, Visa, Finance, Sales, and Product consistently — designed and maintained backend services now supporting 400+ daily active internal users across 5 teams.",
+        "CX, Visa, Finance, and Sales relied on manual processing for recurring tasks — built workflow automation for these operations, reducing manual processing time.",
+        "Repeated queries were creating redundant database load — implemented Redis-based caching, reducing load and improving response times.",
+        "Critical business logic had inconsistent test coverage — wrote and maintained automated tests using Pest to reduce regression risk.",
+        "Development and debugging cycles were slower without AI tooling — adopted AI tools across the dev lifecycle, including AI-assisted code review, debugging, and documentation, to accelerate delivery and workflow improvements."
       ]
     },
     {
       "role": "Associate Developer",
       "company": "True Tracking",
-      "companyUrl": "https://truetracking.com",
       "location": "Chennai, India",
       "start": "Oct 2023",
       "end": "Sep 2024",
       "bullets": [
-        "Real-Time Telemetry Portals: Solved real-time vehicle and asset tracking visibility challenges by building responsive portals and interactive telemetry dashboards using React, TypeScript, Node.js, and PostgreSQL with sub-second updates.",
-        "Database Query & Throughput Tuning: Solved slow reporting queries over high-frequency time-series tracking data by restructuring indexes and optimizing serialization, improving overall backend API throughput by 30%.",
-        "Enterprise Security & RBAC Hardening: Solved access vulnerabilities by implementing robust JWT authentication, fine-grained role-based access control (RBAC), input sanitization schemas, and AES-256 data encryption for sensitive customer records.",
-        "AWS Cloud Infrastructure Scaling: Assisted infrastructure migration and provisioning on AWS (EC2, S3, RDS), scaling concurrent tracking capacity by ~50%."
+        "API and database queries were inefficient under load — improved API performance and query efficiency, achieving a 30% system performance gain.",
+        "Authentication and encryption gaps created security exposure — hardened authentication and implemented encryption, reducing vulnerabilities.",
+        "Backend architecture had scalability limits — contributed to architecture improvements to support continued growth.",
+        "System capacity was constrained — assisted in cloud integration efforts, increasing system capacity by approximately 50%."
       ]
     }
   ],
   "skills": {
-    "Frontend": [
-      "React 18 / 19",
-      "Next.js (App Router)",
-      "TypeScript",
-      "JavaScript (ESNext)",
-      "TailwindCSS",
-      "Modern CSS (Grid/Flexbox)",
-      "Zustand / Redux",
-      "Vite / Webpack"
-    ],
-    "UI/UX & Design": [
-      "Design Systems & Tokens",
-      "Micro-Interactions & Animation",
-      "Web Accessibility (WCAG / a11y)",
-      "Responsive Layouts",
-      "Core Web Vitals Optimization",
-      "Figma to Clean Code"
-    ],
-    "Backend & APIs": [
-      "PHP 8.x",
-      "Laravel",
-      "Laravel Horizon",
-      "Sanctum & JWT Auth",
-      "RESTful APIs",
-      "Node.js",
-      "GraphQL",
-      "Microservices",
-      "WebSockets"
-    ],
-    "Databases & Caching": [
-      "PostgreSQL",
-      "MySQL",
-      "Redis",
-      "Database Read Replicas",
-      "Connection Pooling (PgBouncer)",
-      "SQL Query Optimization",
-      "Indexing Strategies"
-    ],
-    "Cloud & DevOps": [
-      "AWS (EC2, S3, RDS, Lambda)",
-      "Docker",
-      "Kubernetes",
-      "CI/CD (GitHub Actions)",
-      "Nginx & PHP-FPM",
-      "Linux (Ubuntu)"
-    ],
-    "System Architecture": [
-      "System Design",
-      "Event-Driven Architecture",
-      "Laravel Queues & Workers",
-      "Multi-Tier Caching",
-      "API Design & Versioning",
-      "Zero-Downtime Deployments",
-      "Idempotent Workflows"
-    ],
-    "AI & Testing Tools": [
-      "OpenAI API",
-      "Model Context Protocol (MCP)",
-      "LLM Agent Tooling",
-      "Pest / PHPUnit",
-      "Jest / Playwright",
-      "Git / GitHub",
-      "Postman"
-    ]
+    "Backend": ["PHP", "Laravel", "REST APIs", "GraphQL", "MySQL", "Redis", "Cron Jobs", "Queue Systems", "Webhooks"],
+    "Frontend": ["React", "Next.js"],
+    "Architecture": ["System Design", "API Design", "Database Optimization", "Caching Strategies", "Workflow Automation"],
+    "Security": ["Data Encryption", "Authentication", "Authorization"],
+    "AI Integrations & Tooling": ["OpenAI API", "Model Context Protocol (MCP)", "LLM Agent Tooling & Orchestration", "Prompt Engineering", "Voice Agent Integration", "Agent-Based Workflow Automation", "AI-Assisted Development", "AI-Assisted Code Review & Debugging", "AI-Assisted Documentation"],
+    "Tools & DevOps": ["Git", "Linux (Ubuntu)", "Nginx"]
   },
   "certifications": [],
-  "achievements": [
-    {
-      "title": "Rookie of the Year Award",
-      "date": "PickYourTrail",
-      "description": "Awarded for exceptional engineering ownership, delivering the Visa Allocation Dashboard, Auto-quote engine, Instant Voucher service, and supporting refund systems during launch."
-    },
-    {
-      "title": "Top Contributor — 10+ Modules, 50+ Features",
-      "date": "PickYourTrail",
-      "description": "Ranked #1 contributor across internal enterprise platforms (Plato CRM and LockerRoom HRM), driving end-to-end delivery from RFC to production."
-    },
-    {
-      "title": "Trippie AI Launches Shipped in Under a Week",
-      "date": "PickYourTrail",
-      "description": "Engineered a pre-production Test Arena for Trip Custodians and migrated agent tool wiring to MCP, dramatically reducing escalation failure rates and boosting response speeds."
-    },
-    {
-      "title": "Unity Platform: 100 Conversions in 60 Days",
-      "date": "PickYourTrail",
-      "description": "Contributed to the core itinerary generation engine for Unity, which surpassed 100 direct sales conversions within two months of rollout."
-    },
-    {
-      "title": "Zero-Downtime Enterprise Migration",
-      "date": "PickYourTrail",
-      "description": "Successfully migrated 5 departments from legacy spreadsheets and disparate tools to a unified platform with 100% data integrity and zero business disruption."
-    }
-  ],
   "projects": [
     {
-      "name": "Plato Enterprise CRM & Operations Platform",
-      "type": "Full-Stack Enterprise System",
+      "name": "Plato — Internal CRM",
+      "type": "Centralized CRM platform serving CX, Sales, Product, Visa, and Finance departments.",
       "start": "Sep 2024",
       "end": "Present",
       "bullets": [
-        "Consolidated disparate departmental spreadsheets across 7 teams into a single unified platform with real-time workflow tracking, customer data pipelines, and operational reporting.",
-        "Engineered granular role-based access control (RBAC), high-performance Redis caching, and database query optimization sustaining 400+ daily active users.",
-        "Executed phased departmental rollouts with zero maintenance windows, guaranteeing unbroken daily operational workflows throughout migration."
+        "Reduced API response time by 40% through query optimization and caching.",
+        "Supported 400+ daily active users on a stable backend architecture.",
+        "Migrated legacy codebase to modern Laravel.",
+        "Built modules for workflow tracking, customer data processing, and operational reporting.",
+        "Implemented background jobs and scheduled tasks to automate repetitive processes."
       ]
     },
     {
-      "name": "Trippie AI Pre-Trip Assistant & MCP Agent Architecture",
-      "type": "AI Agents & Tool Wiring",
+      "name": "Trippie — AI Pre-Trip Assistant & MCP Agent Architecture",
+      "type": "AI-driven conversational assistant integrated with live booking and itinerary backends.",
       "start": "2025",
       "end": "Present",
       "bullets": [
-        "Architected an intelligent pre-trip conversational assistant integrated with live booking and itinerary backends.",
-        "Migrated agent tool execution from standard function calling to Model Context Protocol (MCP), enabling scalable context sharing and reliable automated escalations.",
-        "Built a sandboxed 'Test Arena' simulation dashboard allowing internal operators to validate agent behavior safely before customer rollout."
+        "Built backend workflows powering an AI voice/chat assistant for pre-trip customer engagement.",
+        "Migrated agent tool execution to Model Context Protocol (MCP), enabling scalable context sharing across tools.",
+        "Built a sandboxed test environment allowing internal operators to validate agent behavior before customer rollout."
       ]
     },
     {
-      "name": "LockerRoom HRM & Performance Platform",
-      "type": "Full-Stack Web Application",
+      "name": "Locker Room — HRM Platform",
+      "type": "Internal HR management platform for employee data and performance monitoring.",
       "start": "Dec 2024",
       "end": "Present",
       "bullets": [
-        "Primary engineering owner from inception to production, replacing legacy paper-based HR reviews with a modern digital performance tracking platform.",
-        "Built automated appraisal workflows, feedback cycles, and role hierarchies, cutting HR processing overhead by 50%."
+        "Reduced manual HR processing time by 50% through automation.",
+        "Improved data visibility and reporting accuracy.",
+        "Contributed to system reliability and performance improvements."
       ]
     },
     {
-      "name": "Unity Itinerary & Sales Conversion Engine",
-      "type": "Full-Stack Sales Platform",
+      "name": "Unity — Itinerary & Sales Conversion Engine",
+      "type": "Dynamic itinerary builder and quotation service for the Sales team.",
       "start": "2025",
       "end": "Present",
       "bullets": [
-        "Developed dynamic itinerary builder and quotation service that directly drove over 100 closed conversions within 60 days of launch.",
-        "Optimized checkout calculations and pricing updates with sub-100ms response times."
+        "Contributed to the itinerary generation engine, which drove 100+ closed conversions within 60 days of launch.",
+        "Optimized checkout and pricing calculations for fast, reliable response times."
       ]
     }
+  ],
+  "achievements": [
+    { "title": "Rookie of the Year Award", "date": "PickYourTrail", "description": "Awarded for exceptional engineering ownership, delivering the Visa Allocation Dashboard, Auto-Quote Engine, Instant Voucher service, and supporting refund systems during launch." },
+    { "title": "Top Contributor — 10+ Modules, 50+ Features", "date": "PickYourTrail", "description": "Ranked #1 contributor across internal enterprise platforms (Plato CRM and Locker Room HRM), driving end-to-end delivery from RFC to production." },
+    { "title": "Trippie AI Launches Shipped in Under a Week", "date": "PickYourTrail", "description": "Built a pre-production test environment for Trip Custodians and migrated agent tool wiring to MCP, reducing escalation failure rates and improving response speed." },
+    { "title": "Unity Platform: 100 Conversions in 60 Days", "date": "PickYourTrail", "description": "Contributed to the core itinerary generation engine for Unity, which surpassed 100 direct sales conversions within two months of rollout." },
+    { "title": "Zero-Downtime Enterprise Migration", "date": "PickYourTrail", "description": "Migrated 5 departments from legacy spreadsheets and disparate tools to a unified platform with 100% data integrity and zero business disruption." }
   ],
   "education": [
     {

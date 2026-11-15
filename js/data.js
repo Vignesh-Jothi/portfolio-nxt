@@ -84,12 +84,11 @@ const TESTIMONIALS = [
 ];
 
 const ACHIEVEMENTS = [
-  { title: "Rookie of the Year", date: "PickYourTrail", description: "Recognised for delivering the Visa Dashboard, Auto-quote, and Instant Voucher, and for stepping in to support the Refunds team during launch." },
-  { title: "Trippie launches shipped in under a week", date: "PickYourTrail", description: "Delivered a dedicated Test Arena and migrated from function calling to MCP, improving escalation reliability and response speed." },
-  { title: "Finance change visibility", date: "PickYourTrail", description: "Built recurring booking-cost updates and change-reason logs so the Finance team can understand what changed and why." },
-  { title: "Visa Dashboard launch", date: "PickYourTrail", description: "Helped give the Visa team clearer daily task visibility and a more manageable way to handle allocations." },
-  { title: "Quality and launch ownership", date: "PickYourTrail", description: "Recognised for stepping in on short notice for launches and for rigorous edge-case testing that strengthened product quality." },
-  { title: "Unity milestone", date: "PickYourTrail", description: "Contributed to Unity, which crossed 100 conversions from Unity itineraries within 60 days of launch." }
+  { title: "Rookie of the Year", date: "PickYourTrail", description: "For delivering the Visa Allocation Dashboard, Auto-Quote Engine and Instant Voucher service, and supporting refund systems during launch." },
+  { title: "Top Contributor: 10+ modules, 50+ features", date: "PickYourTrail", description: "Ranked #1 contributor across Plato CRM and Locker Room HRM, owning delivery from RFC to production." },
+  { title: "Trippie AI launches shipped in under a week", date: "PickYourTrail", description: "Built a pre-production test environment for Trip Custodians and moved agent tool wiring to MCP, reducing escalation failures and speeding up responses." },
+  { title: "Unity: 100 conversions in 60 days", date: "PickYourTrail", description: "Contributed to the core itinerary generation engine, which passed 100 direct sales conversions within two months of rollout." },
+  { title: "Zero-downtime enterprise migration", date: "PickYourTrail", description: "Moved 5 departments from legacy spreadsheets and scattered tools onto one platform with 100% data integrity and zero business disruption." }
 ];
 
 const CERTIFICATIONS = [];
@@ -101,13 +100,13 @@ const ADMIN_PASSCODE = "vignesh2026";
    ABOUT — "Ask me anything" chat. Add your own questions here.
    ============================================================ */
 const ABOUT_QA = [
-  { q: "What do you actually do?", a: "I build the internal platforms a travel company runs on: CRM, finance workflows and AI assistants. One of them is used by <b>400+ people across 7 teams</b> every day." },
-  { q: "What's your favourite kind of problem?", a: "Messy manual workflows. If people are copy-pasting between spreadsheets or waiting days for a refund, I want to automate it. Refunds went from <b>3–5 days to under 24 hours</b>." },
-  { q: "How do you use AI in production?", a: "Two shipped systems: an AI pipeline that summarises sales calls and moves CRM stages on its own, and <b>Trippie</b>, a travel assistant I moved to <b>MCP</b> with a test arena. My rule: the LLM reads the messy input, deterministic rules make the decision." },
-  { q: "Backend or frontend?", a: "Both. Backend is home (Laravel, PostgreSQL, Redis), but I love UI polish too. A teammate once said: <i>“When a backend developer has fun with UI and UX, this is the result.”</i>" },
+  { q: "What do you actually do?", a: "I build the backend systems a travel company runs on: an internal CRM, workflow automation, and AI voice and chat agents. They serve <b>400+ people across 5 teams</b> every day." },
+  { q: "What's your favourite kind of problem?", a: "Messy manual workflows. If people are copy-pasting between spreadsheets or logging calls by hand, I want to automate it. I moved <b>5 departments</b> off spreadsheets onto one platform with zero downtime." },
+  { q: "How do you use AI in production?", a: "In production: <b>AI voice agents</b> for follow-ups and lead qualification, an agent that summarises calls and moves CRM stages, and <b>Trippie</b>, a travel assistant running on <b>MCP</b>. I also use AI tools daily for code review, debugging and docs." },
+  { q: "Backend or frontend?", a: "Backend first: PHP, Laravel, MySQL and Redis. I also work in React and Next.js and love UI polish. A teammate once said: <i>“When a backend developer has fun with UI and UX, this is the result.”</i>" },
   { q: "How do you handle unfamiliar code?", a: "I don't say “I don't know this codebase.” I ask for time to understand it, then fix or build what's needed. Legacy code is just code nobody has explained yet." },
   { q: "What are you learning right now?", a: "Distributed systems beyond a single monolith, and AI agents that can own a workflow end to end, not just assist with it." },
-  { q: "Why should we work together?", a: "I own things end to end: scope, build, test the edge cases, ship, and stay on it after launch. Trippie got <b>two releases in under a week</b>. I was named <b>Rookie of the Year</b> at PickYourTrail." },
+  { q: "Why should we work together?", a: "I own things end to end: scope, build, test the edge cases (Pest), ship, and stay on it after launch. I was the <b>#1 contributor</b> (10+ modules, 50+ features) and <b>Rookie of the Year</b> at PickYourTrail." },
   { q: "How can I reach you?", a: "Email <a href=\"mailto:vigneshjothishwaran@gmail.com\">vigneshjothishwaran@gmail.com</a>, or find me on <a href=\"https://www.linkedin.com/in/vignesh-jothi\" target=\"_blank\" rel=\"noopener\">LinkedIn</a> and <a href=\"https://github.com/vignesh-jothi\" target=\"_blank\" rel=\"noopener\">GitHub</a>." }
 ];
 
@@ -121,137 +120,132 @@ const PRINCIPLES = [
 /* ============================================================
    PROJECTS — cards + case-study modal.
    category: ai | platform | automation
+   Source of truth: resume/resume.json (keep them in sync).
    ============================================================ */
 const PROJECTS = [
   {
     id: "ai-call", title: "AI Call Intelligence", icon: "sparkle", hue: "violet", featured: true, wide: true,
     category: ["ai", "automation"],
-    tagline: "Calls get summarised and the CRM updates itself.",
-    metric: { value: "100%", label: "of calls auto-summarised" },
-    tech: ["TypeScript", "Node.js", "OpenAI", "MCP", "Redis Queue"],
-    problem: "Agents listened to 20–30 minute recordings to log intent and objections, then moved CRM stages by hand.",
-    solution: "An async pipeline that transcribes each call, writes a structured summary with action items, and moves the deal to the right stage by rule.",
-    impact: ["Pipeline updates the moment a call ends", "Shared, auditable insights for CX and Sales", "Hours of agent time back every shift"],
-    flow: ["Call ingested", "Whisper + LLM summary", "MCP stage rules", "PostgreSQL + Redis", "Live UI sync"]
+    tagline: "Post-call summaries and CRM updates, done by an AI agent.",
+    metric: { value: "0", label: "manual post-call logging" },
+    tech: ["Laravel", "OpenAI API", "MCP", "Queues"],
+    problem: "Manual post-call logging was creating overhead for CX and Sales teams, and CRM stages were moved by hand.",
+    solution: "An AI agent workflow using the OpenAI API and Model Context Protocol (MCP) tool wiring that summarises each call and moves the CRM pipeline automatically.",
+    impact: ["Post-call summaries without manual logging", "CRM pipeline transitions happen on their own", "CX and Sales spend time with customers, not forms"],
+    flow: ["Call ends", "Queued job", "LLM summary", "MCP stage rules", "CRM updated"]
   },
   {
-    id: "trippie", title: "Trippie AI Assistant", icon: "award", hue: "pink", featured: true,
-    category: ["ai"],
-    tagline: "A pre-trip AI assistant moved to MCP, with a safe test arena.",
-    metric: { value: "2", label: "releases in under 7 days" },
-    tech: ["MCP", "Next.js", "Node.js", "LLM tooling"],
-    problem: "Escalation tool calls failed or timed out under rigid function-calling schemas, and there was nowhere safe to test prompt changes.",
-    solution: "A sandboxed Test Arena for Trip Custodians to try edge-case prompts, plus a migration to Model Context Protocol for modular tool wiring.",
-    impact: ["Far fewer failed escalations", "Responses noticeably faster within hours", "Prompt changes tested before customers see them"],
-    hardest: "Migrating live tool schemas without breaking active customer conversations."
+    id: "voice", title: "Voice AI Automation", icon: "phone", hue: "pink", featured: true,
+    category: ["ai", "automation"],
+    tagline: "AI voice agents for follow-ups, lead qualification and trip help.",
+    metric: { value: "E2E", label: "automated touchpoints" },
+    tech: ["Laravel", "LLM orchestration", "Voice agents", "Webhooks"],
+    problem: "Customer follow-ups, lead qualification and trip assistance were all handled manually.",
+    solution: "Backend workflows that power AI-based voice automation, using LLM agent tooling and orchestration to run these touchpoints end to end.",
+    impact: ["Follow-ups and lead qualification run automatically", "Trip assistance available without a person on every call", "Agents hand off to people when needed"],
+    flow: ["Trigger (cron / webhook)", "Voice agent call", "LLM orchestration", "Tool calls", "Outcome logged"]
   },
   {
-    id: "plato", title: "Plato Operations Platform", icon: "layout", hue: "blue", featured: true, wide: true,
+    id: "plato", title: "Plato Internal CRM", icon: "layout", hue: "blue", featured: true, wide: true,
     category: ["platform"],
-    tagline: "One platform replacing spreadsheets across 7 departments.",
+    tagline: "One backend for CX, Sales, Product, Visa and Finance.",
     metric: { value: "400+", label: "daily active users" },
-    tech: ["React", "Next.js", "Laravel", "PostgreSQL", "Redis", "AWS"],
-    problem: "CX, Sales, Product, Visa and Finance each kept their own spreadsheets. Data drifted between handoffs and leaders had no live view.",
-    solution: "A unified platform with shared data models, granular RBAC, Redis-backed caching and queue jobs, rolled out in phases.",
-    impact: ["40% faster API responses", "7 departments on one source of truth", "Zero downtime during rollout"],
-    hardest: "A phased rollout with zero downtime for 400+ live daily users."
+    tech: ["PHP", "Laravel", "MySQL", "Redis", "Cron jobs"],
+    problem: "No shared backend served the five teams consistently, and a legacy PHP codebase was slowing delivery.",
+    solution: "Migrated the legacy codebase to modern Laravel and built modules for workflow tracking, customer data processing and reporting, with background jobs and scheduled tasks for repetitive work.",
+    impact: ["40% faster API responses (query tuning + caching)", "400+ daily users on a stable backend", "5 departments migrated with zero downtime"],
+    hardest: "Migrating 5 departments off spreadsheets and legacy tools with 100% data integrity and zero business disruption."
   },
   {
-    id: "refunds", title: "Refund Automation", icon: "clock", hue: "amber",
-    category: ["automation"],
-    tagline: "Refunds that move themselves through CX and Finance.",
-    metric: { value: "<24h", label: "turnaround, was 3–5 days" },
-    tech: ["Laravel", "Queue workers", "Webhooks"],
-    problem: "Every refund needed manual hand-offs between CX and Finance, taking 3–5 days.",
-    solution: "Automated approval pipelines with queue workers and immutable reason logs.",
-    impact: ["Refunds done in under 24 hours", "Finance freed from per-refund busywork", "Full audit trail on every step"]
+    id: "trippie", title: "Trippie AI Assistant", icon: "award", hue: "teal",
+    category: ["ai"],
+    tagline: "Pre-trip AI voice/chat assistant on an MCP agent architecture.",
+    metric: { value: "<1 wk", label: "for two AI launches" },
+    tech: ["MCP", "OpenAI API", "Laravel", "Voice / chat"],
+    problem: "Agent tool calls were hard to scale and there was nowhere safe to test agent behaviour before customers saw it.",
+    solution: "Backend workflows for an AI voice/chat assistant, agent tool execution moved to MCP for shared context across tools, plus a sandboxed test environment for internal operators.",
+    impact: ["Fewer escalation failures", "Faster responses", "Changes validated before customer rollout"],
+    hardest: "Moving live agent tool wiring to MCP without disrupting customers."
   },
   {
-    id: "stream", title: "Stream Workspace", icon: "kanban", hue: "teal",
+    id: "unity", title: "Unity Itinerary Engine", icon: "trend", hue: "amber",
     category: ["platform"],
-    tagline: "Five browser tabs collapsed into one live workspace.",
-    metric: { value: "5→1", label: "tabs per customer action" },
-    tech: ["React", "Next.js", "TypeScript"],
-    problem: "Agents jumped between five tools to handle a single customer.",
-    solution: "A single real-time workspace that brings every customer action into one screen.",
-    impact: ["No more context switching", "Faster handling per customer"]
+    tagline: "Itinerary builder and quotation service for the Sales team.",
+    metric: { value: "100+", label: "conversions in 60 days" },
+    tech: ["Laravel", "MySQL", "Pricing logic"],
+    problem: "Sales needed to build itineraries and quotes quickly, with pricing they could trust.",
+    solution: "Contributed to the itinerary generation engine and optimised checkout and pricing calculations for fast, reliable responses.",
+    impact: ["100+ closed conversions within 60 days of launch", "Fast, reliable pricing and checkout"]
   },
   {
-    id: "lockerroom", title: "LockerRoom HRM", icon: "file-text", hue: "green",
+    id: "lockerroom", title: "Locker Room HRM", icon: "file-text", hue: "green",
     category: ["platform", "automation"],
-    tagline: "Paper HR files turned into a simple digital system.",
-    metric: { value: "50%", label: "less HR admin work" },
-    tech: ["React", "Node.js"],
-    problem: "Employee records and performance reviews lived on paper.",
-    solution: "Digital records and review workflows, kept deliberately simple. Full-stack owner.",
-    impact: ["Half the manual HR admin", "Reviews tracked in one place"]
+    tagline: "Internal HR platform for employee data and performance.",
+    metric: { value: "50%", label: "less manual HR work" },
+    tech: ["Laravel", "MySQL"],
+    problem: "HR processing was manual and data was hard to see in one place.",
+    solution: "Automated HR workflows and improved reporting, plus reliability and performance work.",
+    impact: ["Manual HR processing time cut by 50%", "Better data visibility and reporting accuracy"]
   },
   {
-    id: "deal", title: "Deal Size Engine", icon: "shield-check", hue: "indigo",
-    category: ["automation"],
-    tagline: "Deterministic deal recalculation with a full audit trail.",
-    metric: { value: "100%", label: "auditable changes" },
-    tech: ["PostgreSQL", "Redis", "Idempotent jobs"],
-    problem: "Manual deal-size calculations drifted and nobody could tell why a number changed.",
-    solution: "Idempotent recalculation jobs with reason logs for every change, plus recurring cost-update emails for Finance.",
-    impact: ["Finance sees what changed and why", "No more drifting numbers"]
+    id: "redis", title: "API & Caching Overhaul", icon: "lightning", hue: "indigo",
+    category: ["automation", "platform"],
+    tagline: "Query tuning and Redis caching across key modules.",
+    metric: { value: "40%+", label: "faster API responses" },
+    tech: ["MySQL", "Redis", "Laravel"],
+    problem: "Key modules had slow API responses and repeated queries were putting redundant load on the database.",
+    solution: "Optimised API performance and database queries, and added Redis-based caching for repeated reads.",
+    impact: ["Response time cut by 40%+ across key modules", "Less database load", "Pest tests guarding critical business logic"]
   }
 ];
 
 /* ============================================================
    SKILLS — level: 3 = daily driver, 2 = shipped in production,
    1 = familiar. `used` links to PROJECTS ids.
+   Groups follow resume/resume.json.
    ============================================================ */
 const SKILL_GROUPS = [
-  { id: "frontend", label: "Frontend", skills: [
-    { name: "React", level: 3, used: ["plato", "stream", "lockerroom"] },
-    { name: "Next.js", level: 3, used: ["plato", "stream", "trippie"] },
-    { name: "TypeScript", level: 3, used: ["ai-call", "stream"] },
-    { name: "JavaScript", level: 3 },
-    { name: "TailwindCSS", level: 2 },
-    { name: "Modern CSS", level: 3 },
-    { name: "Zustand / Redux", level: 2 },
-    { name: "Vite / Webpack", level: 2 }
-  ]},
-  { id: "uiux", label: "UI / UX", skills: [
-    { name: "Design systems", level: 2 },
-    { name: "Micro-interactions", level: 3, used: ["plato"] },
-    { name: "Accessibility", level: 2 },
-    { name: "Responsive layouts", level: 3 },
-    { name: "Core Web Vitals", level: 2 },
-    { name: "Figma to code", level: 2 }
-  ]},
   { id: "backend", label: "Backend", skills: [
-    { name: "PHP / Laravel", level: 3, used: ["plato", "refunds"] },
-    { name: "Node.js", level: 3, used: ["ai-call", "trippie", "lockerroom"] },
-    { name: "REST APIs", level: 3, used: ["plato"] },
-    { name: "GraphQL", level: 1 },
-    { name: "Queues / Horizon", level: 3, used: ["refunds", "ai-call"] },
-    { name: "Sanctum & JWT", level: 2 },
-    { name: "WebSockets", level: 2, used: ["stream"] }
+    { name: "PHP", level: 3, used: ["plato", "redis"] },
+    { name: "Laravel", level: 3, used: ["plato", "ai-call", "voice", "unity", "lockerroom"] },
+    { name: "REST APIs", level: 3, used: ["plato", "redis"] },
+    { name: "MySQL", level: 3, used: ["plato", "unity", "redis"] },
+    { name: "Redis", level: 3, used: ["redis", "plato"] },
+    { name: "Queue systems", level: 3, used: ["ai-call", "plato"] },
+    { name: "Cron jobs", level: 3, used: ["plato", "voice"] },
+    { name: "Webhooks", level: 2, used: ["voice"] },
+    { name: "GraphQL", level: 1 }
   ]},
-  { id: "data", label: "Data", skills: [
-    { name: "PostgreSQL", level: 3, used: ["plato", "deal", "ai-call"] },
-    { name: "MySQL", level: 3 },
-    { name: "Redis", level: 3, used: ["plato", "deal", "ai-call"] },
-    { name: "PgBouncer", level: 2, used: ["plato"] },
-    { name: "Query tuning", level: 3, used: ["plato"] },
-    { name: "Read replicas", level: 2 }
-  ]},
-  { id: "cloud", label: "Cloud & DevOps", skills: [
-    { name: "AWS", level: 2, used: ["plato"] },
-    { name: "Docker", level: 2 },
-    { name: "Kubernetes", level: 1 },
-    { name: "GitHub Actions", level: 2 },
-    { name: "Nginx & PHP-FPM", level: 2 },
-    { name: "Linux", level: 2 }
-  ]},
-  { id: "ai", label: "AI & Testing", skills: [
-    { name: "MCP", level: 3, used: ["trippie", "ai-call"] },
+  { id: "ai", label: "AI", skills: [
     { name: "OpenAI API", level: 3, used: ["ai-call", "trippie"] },
-    { name: "LLM agent tooling", level: 2, used: ["trippie"] },
-    { name: "Pest / PHPUnit", level: 2 },
-    { name: "Jest / Playwright", level: 2 }
+    { name: "MCP", level: 3, used: ["trippie", "ai-call"] },
+    { name: "LLM agent orchestration", level: 3, used: ["voice", "trippie"] },
+    { name: "Voice agents", level: 2, used: ["voice", "trippie"] },
+    { name: "Prompt engineering", level: 2, used: ["trippie", "ai-call"] },
+    { name: "AI-assisted dev & review", level: 3 }
+  ]},
+  { id: "arch", label: "Architecture", skills: [
+    { name: "System design", level: 2, used: ["plato"] },
+    { name: "API design", level: 3, used: ["plato"] },
+    { name: "Database optimisation", level: 3, used: ["redis", "plato"] },
+    { name: "Caching strategies", level: 3, used: ["redis"] },
+    { name: "Workflow automation", level: 3, used: ["voice", "ai-call", "lockerroom"] },
+    { name: "Legacy migration", level: 3, used: ["plato"] }
+  ]},
+  { id: "security", label: "Security", skills: [
+    { name: "Authentication", level: 2 },
+    { name: "Authorization", level: 2, used: ["plato"] },
+    { name: "Data encryption", level: 2 }
+  ]},
+  { id: "frontend", label: "Frontend", skills: [
+    { name: "React", level: 2 },
+    { name: "Next.js", level: 2 }
+  ]},
+  { id: "tools", label: "Tools & testing", skills: [
+    { name: "Pest", level: 2, used: ["redis"] },
+    { name: "Git", level: 3 },
+    { name: "Linux (Ubuntu)", level: 2 },
+    { name: "Nginx", level: 2 }
   ]}
 ];
 
@@ -259,10 +253,10 @@ const SKILL_GROUPS = [
    JOURNEY — resume timeline.
    ============================================================ */
 const JOURNEY = [
-  { when: "2020", title: "Started CS degree", place: "Dr. Ambedkar Govt. Arts College", text: "B.Sc. Computer Science, Chennai. Where the code habit started.", icon: "file-text" },
-  { when: "Oct 2023", title: "Associate Developer", place: "True Tracking", text: "Real-time telemetry dashboards, 30% more API throughput, RBAC and AWS scaling (~50% more capacity).", icon: "monitor" },
-  { when: "Sep 2024", title: "Software Developer", place: "PickYourTrail", text: "Platform for 400+ daily users, AI call pipelines, 40% faster APIs, refunds under 24h.", icon: "layout" },
-  { when: "Award", title: "Rookie of the Year", place: "PickYourTrail", text: "For the Visa Dashboard, Auto-quote, Instant Voucher, and stepping in on the Refunds launch.", icon: "award" },
+  { when: "2020", title: "Started CS degree", place: "Dr. Ambedkar Govt. Arts College", text: "B.Sc. Computer Science, Chennai (2020–2023). Where the code habit started.", icon: "file-text" },
+  { when: "Oct 2023", title: "Associate Developer", place: "True Tracking", text: "30% system performance gain, hardened authentication and encryption, and ~50% more capacity through cloud integration.", icon: "monitor" },
+  { when: "Sep 2024", title: "Jr. Software Developer", place: "PickYourTrail", text: "Laravel backends for 400+ daily users across 5 teams, AI voice and call agents with MCP, and 40%+ faster APIs.", icon: "layout" },
+  { when: "Award", title: "Rookie of the Year", place: "PickYourTrail", text: "For the Visa Allocation Dashboard, Auto-Quote Engine, Instant Voucher, and supporting refund systems during launch.", icon: "award" },
   { when: "Next", title: "Bigger systems", place: "Your team?", text: "Distributed systems, production AI agents, and platform-level design.", icon: "sparkle" }
 ];
 
@@ -299,9 +293,9 @@ const AGENT_SCENARIOS = [
       { type: "tool", label: "MCP tool call", detail: 'check_refund_policy({ item: "tour", reason: "cancelled_by_vendor" })', ms: 70 },
       { type: "result", label: "Tool result", detail: "{ eligible: true, amount: \"full\" }", ms: 30 },
       { type: "tool", label: "MCP tool call", detail: 'create_refund_request({ priority: "normal" })', ms: 120 },
-      { type: "result", label: "Tool result", detail: "Queued in the refund pipeline · SLA < 24h", ms: 40 }
+      { type: "result", label: "Tool result", detail: "Queued for the Finance refund workflow", ms: 40 }
     ],
-    reply: "Done. Your refund request is in, and you're eligible for a <b>full refund</b>. It usually reaches you within <b>24 hours</b>."
+    reply: "Done. Your refund request is in, and you're eligible for a <b>full refund</b>. You'll get a confirmation as soon as Finance processes it."
   },
   {
     prompt: "My flight is delayed and nobody is helping!",

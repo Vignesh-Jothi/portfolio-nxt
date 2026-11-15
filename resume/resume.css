@@ -821,3 +821,7 @@ html[data-motion="off"] .section, html[data-motion="off"] .rz-toast{ transition:
   }
 }
 @media print{ .rz-avatar, .rz-stats{ display:none !important; } }
+
+/* project one-line description */
+.entry-desc{ font-style:italic; color:var(--muted); font-size:13px; margin:-2px 0 6px; }
+@media screen{ .entry-desc{ font-style:normal; font-size:14px; } }

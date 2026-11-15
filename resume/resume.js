@@ -38,9 +38,11 @@
   }
 
   function bullet(b) {
-    const m = b.match(/^([^:]{3,70}):\s+(.*)$/);
+    // "Problem — what I did" (new format) or "Title: detail" (old format)
+    const m = b.match(/^(.{3,140}?) — (.*)$/) || b.match(/^([^:]{3,70}):\s+(.*)$/);
     if (!m) return `<li class="no-head"><span class="b-rest">${b}</span></li>`;
-    return `<li><span class="b-head">${m[1]}</span><span class="b-sep">: </span><span class="b-rest">${m[2]}</span></li>`;
+    const sep = b.includes(' — ') ? ' — ' : ': ';
+    return `<li><span class="b-head">${m[1]}</span><span class="b-sep">${sep}</span><span class="b-rest">${m[2]}</span></li>`;
   }
 
   function render(data) {
@@ -63,7 +65,7 @@
       <div class="entry">
         <div class="entry-head">
           <div>
-            <div class="entry-title"><a href="${job.companyUrl || '#'}" target="_blank" rel="noopener">${job.role}, ${job.company}</a>${svgExternalLink()} </div>
+            <div class="entry-title">${job.role} — ${job.companyUrl ? `<a href="${job.companyUrl}" target="_blank" rel="noopener">${job.company}</a>${svgExternalLink()}` : job.company}</div>
           </div>
           <div class="entry-meta">${job.start} – ${job.end}<br>${job.location}</div>
         </div>
@@ -93,9 +95,10 @@
     const projectsHtml = data.projects.map(proj => `
       <div class="entry">
         <div class="entry-head">
-          <div class="entry-title">${proj.name}, <span class="entry-sub">${proj.type}</span></div>
+          <div class="entry-title">${proj.name}</div>
           <div class="entry-meta">${proj.start} – ${proj.end}</div>
         </div>
+        ${proj.type ? `<p class="entry-desc">${proj.type}</p>` : ''}
         <ul class="bullets">
           ${proj.bullets.map(bullet).join('')}
         </ul>
@@ -181,7 +184,7 @@
   }
 
   try {
-    const res = await fetch('resume.json');
+    const res = await fetch('resume.json', { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     render(data);

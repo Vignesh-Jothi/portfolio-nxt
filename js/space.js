@@ -118,7 +118,7 @@
   function initRotator() {
     const el = $('#heroRotator');
     if (!el) return;
-    const words = ['fast APIs', 'AI agents', 'clean UIs', 'smart workflows', 'calm platforms'];
+    const words = ['fast APIs', 'AI voice agents', 'Laravel backends', 'smart automations', 'MCP agents'];
     let i = 0;
     if (!motionOK()) return;
     async function type(word) {
@@ -544,8 +544,10 @@
         rest.className = 'exp-detail';
         while (strong.nextSibling) rest.appendChild(strong.nextSibling);
         li.appendChild(rest);
-        strong.textContent = strong.textContent.replace(/:\s*$/, '');
-        rest.insertBefore(document.createTextNode(': '), rest.firstChild);
+        if (/:\s*$/.test(strong.textContent)) {
+          strong.textContent = strong.textContent.replace(/:\s*$/, '');
+          rest.insertBefore(document.createTextNode(': '), rest.firstChild);
+        }
       });
       item.classList.add('exp-collapsible');
       const b = document.createElement('button');

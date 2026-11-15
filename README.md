@@ -66,7 +66,6 @@ portfolio/
     ├── experience.html
     ├── skills.html
     ├── education.html
-    ├── how-i-think.html
     ├── growth.html
     ├── contact.html
     ├── blog-view.html
