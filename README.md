@@ -19,10 +19,12 @@ Open the site through a local server. Because components are loaded via `fetch()
 
 ### Run locally
 
-**Python 3**
+**Python 3 (recommended: never caches, so edits show on a normal refresh)**
 ```bash
-python3 -m http.server 8000
+python3 serve.py
 ```
+
+Plain `python3 -m http.server 8000` also works, but browsers may keep showing old files until you hard-refresh (Cmd+Shift+R).
 
 **Node.js**
 ```bash
@@ -44,11 +46,15 @@ portfolio/
 ├── admin/
 │   └── index.html      # Passcode-protected blog admin (/admin)
 ├── css/
-│   └── style.css       # Design system and component styles
+│   ├── style.css       # Design system and component styles
+│   ├── theme.css       # Accent palettes + theme picker (shared with resume/)
+│   └── space.css       # Accent palettes, rocket hero, bento, projects, skills, journey
 ├── js/
 │   ├── components.js   # Loads HTML fragments into [data-include] placeholders
-│   ├── data.js         # Content data (testimonials, achievements, passcode)
+│   ├── data.js         # Content data (testimonials, achievements, projects, skills, about Q&A, journey)
+│   ├── theme.js        # Theme picker logic (shared with resume/)
 │   ├── main.js         # Navigation, theme toggle, mobile menu, view switching
+│   ├── space.js        # Theme panel, starfield, rocket launch, chat, project modal, skills radar
 │   └── admin.js        # Admin-only blog composer and delete controls
 └── components/
     ├── topbar.html
@@ -80,7 +86,10 @@ Components are plain HTML fragments in `components/`. They are included in `inde
 ## Customize content
 
 - Edit plain text and markup inside `components/*.html`.
-- Update data-driven sections (testimonials, achievements) in `js/data.js`.
+- Update data-driven sections in `js/data.js`: `PROJECTS`, `SKILL_GROUPS` (level 3/2/1), `ABOUT_QA` (the "Ask me anything" chat), `PRINCIPLES`, `JOURNEY`, testimonials and achievements.
+- Accent palettes (Ocean, Aurora, Sunset, Nebula, Forest) are solid three-colour sets (`--c1`, `--c2`, `--c3`) in `css/theme.css` and apply to both the portfolio and the resume page.
+- The AI agent playground scenarios are `AGENT_SCENARIOS` in `js/data.js` (`components/ai-lab.html`).
+- Resume interactions (search, skill chips, impact highlighting, quick scan) are in `resume/resume-fx.js`; printing always uses the plain black-on-white layout.
 - Tweak colors and spacing in `css/style.css`.
 - Set your own admin passcode in `js/data.js` (`ADMIN_PASSCODE`) before deploying.
 

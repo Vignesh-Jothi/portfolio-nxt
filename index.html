@@ -9,14 +9,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=18">
+<link rel="stylesheet" href="css/style.css?v=20">
+<link rel="stylesheet" href="css/theme.css?v=2">
+<link rel="stylesheet" href="css/space.css?v=12">
 <script>
   (function() {
     try {
       var saved = localStorage.getItem('portfolio_theme');
       var theme = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-palette', localStorage.getItem('portfolio_palette') || 'ocean');
+      if (localStorage.getItem('portfolio_motion') === 'off') document.documentElement.setAttribute('data-motion', 'off');
     } catch(e) {
+      document.documentElement.setAttribute('data-palette', 'ocean');
       document.documentElement.setAttribute('data-theme', 'light');
     }
   })();
@@ -36,6 +41,7 @@
     <div data-include="components/hero.html"></div>
     <div data-include="components/about.html"></div>
     <div data-include="components/projects.html"></div>
+    <div data-include="components/ai-lab.html"></div>
     <div data-include="components/how-i-think.html"></div>
     <div data-include="components/experience.html"></div>
     <div data-include="components/skills.html"></div>
@@ -51,8 +57,10 @@
 <div data-include="components/blog-view.html"></div>
 
 <script src="js/blog-data.js"></script>
-<script src="js/data.js"></script>
+<script src="js/data.js?v=3"></script>
 <script src="js/components.js?v=3"></script>
-<script src="js/main.js?v=13"></script>
+<script src="js/theme.js?v=1"></script>
+<script src="js/main.js?v=14"></script>
+<script src="js/space.js?v=8"></script>
 </body>
 </html>
