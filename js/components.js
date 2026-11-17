@@ -16,7 +16,9 @@
     await Promise.all(placeholders.map(async function (node) {
       const src = node.getAttribute('data-include');
       try {
-        const res = await fetch(src, { credentials: 'same-origin', cache: 'no-store' });
+        const get = () => fetch(src, { credentials: 'same-origin', cache: 'no-store' });
+        // one retry: a dropped connection otherwise leaves a whole section missing
+        let res = await get().catch(get);
         if (!res.ok) throw new Error('HTTP ' + res.status + ' for ' + src);
         const html = await res.text();
         node.outerHTML = html;

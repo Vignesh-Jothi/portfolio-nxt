@@ -1,0 +1,24 @@
+<section id="how" class="alt" aria-labelledby="how-h">
+  <div class="wrap">
+    <h2 id="how-h" data-reveal>How I build agents</h2>
+    <p class="sec-intro" data-reveal>For engineering leads who want the detail: the process behind these agents, and one of them step by step.</p>
+    <ol class="steps" data-reveal>
+      <li><b>Find the manual work</b><span>I talk to the people doing it and read the code around it, so the agent solves the real problem, not a demo version.</span></li>
+      <li><b>Small tools, clear rules</b><span>The model reads messy input. MCP tools act on it, and plain code makes the business decision, so every outcome can be audited.</span></li>
+      <li><b>Test in a sandbox, then measure</b><span>Agent changes run against edge cases before customers see them, and I check the numbers after launch.</span></li>
+    </ol>
+
+    <div class="pipeline" id="pipeline" data-reveal>
+      <h3>How the call summary agent works</h3>
+      <p class="pipe-hint">Select a step, or watch it run.</p>
+      <ol class="pipe-steps">
+        <li><button type="button" class="pipe-node" data-desc="A sales or CX call finishes. Nobody has to write anything down.">Call ends</button></li>
+        <li><button type="button" class="pipe-node" data-desc="Laravel puts the call on a queue, so the summary runs in the background and the CRM stays fast.">Queued job</button></li>
+        <li><button type="button" class="pipe-node" data-desc="The OpenAI API turns the conversation into a structured summary with action items.">LLM summary</button></li>
+        <li><button type="button" class="pipe-node" data-desc="Through MCP tools the agent reads the summary, and plain rules decide which CRM stage the deal moves to.">MCP stage rules</button></li>
+        <li><button type="button" class="pipe-node" data-desc="The deal moves to the right stage and the summary is saved, so CX and Sales see it right away.">CRM updated</button></li>
+      </ol>
+      <p class="pipe-desc" id="pipeDesc" aria-live="polite"></p>
+    </div>
+  </div>
+</section>

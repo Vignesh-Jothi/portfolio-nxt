@@ -48,7 +48,7 @@ html[data-theme][data-palette][data-palette]{
 
 /* smooth palette swaps */
 html.palette-swap *, html.palette-swap *::before, html.palette-swap *::after{
-  transition:background-color .35s ease, border-color .35s ease, color .35s ease, fill .35s ease !important;
+  transition:background-color .3s cubic-bezier(.22,1,.36,1), border-color .3s cubic-bezier(.22,1,.36,1), color .3s cubic-bezier(.22,1,.36,1), fill .3s cubic-bezier(.22,1,.36,1) !important;
 }
 
 /* ---------- theme picker ---------- */
@@ -68,7 +68,7 @@ html[data-theme="dark"] .theme-panel{ background:color-mix(in srgb, var(--bg) 94
 html[data-theme="light"] .theme-panel{ background:rgba(255,255,255,.96); box-shadow:0 20px 50px rgba(15,23,42,.14); }
 @keyframes tpIn{ from{ opacity:0; transform:translateY(-6px) scale(.98); } }
 @media (max-width:760px){ .theme-panel{ position:fixed; top:68px; left:16px; right:16px; width:auto; } }
-.tp-k{ font-family:var(--font-mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+.tp-k{ font-size:14px; line-height:20px; font-weight:500; color:var(--muted); }
 .tp-seg{ display:grid; grid-template-columns:repeat(3,1fr); gap:4px; padding:4px; background:var(--surface-2); border-radius:10px; border:1px solid var(--line); }
 .tp-seg button{ border:0; background:transparent; color:var(--muted); font:600 12.5px var(--font-sans); padding:8px 4px; border-radius:7px; cursor:pointer; }
 .tp-seg button[aria-checked="true"]{ background:var(--surface); color:var(--ink); box-shadow:0 1px 4px rgba(0,0,0,.15); }

@@ -1,6 +1,6 @@
 {
   "name": "Vignesh J",
-  "title": "Backend-Focused Software Engineer",
+  "title": "AI Engineer, LLM Agents and Backend Systems",
   "contact": {
     "email": "vigneshjothishwaran@gmail.com",
     "phone": "9360510389",
@@ -9,7 +9,7 @@
     "linkedin": "https://www.linkedin.com/in/vignesh-jothi",
     "github": "https://github.com/vignesh-jothi"
   },
-  "summary": "Backend-focused Software Engineer with 3 years of experience designing and maintaining scalable internal platforms using **Laravel, PHP, MySQL, and Redis**, with working frontend experience in **React and Next.js**. Built and optimized backend services supporting 400+ daily active users across CX, Finance, Sales, Product, and Visa teams, cutting API response times by over 40% through query optimization and caching. Experienced in legacy system migration, workflow automation, AI agent and voice workflows, and cron-based processing. Focused on building reliable, maintainable systems that reduce operational load and scale with business growth.",
+  "summary": "AI engineer with 3 years of experience building LLM agents and the production backends they run on. At PickYourTrail, built AI voice agents that automate customer follow ups, lead qualification, and trip assistance; an agent workflow using the **OpenAI API and Model Context Protocol (MCP)** that automates post call summaries and CRM pipeline transitions; and the MCP agent architecture behind Trippie, a pre trip assistant, with a sandboxed test environment for safe rollouts. Backed by **Laravel, PHP, MySQL, and Redis** services supporting 400+ daily active users across CX, Finance, Sales, Product, and Visa teams, with API response times cut by over 40%. Uses AI assisted development for code review, debugging, and documentation.",
   "experience": [
     {
       "role": "Jr. Software Developer",

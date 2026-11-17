@@ -1,150 +1,54 @@
-<header class="hero hero-v2" id="top">
-  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
-  <div class="hero-glow" aria-hidden="true"></div>
+<header class="hero" id="top">
+  <div class="wrap hv">
+    <div class="hv-copy">
+      <p class="hv-status"><span class="hv-dot" aria-hidden="true"></span>Open to AI engineering roles in Chennai</p>
+      <h1 class="hv-title"><span class="hl">I build AI agents</span><br> <span class="hl">that take manual work</span><br> <span class="hl">off real teams.</span></h1>
 
-  <div class="wrap">
-    <div class="hv-grid">
-      <div class="hv-copy">
-        <div class="hv-hello" data-reveal>
-          <span class="hv-avatar" aria-hidden="true">VJ</span>
-          <div>
-            <p class="hv-hi">Hi, I'm <b>Vignesh</b> <span class="wave" aria-hidden="true">👋</span></p>
-            <p class="hv-status"><span class="beacon"><span class="beacon-core"></span><span class="beacon-ripple"></span></span> Open to new roles · Chennai, India</p>
-          </div>
-        </div>
+      <p class="hv-lede">I'm Vignesh, an AI engineer in Chennai. At PickYourTrail I build LLM voice agents, call summary agents and MCP tools, backed by <span id="expYearsText">3+ years</span> of building production backends.</p>
 
-        <h1 class="hv-title" data-reveal>
-          <span class="hv-line">I build</span>
-          <span class="hv-rotator"><span id="heroRotator" class="gradient-text">fast APIs</span><span class="hv-caret" aria-hidden="true"></span></span>
-          <span class="hv-line">that teams rely on every day.</span>
-        </h1>
-
-        <p class="hv-lede" data-reveal>Backend-focused engineer with <b><span id="expYearsText">3+ years</span></b> building Laravel, PHP and AI-agent systems used by <b>400+ people</b> daily.</p>
-
-        <div class="hv-cta" data-reveal>
-          <a class="btn primary btn-glow" href="#projects" id="heroLaunchCta">
-            <span>See my work</span>
-            <span class="cta-rocket" aria-hidden="true">🚀</span>
-          </a>
-          <a class="btn btn-secondary" href="resume/?download" target="_blank" rel="noopener">
-            <svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#download"></use></svg>
-            <span>Resume</span>
-          </a>
-          <button type="button" class="btn btn-secondary btn-copy-email" id="heroCopyEmailBtn" aria-label="Copy email address to clipboard" data-email="vigneshjothishwaran@gmail.com">
-            <svg class="btn-icon icon-copy" aria-hidden="true"><use href="icons/icons.svg#copy"></use></svg>
-            <span class="btn-text">Copy email</span>
-            <span class="copy-tooltip" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20 6 9 17l-5-5"/></svg>
-              Copied!
-            </span>
-          </button>
-          <div class="hv-socials">
-            <a class="icon-btn" href="https://github.com/vignesh-jothi" target="_blank" rel="noopener" aria-label="GitHub">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            </a>
-            <a class="icon-btn" href="https://www.linkedin.com/in/vignesh-jothi" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="hv-stats stats" data-reveal>
-          <div class="hv-stat"><span class="num" id="statDAU">400+</span><span class="lbl">daily users</span></div>
-          <div class="hv-stat"><span class="num" id="statSpeed">40%+</span><span class="lbl">faster APIs</span></div>
-          <div class="hv-stat"><span class="num" id="statConv">100+</span><span class="lbl">conversions in 60 days</span></div>
-          <div class="hv-stat"><span class="num" id="statExp">3+</span><span class="lbl">years shipping</span></div>
-        </div>
-      </div>
-
-      <!-- Rocket & orbit scene -->
-      <div class="hv-visual" data-reveal>
-        <div class="orbit-scene" id="orbitScene">
-          <div class="orbit orbit-1" aria-hidden="true">
-            <span class="planet" style="--a:0deg"><i>React</i></span>
-            <span class="planet" style="--a:180deg"><i>Next.js</i></span>
-          </div>
-          <div class="orbit orbit-2" aria-hidden="true">
-            <span class="planet" style="--a:60deg"><i>Laravel</i></span>
-            <span class="planet" style="--a:180deg"><i>Redis</i></span>
-            <span class="planet" style="--a:300deg"><i>MySQL</i></span>
-          </div>
-          <div class="orbit orbit-3" aria-hidden="true">
-            <span class="planet planet-ai" style="--a:30deg"><i>MCP</i></span>
-            <span class="planet planet-ai" style="--a:150deg"><i>OpenAI</i></span>
-            <span class="planet" style="--a:270deg"><i>PHP</i></span>
-          </div>
-          <div class="moon-core" aria-hidden="true"></div>
-
-          <div class="rocket-wrap" id="heroRocket" aria-hidden="true">
-            <svg class="rocket" viewBox="0 0 120 230">
-              <defs>
-                <linearGradient id="rkBody" x1="0" x2="1">
-                  <stop offset="0" stop-color="#E2E8F0"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset="1" stop-color="#CBD5E1"/>
-                </linearGradient>
-                <linearGradient id="rkFlame" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#FDE68A"/><stop offset=".45" stop-color="#FB923C"/><stop offset="1" stop-color="#EF4444" stop-opacity="0"/>
-                </linearGradient>
-                <radialGradient id="rkWin" cx=".35" cy=".35" r=".8">
-                  <stop offset="0" stop-color="#BAE6FD"/><stop offset=".55" stop-color="#0EA5E9"/><stop offset="1" stop-color="#0C4A6E"/>
-                </radialGradient>
-              </defs>
-              <g class="rk-flame">
-                <path d="M46 160 C 42 192 60 226 60 226 C 60 226 78 192 74 160 Z" fill="url(#rkFlame)"/>
-                <path d="M52 160 C 50 182 60 200 60 200 C 60 200 70 182 68 160 Z" fill="#FEF3C7"/>
-              </g>
-              <path d="M28 112 L6 150 L6 170 L30 152 Z" class="rk-accent"/>
-              <path d="M92 112 L114 150 L114 170 L90 152 Z" class="rk-accent"/>
-              <path d="M60 6 C 87 30 95 72 92 122 L 92 152 L 28 152 L 28 122 C 25 72 33 30 60 6 Z" fill="url(#rkBody)"/>
-              <path d="M60 6 C 76 20 85 38 89 56 L 31 56 C 35 38 44 20 60 6 Z" class="rk-accent"/>
-              <rect x="56" y="112" width="8" height="40" rx="3" class="rk-accent" opacity=".85"/>
-              <circle cx="60" cy="86" r="16" fill="#334155"/>
-              <circle cx="60" cy="86" r="12" fill="url(#rkWin)"/>
-              <path d="M53 80 a9 9 0 0 1 8 -4" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".8"/>
-              <path d="M42 152 L78 152 L72 164 L48 164 Z" fill="#64748B"/>
-            </svg>
-            <div class="rk-smoke"></div>
-          </div>
-
-          <div class="launch-count" id="launchCount" aria-live="assertive"></div>
-        </div>
-        <button type="button" class="launch-btn" id="launchBtn">
-          <span class="lb-dot" aria-hidden="true"></span>
-          <span class="lb-text">Launch the rocket</span>
+      <div class="hv-actions">
+        <a class="btn primary" href="resume/Vignesh_J.pdf" download>
+          <svg class="btn-icon" aria-hidden="true"><use href="icons/icons.svg#download"></use></svg>
+          <span>Download my resume</span>
+        </a>
+        <a class="hv-textlink" href="mailto:vigneshjothishwaran@gmail.com">Email me</a>
+        <button type="button" class="hv-textlink btn-copy-email" id="heroCopyEmailBtn" data-email="vigneshjothishwaran@gmail.com">
+          <span class="btn-text">Copy email</span>
+          <span class="copy-tooltip" aria-hidden="true">Copied</span>
         </button>
       </div>
-    </div>
-  </div>
 
-  <div class="hero-skills" aria-label="Technologies I work with">
-    <div class="skill-marquee">
-      <div class="skill-track">
-        <span class="skill-pill pill-be"><span class="pill-dot"></span>PHP</span>
-        <span class="skill-pill pill-be"><span class="pill-dot"></span>Laravel</span>
-        <span class="skill-pill pill-be"><span class="pill-dot"></span>MySQL</span>
-        <span class="skill-pill pill-be"><span class="pill-dot"></span>Redis</span>
-        <span class="skill-pill pill-be"><span class="pill-dot"></span>Queues & cron</span>
-        <span class="skill-pill pill-be"><span class="pill-dot"></span>Webhooks</span>
-        <span class="skill-pill pill-ai"><span class="pill-dot"></span>OpenAI API</span>
-        <span class="skill-pill pill-ai"><span class="pill-dot"></span>MCP agents</span>
-        <span class="skill-pill pill-ai"><span class="pill-dot"></span>Voice agents</span>
-        <span class="skill-pill pill-fe"><span class="pill-dot"></span>React</span>
-        <span class="skill-pill pill-fe"><span class="pill-dot"></span>Next.js</span>
-        <span class="skill-pill pill-ops"><span class="pill-dot"></span>Pest</span>
-        <span class="skill-pill pill-ops"><span class="pill-dot"></span>Nginx</span>
-        <span class="skill-pill pill-be" aria-hidden="true"><span class="pill-dot"></span>PHP</span>
-        <span class="skill-pill pill-be" aria-hidden="true"><span class="pill-dot"></span>Laravel</span>
-        <span class="skill-pill pill-be" aria-hidden="true"><span class="pill-dot"></span>MySQL</span>
-        <span class="skill-pill pill-be" aria-hidden="true"><span class="pill-dot"></span>Redis</span>
-        <span class="skill-pill pill-be" aria-hidden="true"><span class="pill-dot"></span>Queues & cron</span>
-        <span class="skill-pill pill-be" aria-hidden="true"><span class="pill-dot"></span>Webhooks</span>
-        <span class="skill-pill pill-ai" aria-hidden="true"><span class="pill-dot"></span>OpenAI API</span>
-        <span class="skill-pill pill-ai" aria-hidden="true"><span class="pill-dot"></span>MCP agents</span>
-        <span class="skill-pill pill-ai" aria-hidden="true"><span class="pill-dot"></span>Voice agents</span>
-        <span class="skill-pill pill-fe" aria-hidden="true"><span class="pill-dot"></span>React</span>
-        <span class="skill-pill pill-fe" aria-hidden="true"><span class="pill-dot"></span>Next.js</span>
-        <span class="skill-pill pill-ops" aria-hidden="true"><span class="pill-dot"></span>Pest</span>
-        <span class="skill-pill pill-ops" aria-hidden="true"><span class="pill-dot"></span>Nginx</span>
-      </div>
+      <p class="hv-proof">Rookie of the Year at PickYourTrail. Two AI launches shipped in under a week.</p>
     </div>
+
+    <div class="glance" aria-label="At a glance">
+      <dl class="glance-grid">
+        <div><dt>Now</dt><dd>Building AI agents at PickYourTrail</dd></div>
+        <div><dt>Experience</dt><dd>3+ years in production, 2 companies</dd></div>
+        <div><dt>Impact</dt><dd>400+ daily users, APIs 40% faster</dd></div>
+        <div><dt>Recognition</dt><dd>Rookie of the Year, #1 contributor</dd></div>
+        <div><dt>Availability</dt><dd>30 days notice, Chennai hybrid or on site</dd></div>
+      </dl>
+    </div>
+
+    <!-- Where my agents work: select a group to see it -->
+    <figure class="sysmap" id="sysmap" aria-label="Where my AI agents are used">
+      <div class="sm-stage">
+        <svg class="sm-lines" viewBox="0 0 100 100" aria-hidden="true">
+          <g class="sm-spoke" style="--dx:34.2px;--dy:-11.7px"><line x1="50" y1="50" x2="84.2" y2="38.3"/><circle cx="50" cy="50" r="1.2"/></g>
+          <g class="sm-spoke" style="--dx:21.2px;--dy:30.7px"><line x1="50" y1="50" x2="71.2" y2="80.7"/><circle cx="50" cy="50" r="1.2"/></g>
+          <g class="sm-spoke" style="--dx:-21.2px;--dy:30.7px"><line x1="50" y1="50" x2="28.8" y2="80.7"/><circle cx="50" cy="50" r="1.2"/></g>
+          <g class="sm-spoke" style="--dx:-34.2px;--dy:-11.7px"><line x1="50" y1="50" x2="15.8" y2="38.3"/><circle cx="50" cy="50" r="1.2"/></g>
+          <g class="sm-spoke" style="--dx:0px;--dy:-38px"><line x1="50" y1="50" x2="50" y2="12"/><circle cx="50" cy="50" r="1.2"/></g>
+        </svg>
+        <div class="sm-core" aria-hidden="true"><b>LLM agents</b><span>OpenAI API and MCP tools</span></div>
+        <button type="button" class="sm-node" style="--x:84.2%;--y:38.3%" data-desc="A call summary agent writes up every call and moves the CRM stage, so nobody logs calls by hand.">CX</button>
+        <button type="button" class="sm-node" style="--x:71.2%;--y:80.7%" data-desc="Voice agents handle lead follow ups and qualification automatically.">Sales</button>
+        <button type="button" class="sm-node" style="--x:28.8%;--y:80.7%" data-desc="Trippie answers travellers before their trip, by voice and chat, running on MCP.">Travellers</button>
+        <button type="button" class="sm-node" style="--x:15.8%;--y:38.3%" data-desc="I use AI for code review, debugging and documentation to ship faster.">Engineering</button>
+        <button type="button" class="sm-node" style="--x:50%;--y:12%" data-desc="A sandbox lets Trip Custodians test agent behaviour on edge cases before customers see it.">Trip Custodians</button>
+      </div>
+      <figcaption class="sm-desc" id="smDesc" aria-live="polite"></figcaption>
+    </figure>
   </div>
 </header>

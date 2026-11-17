@@ -228,7 +228,7 @@
     a.after(btn);
     btn.addEventListener('click', async () => {
       const email = a.getAttribute('href').replace('mailto:', '');
-      try { await navigator.clipboard.writeText(email); toast('Email copied 📋'); }
+      try { await navigator.clipboard.writeText(email); toast('Email copied'); }
       catch (e) { toast(email); }
     });
   }
