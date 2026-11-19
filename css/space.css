@@ -100,6 +100,7 @@ section{ padding:96px 0; }
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 .hv-lede{ font-size:18px; line-height:28px; color:var(--muted); max-width:680px; margin-bottom:32px; }  /* Title 2 */
+.hv-lede:has(+ .hv-lede){ margin-bottom:16px; }
 .hv-actions{ display:flex; flex-wrap:wrap; align-items:center; gap:24px; }
 .hv-textlink{ font-size:16px; line-height:24px; font-weight:600; color:var(--ink); text-decoration:underline; text-underline-offset:4px; text-decoration-color:var(--line); transition:text-decoration-color .3s var(--ease); }
 .hv-textlink:hover{ text-decoration-color:var(--accent); }
@@ -115,6 +116,8 @@ section{ padding:96px 0; }
 .tagline-text{ font-size:48px; line-height:48px; font-weight:600; letter-spacing:-.03em; max-width:680px; text-wrap:balance; }  /* Heading 2 */
 .tagline .tw{ color:color-mix(in srgb, var(--ink) 30%, transparent); transition:color .5s var(--ease); }
 .tagline .tw.on{ color:var(--ink); }
+.about-copy{ max-width:680px; margin-top:48px; display:grid; gap:20px; }
+.about-copy p{ font-size:18px; line-height:28px; color:var(--muted); text-wrap:pretty; }
 @media (max-width:640px){ .tagline-text{ font-size:30px; line-height:36px; } .tagline-text br{ display:none; } }
 
 /* ---------- benefits ---------- */
@@ -222,6 +225,11 @@ section{ padding:96px 0; }
 .exp-toggle:active{ transform:scale(.98); }
 
 /* ---------- achievements: a plain list, not identical cards ---------- */
+.impact-stats{ display:grid; grid-template-columns:repeat(4, 1fr); gap:32px 24px; margin:0 0 48px; }
+.impact-stats div{ display:flex; flex-direction:column-reverse; justify-content:flex-end; }  /* number reads first, label stays first in the markup for screen readers */
+.impact-stats dd{ margin:0; font-size:30px; line-height:36px; font-weight:600; color:var(--c2, var(--accent-fg)); }
+.impact-stats dt{ font-size:14px; line-height:20px; color:var(--muted); }
+@media (max-width:760px){ .impact-stats{ grid-template-columns:repeat(2, 1fr); } }
 .ach-grid{ display:block; border-top:1px solid var(--line); }
 .ach-card, .ach-card--featured{ display:grid; grid-template-columns:minmax(200px, 320px) 1fr; gap:8px 32px; padding:24px 0; border:0; border-bottom:1px solid var(--line); border-radius:0; background:none; }
 .ach-card > div{ display:contents; }

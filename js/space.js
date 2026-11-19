@@ -12,6 +12,7 @@
 
   function init() {
     initProjects();
+    countUp($$('.impact-stats dd'));
     initTagline();
     initSkills();
     initExperience();
