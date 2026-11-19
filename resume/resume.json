@@ -79,6 +79,39 @@
       ]
     },
     {
+      "name": "Real-time Chat Platform",
+      "type": "Internal chat product for Sales, Operations and Support: backend, web UI and a mobile SDK.",
+      "start": "2025",
+      "end": "2026",
+      "bullets": [
+        "Built real-time presence, typing indicators, message receipts, read tracking, chat assignment and ownership routing; the platform has carried 3B+ messages and handles 400 concurrent chats on minimal infrastructure.",
+        "Added AI layers for conversation summaries and response-time metrics, and a web UI with canned responses, file uploads, AI tone suggestions and agent metrics.",
+        "Packaged mobile chat as a standalone SDK with an imperative API, shipped across the consumer and enterprise travel apps, with WhatsApp routed in via a self-hosted gateway."
+      ]
+    },
+    {
+      "name": "Lead Allocation Engine",
+      "type": "Rule-based routing that assigns incoming customers to sales, operations, visa and on-trip agents in real time.",
+      "start": "2025",
+      "end": "2026",
+      "bullets": [
+        "Built a prioritised rule engine on Laravel queue jobs that matches customer and trip attributes, with fallback teams when a team is fully occupied.",
+        "Layered roster availability, concurrent lead caps, weekly and monthly capacity, and rolling-window rate limits overridable per destination region.",
+        "Matched customer language to agent language, routed returning customers to their previous agent, and wrote every decision to an audit trail with a dry-run mode."
+      ]
+    },
+    {
+      "name": "Vortex — Git Flow Automation",
+      "type": "Developer tooling that automates Git Flow branch management across GitHub repositories.",
+      "start": "2025",
+      "end": "2026",
+      "bullets": [
+        "Automated pull request creation, merge conflict detection and retry, the release pipeline, hotfix handling and Slack notifications.",
+        "Added an MCP endpoint so AI agents can drive the release pipeline directly.",
+        "Covered it with unit, HTTP integration and end-to-end browser tests of the release flow."
+      ]
+    },
+    {
       "name": "Locker Room — HRM Platform",
       "type": "Internal HR management platform for employee data and performance monitoring.",
       "start": "Dec 2024",
