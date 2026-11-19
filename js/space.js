@@ -217,12 +217,15 @@
   function initSystemMap() {
     const wrap = $('#sysmap'), desc = $('#smDesc');
     if (!wrap) return;
-    const nodes = $$('.sm-node', wrap), spokes = $$('.sm-spoke', wrap);
+    const nodes = $$('.sm-node', wrap), spokes = $$('.sm-spoke', wrap), run = $('#smRun');
+    wrap.classList.add('running');
     cycle(wrap, nodes, (n) => {
       nodes.forEach((b, k) => { b.classList.toggle('active', k === n); b.setAttribute('aria-pressed', String(k === n)); });
       spokes.forEach((g, k) => g.classList.toggle('active', k === n));
       desc.innerHTML = `<b>${esc(nodes[n].textContent)}</b> ${esc(nodes[n].dataset.desc)}`;
-    }, 2600);
+      // the core names what the agent is doing with this piece of work
+      if (run) { run.classList.add('swap'); setTimeout(() => { run.textContent = nodes[n].dataset.run; run.classList.remove('swap'); }, 200); }
+    }, 5200);  // two in-and-out trips per node
   }
 
   /* ---------------- floating resume button: shows once the hero button scrolls away,
