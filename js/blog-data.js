@@ -1,6 +1,6 @@
 /* ============================================================
-   BLOG POSTS DATA — Reusable data structure for backend
-   and software engineering articles (Laravel / PHP stack).
+   BLOG POSTS DATA — AI engineering, backend and software
+   architecture articles. Listed newest first by date in main.js.
    Adding new articles in the future requires only appending to
    this array without touching HTML markup.
    ============================================================ */
@@ -567,6 +567,207 @@ php artisan horizon:terminate && php artisan horizon &</code></pre>
       <div class="callout callout-success">
         <div class="callout-title">Production-Readiness Checklist</div>
         <p>A production-grade Laravel API uses Sanctum for stateless token auth, Redis-backed rate limiting, tagged cache invalidation, Horizon-supervised queue workers, and Octane-powered zero-downtime deployments — no Node.js required.</p>
+      </div>
+    `
+  },
+  {
+    id: "call-summary-agent-mcp",
+    slug: "call-summary-agent",
+    title: "Nobody Logs Calls Anymore: Building a Call Summary Agent with the OpenAI API and MCP",
+    category: "AI Engineering",
+    date: "Nov 12, 2026",
+    readTime: "5 min read",
+    summary: "How I replaced manual post-call logging for CX and Sales with an agent that summarises every call and moves the CRM pipeline on its own, and why the business decision still lives in plain code.",
+    tags: ["AI Agents", "MCP", "OpenAI API", "Laravel", "Queues"],
+    content: `
+      <p class="lead">Every CX and Sales call at PickYourTrail used to end the same way: someone typing notes into the CRM and dragging the lead to the next stage by hand. It was slow, it was inconsistent, and it took time away from the next customer. So I built an agent that does both jobs the moment a call ends.</p>
+
+      <h3>The Problem Was Never the Summary</h3>
+      <p>Summarising a call is the part everyone thinks about first, and it is the easiest part for a language model. The real cost was everything around it. Notes were written differently by every person, some calls were never logged at all, and CRM stages moved whenever someone remembered to move them. Reports built on that data were only as good as the discipline of the busiest person on the team.</p>
+      <p>So the goal was not "generate a nice summary". It was: <strong>after every call, the CRM should be correct without anyone touching it.</strong></p>
+
+      <h3>The Pipeline: Five Small Steps</h3>
+      <p>The whole flow is deliberately boring:</p>
+      <ol>
+        <li><strong>Call ends.</strong> The telephony provider sends a webhook.</li>
+        <li><strong>Queued job.</strong> The webhook only records the event and dispatches a job, so the request returns immediately.</li>
+        <li><strong>LLM summary.</strong> The job sends the transcript to the model and asks for a structured result, not free text.</li>
+        <li><strong>Stage rules.</strong> Plain code decides whether the lead should move, using the structured result.</li>
+        <li><strong>CRM updated.</strong> The note and the stage change are written through MCP tools, and every step is logged.</li>
+      </ol>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Simplified: the webhook only queues work</span></div>
+        <pre><code>// Route::post('/webhooks/call-ended', CallEndedController::class);
+public function __invoke(Request $request)
+{
+    $call = CallLog::firstOrCreate(
+        ['provider_call_id' => $request->input('call_id')], // retries don't create duplicates
+        ['payload' => $request->all()]
+    );
+
+    SummariseCall::dispatch($call)->onQueue('agents');
+
+    return response()->noContent();
+}</code></pre>
+      </div>
+
+      <p>Keeping the webhook thin matters. Model calls are slow and occasionally fail; a queue gives you retries, backoff and visibility for free, and the provider never times out waiting on an LLM.</p>
+
+      <h3>Let the Model Read, Let Code Decide</h3>
+      <p>This is the rule I keep coming back to on every agent I build. A language model is excellent at reading messy input: a half-transcribed call with two people talking over each other. It is a poor place to put a business rule that someone will need to audit later.</p>
+      <p>So the model's only job is to turn the transcript into fields: a short summary, the customer's intent, the agreed next step. Whether that means the lead moves from "Contacted" to "Quote sent" is decided by ordinary PHP that anyone on the team can read and test.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP</span><span class="code-title">Simplified: the stage decision is plain, testable code</span></div>
+        <pre><code>public function nextStage(Lead $lead, CallInsight $insight): ?Stage
+{
+    if (! $insight->isValid()) {
+        return null; // bad model output never moves a lead
+    }
+
+    return match (true) {
+        $insight->intent === 'not_interested'  => Stage::Closed,
+        $insight->nextStep === 'send_quote'    => Stage::QuoteSent,
+        $lead->stage === Stage::New            => Stage::Contacted,
+        default                                => null,
+    };
+}</code></pre>
+      </div>
+
+      <div class="callout callout-info">
+        <div class="callout-title">Why this split matters</div>
+        <p>When someone asks "why did this lead move?", the answer is a rule in code plus the logged model output that fed it. Nobody has to argue with a prompt.</p>
+      </div>
+
+      <h3>MCP as the Boundary to the CRM</h3>
+      <p>The agent does not call the CRM directly. It works through tools exposed over the Model Context Protocol: read the lead, add a note, change a stage. Each tool validates its input and does exactly one thing.</p>
+      <p>That boundary paid off quickly. The same tools are reused by other agents, permissions live in one place, and when a tool misbehaves the logs show exactly which call, which input and which output caused it.</p>
+
+      <h3>What I Would Tell Anyone Building One</h3>
+      <ul>
+        <li><strong>Queue everything.</strong> Webhooks record, jobs think.</li>
+        <li><strong>Ask for structure.</strong> Validate the model's output before anything acts on it, and treat invalid output as "do nothing".</li>
+        <li><strong>Keep decisions in code.</strong> The model reads, the code decides, and both are logged.</li>
+        <li><strong>Make tools small.</strong> One tool, one action, its own validation.</li>
+      </ul>
+
+      <div class="callout callout-success">
+        <div class="callout-title">The outcome</div>
+        <p>Calls are summarised without manual logging, CRM pipeline transitions happen on their own, and CX and Sales spend that time with customers instead of forms.</p>
+      </div>
+    `
+  },
+  {
+    id: "function-calling-to-mcp",
+    slug: "function-calling-to-mcp",
+    title: "From Function Calling to MCP: Moving a Live AI Assistant Without Customers Noticing",
+    category: "AI Engineering",
+    date: "Oct 22, 2026",
+    readTime: "4 min read",
+    summary: "What changed when I moved Trippie's agent tool calls from function calling to the Model Context Protocol, and why a sandbox for operators mattered as much as the migration itself.",
+    tags: ["MCP", "AI Agents", "Function Calling", "Testing", "Laravel"],
+    content: `
+      <p class="lead">Trippie is PickYourTrail's AI assistant for travellers before their trip, by voice and by chat. As it grew, the way its tools were wired started to hold it back, and there was nowhere safe to try changes before customers saw them. Fixing both took two launches, and both shipped in under a week.</p>
+
+      <h3>Where Function Calling Started to Hurt</h3>
+      <p>Function calling is a great way to start. You describe a few functions, the model picks one, your code runs it. The trouble starts when the list grows and more than one surface uses it.</p>
+      <ul>
+        <li>Tool definitions lived next to each agent, so the same capability was described more than once and drifted.</li>
+        <li>Context did not travel well between tools, so the agent kept re-asking for things it already knew.</li>
+        <li>When a tool call failed, the escalation to a person did not always happen cleanly.</li>
+      </ul>
+      <p>None of these is dramatic on its own. Together they made every change slower and riskier than it should have been.</p>
+
+      <h3>What MCP Changed</h3>
+      <p>The Model Context Protocol moves tools out of the agent and behind a server. Each tool is defined once, with its own input schema and validation, and any agent that speaks MCP can use it.</p>
+      <p>For Trippie that meant three practical things:</p>
+      <ol>
+        <li><strong>One definition per tool.</strong> Voice and chat use the same tools, so a fix lands everywhere at once.</li>
+        <li><strong>Shared context.</strong> Tools can work from the same trip context instead of each one rebuilding it.</li>
+        <li><strong>A clear failure path.</strong> A tool that cannot complete says so in a structured way, and the agent hands off to a person instead of guessing.</li>
+      </ol>
+
+      <div class="callout callout-info">
+        <div class="callout-title">The mental model</div>
+        <p>Function calling makes tools part of the prompt. MCP makes them part of your backend. Once tools are backend code, you get to treat them like backend code: versioned, validated, logged and tested.</p>
+      </div>
+
+      <h3>The Test Arena: A Sandbox for the People Who Know the Edge Cases</h3>
+      <p>The second launch mattered as much as the first. Trip Custodians, the team who look after travellers, know exactly which questions break an assistant. Until then they had no way to try those questions without a real customer on the other end.</p>
+      <p>So I built a sandboxed test environment where internal operators can talk to the agent, try the awkward cases, and see what it would do before a change reaches customers. Changes are validated there first, and only then rolled out.</p>
+
+      <h3>Moving Live Wiring Without Disruption</h3>
+      <p>The hardest part was not writing MCP tools. It was moving an assistant that customers were already using without them noticing. What made it safe was simple:</p>
+      <ul>
+        <li><strong>Same behaviour first.</strong> Each tool was moved to match what it already did before anything was improved.</li>
+        <li><strong>Test before rollout.</strong> Every change went through the sandbox with the people who know the edge cases.</li>
+        <li><strong>Watch the escalations.</strong> Failed handoffs were the signal that mattered most, so that is what I watched after each change.</li>
+      </ul>
+
+      <div class="callout callout-success">
+        <div class="callout-title">The outcome</div>
+        <p>Two launches shipped in under a week: the Test Arena for Trip Custodians and the move from function calling to MCP. Escalation failures dropped and responses got faster, and customers felt the difference within hours.</p>
+      </div>
+    `
+  },
+  {
+    id: "voice-agents-follow-ups",
+    slug: "voice-agents",
+    title: "Voice Agents for Follow-Ups and Lead Qualification: The Backend Is the Real Work",
+    category: "AI Engineering",
+    date: "Sep 30, 2026",
+    readTime: "4 min read",
+    summary: "The call is the easy part. Notes on the backend behind AI voice agents that run customer follow-ups, lead qualification and trip help: triggers, orchestration, tool calls and knowing when to hand off.",
+    tags: ["Voice Agents", "LLM Orchestration", "Webhooks", "Laravel", "AI Agents"],
+    content: `
+      <p class="lead">Follow-ups, lead qualification and trip assistance were all handled by people making calls. Voice agents now run those touchpoints end to end. The voice itself is the part people notice, but almost all of the engineering lives in the backend around it.</p>
+
+      <h3>Every Call Starts as an Event</h3>
+      <p>A voice agent never decides on its own to call someone. Something in the system says it is time: a scheduled job finds leads that are due a follow-up, or a webhook reports that something happened to a booking. Treating every call as the result of an event keeps the whole thing predictable.</p>
+      <p>The flow is the same for every use case:</p>
+      <ol>
+        <li><strong>Trigger:</strong> a cron job or a webhook decides a call is needed.</li>
+        <li><strong>Voice agent call:</strong> the call is placed with the context it needs.</li>
+        <li><strong>LLM orchestration:</strong> the conversation is steered towards one clear goal.</li>
+        <li><strong>Tool calls:</strong> the agent reads or updates real data during the call.</li>
+        <li><strong>Outcome logged:</strong> the result is written back, and the next step is scheduled.</li>
+      </ol>
+
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">PHP / Laravel</span><span class="code-title">Simplified: triggers queue calls, they never place them inline</span></div>
+        <pre><code>// routes/console.php
+Schedule::job(new QueueDueFollowUps)->everyFifteenMinutes();
+
+// QueueDueFollowUps::handle()
+Lead::dueForFollowUp()
+    ->whereDoesntHave('openVoiceTask')   // never call the same person twice at once
+    ->each(fn (Lead $lead) => PlaceFollowUpCall::dispatch($lead));</code></pre>
+      </div>
+
+      <h3>Webhooks Arrive Twice, Out of Order, or Not at All</h3>
+      <p>Voice platforms talk back through webhooks: call started, call answered, call ended, transcript ready. In production those arrive late, arrive twice, and occasionally arrive in the wrong order. The backend has to be fine with all three.</p>
+      <ul>
+        <li><strong>Idempotent handlers.</strong> Every event is keyed by the provider's ID, so a repeat does nothing.</li>
+        <li><strong>State, not assumptions.</strong> Each call moves through explicit states, and an event that does not fit the current state is logged instead of applied.</li>
+        <li><strong>Timeouts.</strong> If "call ended" never arrives, a scheduled check closes the call and schedules a retry.</li>
+      </ul>
+
+      <h3>One Goal per Call</h3>
+      <p>The orchestration layer keeps each call focused. A follow-up call has one job; a qualification call has another. The agent gets the context for that job and the tools for that job, nothing more. Smaller scopes make the agent easier to test and its mistakes easier to spot.</p>
+
+      <div class="callout callout-info">
+        <div class="callout-title">Same rule as every other agent</div>
+        <p>The model handles the conversation. Whether a lead counts as qualified is decided by code, from the structured result of the call, so the rule can be read, tested and changed without touching a prompt.</p>
+      </div>
+
+      <h3>Knowing When to Hand Off</h3>
+      <p>A voice agent that never gives up is worse than no agent. When the customer asks for a person, when the agent is unsure, or when a tool cannot complete, the call is handed to a human with the context already written down. The person picks up where the agent stopped, not from the beginning.</p>
+
+      <h3>What Changed</h3>
+      <div class="callout callout-success">
+        <div class="callout-title">The outcome</div>
+        <p>Follow-ups and lead qualification run automatically, trip assistance is available without a person on every call, and agents hand off to people when they should.</p>
       </div>
     `
   }
