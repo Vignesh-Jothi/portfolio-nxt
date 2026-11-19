@@ -516,6 +516,93 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
   .back-to-top{ right:16px; bottom:16px; }
 }
 
+/* ---------- writing: home cards, blog index and article view on the site's type scale ---------- */
+.blog-grid{ grid-template-columns:repeat(3, 1fr); grid-template-rows:none; gap:24px; margin-top:32px; }
+@media (max-width:960px){ .blog-grid{ grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:640px){ .blog-grid{ grid-template-columns:1fr; } }
+.home-blog-card, .home-blog-card:first-child{ grid-row:auto; padding:24px; border-radius:16px; gap:24px; }
+.home-blog-card .card-meta{ margin-bottom:16px; }
+.home-blog-card h3, .home-blog-card:first-child h3{ font-size:18px; line-height:28px; font-weight:600; margin:0 0 8px; }
+.home-blog-card .card-summary{ font-size:16px; line-height:24px; margin:0; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.home-blog-card .card-footer{ padding-top:16px; font-size:14px; line-height:20px; }
+.category-badge{ font-family:var(--font-sans); font-size:12px; line-height:16px; font-weight:600; padding:4px 10px; }
+.read-time, .card-date{ font-family:var(--font-sans); font-size:14px; line-height:20px; color:var(--muted); }
+.read-action{ font-size:14px; font-weight:600; }
+
+.blog-topbar .back, .post-topbar .back{ font-family:var(--font-sans); font-size:14px; font-weight:500; }
+.blog-hero-meta{ font-family:var(--font-sans); font-size:14px; }
+.blog-article-count{ font-size:12px; letter-spacing:0; }
+.cat-pill{ font-family:var(--font-sans); font-size:14px; line-height:20px; padding:8px 16px; min-height:40px; }
+.cat-pill.active{ box-shadow:none; }
+/* sticky bars sit below the floating nav (12px offset + 58px tall) instead of sliding under it */
+.blog-filter-bar, .post-topbar{ top:80px; }
+.blog-toc-sidebar{ top:152px; }
+.blog-index-card-meta{ gap:8px 12px; }
+.blog-index-card:first-child .blog-index-card-arrow{ display:none; }  /* the whole featured card is the link */
+.blog-index-card:not(:first-child){ padding-left:0; padding-right:0; }  /* titles line up with the featured card's edge */
+.blog-index-card-summary{ font-size:16px; line-height:24px; }
+.article-tag{ font-family:var(--font-sans); font-size:12px; }
+.article-breadcrumb, .blog-article-header .article-meta{ font-family:var(--font-sans); font-size:14px; }
+.share-btn{ font-family:var(--font-sans); font-size:13px; }
+.blog-toc-label{ font-family:var(--font-sans); font-size:12px; letter-spacing:.08em; }
+
+/* ---------- reading: an article should read like a good book page, not a dashboard ---------- */
+/* one comfortable column: text at ~70 characters a line, the title allowed a little wider */
+.blog-article-header{ max-width:720px; }
+.article-content{ max-width:640px; }
+.blog-article-header h2{ font-size:clamp(30px, 4vw, 44px); line-height:1.15; letter-spacing:-.03em; text-wrap:balance; }
+/* body: 18/30, a touch softer than headings so long text doesn't glare in dark mode */
+.article-content{ font-size:18px; line-height:30px; letter-spacing:0; color:color-mix(in srgb, var(--ink) 86%, var(--bg)); }
+.article-content p{ margin-bottom:24px; line-height:inherit; max-width:none; word-break:normal; text-wrap:pretty; }
+.article-content strong{ color:var(--ink); font-weight:600; }
+.article-content em{ color:inherit; }
+/* intro: larger text instead of a coloured box */
+.article-content p.lead{ font-size:21px; line-height:34px; font-weight:400; color:var(--ink); padding:0; margin:0 0 40px; border:0; background:none; border-radius:0; }
+/* headings: plenty of air above, the section number as a quiet label rather than a badge */
+.article-content h3{ font-size:26px; line-height:34px; font-weight:600; margin:64px 0 16px; flex-direction:column; gap:4px; scroll-margin-top:168px; }
+.article-content h3::before{ font-family:var(--font-sans); font-size:14px; line-height:20px; font-weight:600; letter-spacing:.02em; color:var(--accent-fg); background:none; padding:0; margin:0; border-radius:0; }
+.article-content li{ margin-bottom:12px; line-height:30px; }
+.article-content ul li::before{ top:12px; }
+.article-content ol li::before{ font-family:var(--font-sans); font-size:inherit; }
+/* inline code reads as code, not as a link */
+.article-content code{ font-size:.875em; color:var(--ink); padding:2px 6px; border-radius:6px; }
+.code-block{ margin:32px 0; box-shadow:none; background:var(--surface); }
+.code-block-header{ font-family:var(--font-sans); font-size:13px; padding:10px 16px; }
+.code-block-header .code-title{ font-size:13px; }
+.code-block-header .code-lang{ font-family:var(--font-sans); font-size:12px; letter-spacing:0; }
+.code-copy-btn{ font-family:var(--font-sans); font-size:12px; padding:4px 10px; }
+.code-block pre{ padding:20px; font-size:14px; line-height:24px; tab-size:2; }
+.article-content .code-block code{ font-size:14px; color:var(--ink); padding:0; background:none; border:0; border-radius:0; }  /* undo the inline-code chip inside blocks */
+.callout{ padding:20px 24px; margin:32px 0; border-radius:12px; }
+.callout-title{ font-size:16px; line-height:24px; font-weight:600; margin-bottom:4px; }
+.callout p{ font-size:16px; line-height:26px; }
+.toc-link{ font-size:14px; line-height:20px; }
+.post-nav-dir{ font-family:var(--font-sans); font-size:12px; letter-spacing:.06em; }
+.post-nav-title{ font-size:16px; line-height:24px; font-weight:600; }
+.article-content ::selection, .blog-article-header ::selection{ background:color-mix(in srgb, var(--accent) 30%, transparent); }
+@media (max-width:640px){
+  .blog-article-header h2{ font-size:28px; line-height:34px; }
+  .blog-article-header .article-meta, .article-breadcrumb{ font-size:14px; }
+  .article-tag{ font-size:12px; }
+  .article-content{ font-size:17px; line-height:28px; }
+  .article-content p{ margin-bottom:20px; }
+  .article-content p.lead{ font-size:19px; line-height:30px; margin:0 0 32px; padding:0; }
+  .article-content h3{ font-size:22px; line-height:28px; margin:48px 0 12px; }
+  .article-content h3::before{ font-size:13px; padding:0; }
+  .article-content li{ font-size:17px; line-height:28px; }
+  .article-content ul li::before{ top:11px; }
+  .article-content code{ font-size:.875em; }
+  .code-block{ margin:24px -16px; width:auto; max-width:none; border-radius:0; border-left:0; border-right:0; }  /* full-bleed on phones: more room for code */
+  .code-block-header .code-title, .code-block-header .code-lang{ font-size:12px; }
+  .code-copy-btn{ font-size:12px; }
+  .article-content .code-block pre, .article-content .code-block code{ font-size:13px; line-height:22px; }
+  .code-block pre{ padding:16px; }
+  .callout{ padding:16px 20px; margin:24px 0; }
+  .callout-title, .callout p{ font-size:15px; line-height:24px; }
+  .post-topbar .back{ font-size:14px; }
+  .post-nav-title{ font-size:15px; }
+}
+
 /* ---------- the theme panel's "Animations" switch turns all of this off ---------- */
 html[data-motion="off"] *, html[data-motion="off"] *::before, html[data-motion="off"] *::after{ animation:none !important; transition:none !important; }
-html[data-motion="off"] [data-reveal]{ opacity:1; transform:none; }
+html[data-motion="off"] [data-reveal], html[data-motion="off"] .reveal-item{ opacity:1; transform:none; }

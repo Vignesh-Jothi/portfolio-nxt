@@ -429,7 +429,8 @@ let readProgressListener = null;
 
 /* ── Helpers ──────────────────────────────────────────────────── */
 function getAllPosts() {
-  return (typeof BLOG_POSTS !== 'undefined') ? [...BLOG_POSTS] : [];
+  // newest first, so the home section always shows the latest three
+  return (typeof BLOG_POSTS !== 'undefined') ? [...BLOG_POSTS].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0)) : [];
 }
 
 function buildUrl(params) {
@@ -488,33 +489,24 @@ function renderHomeBlogCards() {
   const posts = getAllPosts();
   if (!posts.length) return;
 
-  homeBlogGrid.innerHTML = posts.slice(0, 3).map((p, i) => `
-    <article class="home-blog-card reveal-item" data-slug="${p.slug}"
-      style="animation-delay:${i * 80}ms"
+  // the grid's own data-reveal staggers these in (space.css), so cards need no reveal class of their own
+  homeBlogGrid.innerHTML = posts.slice(0, 3).map(p => `
+    <article class="home-blog-card" data-slug="${p.slug}"
       tabindex="0" role="button" aria-label="Read: ${p.title}">
       <div>
-        <div class="card-num">${String(i + 1).padStart(2, '0')}</div>
         <div class="card-meta">
           <span class="category-badge">${p.category}</span>
-          <span class="read-time mono">${p.readTime}</span>
+          <span class="read-time">${p.readTime}</span>
         </div>
         <h3>${p.title}</h3>
         <p class="card-summary">${p.summary}</p>
-        <div class="card-tags">
-          ${(p.tags || []).slice(0, 3).map(t => `<span class="card-tag-pill">#${t}</span>`).join('')}
-        </div>
       </div>
       <div class="card-footer">
-        <span class="card-date mono">${p.date}</span>
-        <span class="read-action">Read Article →</span>
+        <span class="card-date">${p.date}</span>
+        <span class="read-action">Read →</span>
       </div>
     </article>
   `).join('');
-
-  // Trigger reveal animations
-  requestAnimationFrame(() => {
-    homeBlogGrid.querySelectorAll('.reveal-item').forEach(el => el.classList.add('revealed'));
-  });
 
   homeBlogGrid.querySelectorAll('.home-blog-card').forEach(card => {
     const go = () => { const slug = card.dataset.slug; history.pushState({}, '', buildUrl({ post: slug })); showPost(slug); };
@@ -540,14 +532,12 @@ function renderBlogIndex(filterCat = 'all') {
 
   blogIndexGrid.innerHTML = posts.map((p, i) => `
     <a class="blog-index-card reveal-item" href="${buildUrl({ post: p.slug })}" data-slug="${p.slug}"
-      style="animation-delay:${i * 70}ms"
-      role="article" aria-label="Read: ${p.title}">
+      style="animation-delay:${i * 70}ms">
       <div class="blog-index-card-inner">
-        <div class="blog-index-card-num">${String(i + 1).padStart(2, '0')}</div>
         <div class="blog-index-card-meta">
           <span class="category-badge">${p.category}</span>
-          <span class="read-time mono">${p.readTime}</span>
-          <span class="card-date mono">${p.date}</span>
+          <span class="card-date">${p.date}</span>
+          <span class="read-time">${p.readTime}</span>
         </div>
         <h2>${p.title}</h2>
         <p class="blog-index-card-summary">${p.summary}</p>
@@ -592,7 +582,7 @@ function buildToc(article, postId) {
     a.textContent = (h3.textContent || '').trim();
     a.addEventListener('click', e => {
       e.preventDefault();
-      const topOffset = 80;
+      const topOffset = 168;  // floating nav + sticky post bar
       const elementPosition = h3.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - topOffset;
       window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
@@ -706,17 +696,15 @@ function showPost(slug) {
     <article class="blog-article-full" id="article-${post.id}">
       <header class="blog-article-header">
         <nav class="article-breadcrumb" aria-label="Breadcrumb">
-          <a href="#" class="breadcrumb-link" id="breadcrumbBlogLink">Engineering Notes</a>
+          <a href="#" class="breadcrumb-link" id="breadcrumbBlogLink">Writing</a>
           <span class="breadcrumb-sep">/</span>
           <span class="breadcrumb-current">${post.category}</span>
         </nav>
         <h2>${post.title}</h2>
         <div class="article-meta">
-          <span class="category-badge">${post.category}</span>
-          <span class="read-time mono">⏱ ${post.readTime}</span>
-          <span class="card-date mono">📅 ${post.date}</span>
-          <span class="blog-hero-sep">·</span>
-          <span class="article-author mono">✍️ Vignesh Jothi</span>
+          <span class="card-date">${post.date}</span>
+          <span class="blog-hero-sep" aria-hidden="true">·</span>
+          <span class="read-time">${post.readTime}</span>
         </div>
         <div class="article-tags">
           ${(post.tags || []).map(t => `<span class="article-tag">#${t}</span>`).join('')}
@@ -794,7 +782,7 @@ function showBlogListing() {
   if (navBlogEl) navBlogEl.classList.add('current');
   if (navBlogMobEl) navBlogMobEl.classList.add('current');
   document.querySelectorAll('#mainNav a, #mobileNav a').forEach(a => a.classList.remove('current'));
-  document.title = 'Engineering Notes — Vignesh J';
+  document.title = 'Writing — Vignesh J';
 
   if (viewPortfolio && !viewPortfolio.hidden) {
     transitionTo(viewBlog, viewPortfolio, () => {
