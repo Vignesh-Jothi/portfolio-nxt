@@ -441,7 +441,9 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
   font-size:14px; line-height:20px; font-weight:500; color:var(--ink); }                                /* Caption 1 */
 .hv-dot{ width:8px; height:8px; border-radius:9999px; background:#22C55E; }
 .hero .hv-status{ animation:fadeIn .8s var(--ease) both; }
-.hv-actions .btn-copy-email{ background:none; border:0; padding:0; cursor:pointer; font-family:var(--font-sans); }
+.hv-actions .btn-copy-email{ display:inline-grid; place-items:center; width:40px; height:40px; margin-left:-8px; background:none; border:0; border-radius:10px; padding:0; cursor:pointer; color:var(--muted); transition:color .3s var(--ease), background .3s var(--ease); }
+.hv-actions .btn-copy-email:hover, .hv-actions .btn-copy-email:focus-visible{ color:var(--ink); background:var(--surface); }
+.hv-actions .btn-copy-email .btn-icon{ width:18px; height:18px; }
 
 /* at a glance: four facts in one row, right under the hero */
 /* lives inside the hero grid: full width under both columns, right after the buttons on phones */
