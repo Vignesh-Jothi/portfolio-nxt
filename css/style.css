@@ -41,7 +41,7 @@ html[data-theme="light"]{
 *{ box-sizing:border-box; margin:0; padding:0; }
 html{ scroll-behavior:smooth; }
 html, body{
-  width:100%; max-width:100%; overflow-x:hidden; position:relative;
+  width:100%; max-width:100%; overflow-x:hidden; overflow-x:clip; position:relative;  /* clip, unlike hidden, keeps position:sticky working */
 }
 body{
   background:var(--bg); color:var(--ink); font-family:var(--font-sans);

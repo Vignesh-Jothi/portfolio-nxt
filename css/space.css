@@ -112,10 +112,27 @@ section{ padding:96px 0; }
 }
 
 /* ---------- tagline reveal ---------- */
-.tagline{ padding:96px 0; border-bottom:0; }
+.tagline{ padding:0 0 96px; border-bottom:0; }
+/* story: the line pins while scroll lights each word, then "by hand" is struck and "agent" lights up */
+.tagline-pin{ height:240vh; }
+.tagline-stage{ position:sticky; top:0; height:100vh; height:100svh; display:flex; align-items:center; isolation:isolate; }
+/* background follows the story: --p (0-1 scroll progress, set in space.js) grows the first glow; the payoff fades in a second, drifting one */
+.tagline-stage::before, .tagline-stage::after{ content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; }
+.tagline-stage::before{ background:radial-gradient(45% 55% at 25% 50%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 70%); opacity:var(--p, 0); transform:scale(calc(.7 + var(--p, 0) * .3)); }
+.tagline-stage::after{ background:radial-gradient(35% 45% at 65% 60%, color-mix(in srgb, var(--c2, var(--accent)) 16%, transparent), transparent 70%); opacity:0; transition:opacity 1s var(--ease); animation:taglineDrift 14s ease-in-out infinite alternate; }
+.tagline.resolved .tagline-stage::after{ opacity:1; }
+@keyframes taglineDrift{ to{ transform:translate(-6%, -8%) scale(1.08); } }
+.tagline--static .tagline-stage::before{ display:none; }
+.tagline--static .tagline-pin{ height:auto; }
+.tagline--static .tagline-stage{ position:static; height:auto; padding-top:96px; }
 .tagline-text{ font-size:48px; line-height:48px; font-weight:600; letter-spacing:-.03em; max-width:680px; text-wrap:balance; }  /* Heading 2 */
 .tagline .tw{ color:color-mix(in srgb, var(--ink) 30%, transparent); transition:color .5s var(--ease); }
 .tagline .tw.on{ color:var(--ink); }
+.tw-strike{ position:relative; white-space:nowrap; }
+.tw-strike::after{ content:''; position:absolute; left:-.05em; right:-.05em; top:52%; height:.08em; border-radius:99px; background:var(--c3, var(--accent-fg)); transform:scaleX(0); transform-origin:left; transition:transform .6s var(--ease); }
+.tagline.resolved .tw-strike::after{ transform:scaleX(1); }
+.tagline.resolved .tw-strike .tw{ color:color-mix(in srgb, var(--ink) 40%, transparent); }
+.tagline.resolved .tw.tw-agent{ color:var(--c2, var(--accent-fg)); }
 .about-copy{ max-width:680px; margin-top:48px; display:grid; gap:20px; }
 .about-copy p{ font-size:18px; line-height:28px; color:var(--muted); text-wrap:pretty; }
 @media (max-width:640px){ .tagline-text{ font-size:30px; line-height:36px; } .tagline-text br{ display:none; } }
@@ -327,6 +344,13 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
           mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='2' cy='2' r='1.25'/%3E%3C/svg%3E");
 }
 
+/* glow: main colour behind the headline, second colour behind the map; space.js fades it (--sv) as the hero scrolls away */
+.hero::after{
+  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; opacity:var(--sv, 1);
+  background:radial-gradient(40% 50% at 22% 35%, color-mix(in srgb, var(--c1, var(--accent)) 14%, transparent), transparent 70%),
+             radial-gradient(30% 45% at 80% 45%, color-mix(in srgb, var(--c2, var(--accent)) 12%, transparent), transparent 70%);
+}
+
 /* two columns on wide screens, map under the copy otherwise */
 .hv{ display:grid; grid-template-columns:1fr; gap:48px; align-items:center; }
 @media (min-width:1200px){
@@ -344,10 +368,10 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
 .sm-spoke.active line{ stroke:var(--accent); }
 /* a request travels from the core to each team */
 .sm-spoke circle{ fill:var(--accent); opacity:0; animation:flow 2.4s var(--ease) infinite; }
-.sm-spoke:nth-child(2) circle{ animation-delay:.5s; }
-.sm-spoke:nth-child(3) circle{ animation-delay:1s; }
+.sm-spoke:nth-child(2) circle{ animation-delay:.5s; fill:var(--c2, var(--accent)); }
+.sm-spoke:nth-child(3) circle{ animation-delay:1s; fill:var(--c3, var(--accent)); }
 .sm-spoke:nth-child(4) circle{ animation-delay:1.5s; }
-.sm-spoke:nth-child(5) circle{ animation-delay:2s; }
+.sm-spoke:nth-child(5) circle{ animation-delay:2s; fill:var(--c2, var(--accent)); }
 @keyframes flow{
   0%{ transform:translate(0, 0); opacity:0; }
   15%, 80%{ opacity:1; }
@@ -355,7 +379,7 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
 }
 
 .sm-core{
-  position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); width:44%;
+  position:absolute; left:50%; top:50%; transform:translate(-50%, -50%); width:38%;  /* narrow enough that the side nodes never overlap it */
   padding:16px 12px; border-radius:16px; border:1px solid var(--line); background:var(--surface);
   display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center;
 }
@@ -379,7 +403,7 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
 .sm-node:active{ transform:translate(-50%, -50%) scale(.98); }
 .sm-desc{ margin-top:16px; min-height:40px; text-align:center; color:var(--muted); font-size:14px; line-height:20px; text-wrap:balance; }
 .sm-desc b{ color:var(--ink); font-weight:600; }
-@media (max-width:640px){ .sysmap{ max-width:340px; } .sm-core{ width:48%; padding:12px 8px; } }
+@media (max-width:640px){ .sysmap{ max-width:340px; } .sm-core{ width:36%; padding:10px 6px; } .sm-core b{ font-size:14px; line-height:20px; } .sm-node{ font-size:13px; padding:6px 10px; min-height:36px; } }
 
 /* ============================================================
    INTERACTIVE MOTION — sections respond to hover and reveal
@@ -425,6 +449,18 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
   border-radius:9999px; border:2px solid var(--accent); animation:ring 2.4s var(--ease) infinite; pointer-events:none;
 }
 .tl-item.open .exp-detail{ animation:fadeIn .5s var(--ease) both; }
+
+/* scroll story (space.js sets --sv per section, --tp on the career line) */
+.story-sec{ position:relative; isolation:isolate; --gx:18%; --gc:var(--c1, var(--accent)); }
+.story-sec[data-glow="right"]{ --gx:82%; }
+.story-sec[data-tone="2"]{ --gc:var(--c2, var(--accent)); }
+.story-sec[data-tone="3"]{ --gc:var(--c3, var(--accent)); }
+.story-sec::before{ content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; background:radial-gradient(38% 55% at var(--gx) 45%, color-mix(in srgb, var(--gc) 13%, transparent), transparent 70%); opacity:var(--sv, 0); }
+.story-sec[data-glow="center"]::before{ background:radial-gradient(40% 60% at 42% 50%, color-mix(in srgb, var(--c1, var(--accent)) 18%, transparent), transparent 70%), radial-gradient(35% 55% at 60% 60%, color-mix(in srgb, var(--c2, var(--accent)) 16%, transparent), transparent 70%); }
+/* career: an accent line fills the timeline track as you read down it */
+.tl::before{ content:''; position:absolute; left:-2px; top:0; bottom:0; width:2px; background:var(--accent); transform-origin:top; transform:scaleY(var(--tp, 1)); }
+/* grids that are not lists still stagger in, using the shared nth-child delays above */
+.impact-stats.in > *, .ach-grid.in > *, .blog-grid.in > *{ animation:rise .6s var(--ease) both; }
 
 /* achievements: rows respond to hover */
 .ach-card{ transition:transform .3s var(--ease); }

@@ -19,6 +19,38 @@
     initPipeline();
     initFloatCta();
     initSystemMap();
+    initScrollStory();
+  }
+
+  /* ---------------- scroll story: each section's glow peaks when it is centred; the career line draws as you read ---------------- */
+  function initScrollStory() {
+    const secs = $$('#main section[id]').filter(s => !s.classList.contains('tagline'));  // the tagline runs its own story
+    const tl = $('#experience .tl'), hero = $('#top');
+    // the light swaps sides section by section, and the closing call to action gets a centred one
+    secs.forEach((s, i) => { s.classList.add('story-sec'); s.dataset.glow = s.id === 'resume' ? 'center' : (i % 2 ? 'right' : 'left'); s.dataset.tone = String(i % 3 + 1); });  // tone cycles the palette's three colours
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const vh = innerHeight, on = motionOK();
+      secs.forEach(s => {
+        const r = s.getBoundingClientRect();
+        // 1 with the section centred in the viewport, 0 once it is fully off screen
+        const d = Math.abs(r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);
+        s.style.setProperty('--sv', on ? Math.max(0, 1 - d).toFixed(3) : '0');
+      });
+      if (hero) {
+        // the hero starts on screen, so its glow simply fades as you scroll past it
+        const r = hero.getBoundingClientRect();
+        hero.style.setProperty('--sv', on ? Math.max(0, Math.min(1, r.bottom / r.height)).toFixed(3) : '1');
+      }
+      if (tl) {
+        const r = tl.getBoundingClientRect();
+        tl.style.setProperty('--tp', on ? Math.min(1, Math.max(0, (vh * 0.6 - r.top) / r.height)).toFixed(3) : '1');
+      }
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update);
+    update();
   }
 
   /* ---------------- projects ---------------- */
@@ -98,15 +130,37 @@
       part === '<br>' ? part : part.split(/(\s+)/).map(w => w.trim() ? `<span class="tw">${w}</span>` : w).join('')
     ).join('');
     const words = $$('.tw', el);
-    if (!motionOK() || !('IntersectionObserver' in window)) {
+    const section = el.closest('.tagline'), pin = $('#taglinePin');
+    // story beats: "by hand" is the problem (struck through), "agent" the answer (accent)
+    const by = words.find(w => w.textContent === 'by'), hand = words.find(w => w.textContent === 'hand');
+    if (by && hand) {
+      const strike = document.createElement('span');
+      strike.className = 'tw-strike';
+      by.before(strike);
+      strike.append(by, by.nextSibling, hand);  // keeps the space between the two words inside the strike
+    }
+    const agent = words.find(w => w.textContent === 'agent');
+    if (agent) agent.classList.add('tw-agent');
+
+    if (!motionOK() || !pin) {
+      section.classList.add('tagline--static', 'resolved');
       words.forEach(w => w.classList.add('on'));
       return;
     }
-    // the viewport's top 55% is the trigger zone, so words light up in reading order while scrolling down
-    const io = new IntersectionObserver(entries => entries.forEach(e => {
-      if (e.isIntersecting || e.boundingClientRect.top < 0) { e.target.classList.add('on'); io.unobserve(e.target); }
-    }), { rootMargin: '0px 0px -45% 0px' });
-    words.forEach(w => io.observe(w));
+    // scrubbed by scroll, so it plays backwards too: words light over the first 70%, the payoff lands at 80%
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const r = pin.getBoundingClientRect(), lead = innerHeight * 0.4;
+      const p = Math.min(1, Math.max(0, (lead - r.top) / (r.height - innerHeight + lead)));
+      const lit = Math.ceil(p / 0.7 * words.length);
+      words.forEach((w, i) => w.classList.toggle('on', i < lit));
+      section.classList.toggle('resolved', p >= 0.8);
+      section.style.setProperty('--p', p.toFixed(3));  // drives the background glow
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update);
+    update();
   }
 
   /* ---------------- numbers count up once when they scroll into view ---------------- */
