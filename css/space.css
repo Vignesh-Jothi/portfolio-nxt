@@ -274,6 +274,7 @@ section{ padding:96px 0; }
 .hv-title .hl{
   display:inline-block; background:linear-gradient(90deg, var(--heading-from), var(--heading-to));
   -webkit-background-clip:text; background-clip:text; color:transparent;
+  padding-bottom:.14em; margin-bottom:-.14em;   /* the clipped gradient stops at the line box; give g, p, y room for their tails */
   animation:heroIn .8s var(--ease) both;
 }
 .hv-title .hl:nth-of-type(2){ animation-delay:80ms; }
@@ -351,6 +352,11 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
              radial-gradient(30% 45% at 80% 45%, color-mix(in srgb, var(--c2, var(--accent)) 12%, transparent), transparent 70%);
 }
 
+/* glossy sphere field behind the whole page (js/gravity-field.js); its script sets the opacity per scroll stage */
+.gravity-field{ position:fixed; inset:0; z-index:-1; width:100%; height:100%; pointer-events:none; opacity:0; transition:opacity .4s linear; }
+/* the alternating bands go see-through so the field reads through them */
+html.gravity-on section.alt, html.gravity-on #contact{ background:color-mix(in srgb, var(--bg-alt) 70%, transparent); }
+
 /* two columns on wide screens, map under the copy otherwise */
 .hv{ display:grid; grid-template-columns:1fr; gap:48px; align-items:center; }
 @media (min-width:1200px){
@@ -365,16 +371,28 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
 .sm-stage{ position:relative; aspect-ratio:1; }
 .sm-lines{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
 .sm-spoke line{ stroke:var(--line); stroke-width:1.5; vector-effect:non-scaling-stroke; transition:stroke .3s var(--ease); }
-.sm-spoke.active line{ stroke:var(--accent); }
-/* a request travels from the core to each team */
-.sm-spoke circle{ fill:var(--accent); opacity:0; animation:flow 2.4s var(--ease) infinite; }
-.sm-spoke:nth-child(2) circle{ animation-delay:.5s; fill:var(--c2, var(--accent)); }
-.sm-spoke:nth-child(3) circle{ animation-delay:1s; fill:var(--c3, var(--accent)); }
-.sm-spoke:nth-child(4) circle{ animation-delay:1.5s; }
-.sm-spoke:nth-child(5) circle{ animation-delay:2s; fill:var(--c2, var(--accent)); }
-@keyframes flow{
+/* the selected path carries a moving dash, so the work visibly flows along it */
+.sm-spoke.active line{ stroke:var(--accent); stroke-dasharray:3 2.5; animation:dash 1s linear infinite; }
+@keyframes dash{ to{ stroke-dashoffset:-5.5; } }
+/* idle: small pieces of work keep drifting in from every node, staggered */
+.sm-spoke .sm-in{ fill:var(--muted); opacity:0; animation:take-in 3.6s var(--ease) infinite; }
+.sm-spoke:nth-child(2) .sm-in{ animation-delay:.6s; } .sm-spoke:nth-child(3) .sm-in{ animation-delay:1.2s; }
+.sm-spoke:nth-child(4) .sm-in{ animation-delay:1.8s; } .sm-spoke:nth-child(5) .sm-in{ animation-delay:2.4s; }
+.sm-spoke:nth-child(6) .sm-in{ animation-delay:3s; }
+.sm-spoke .sm-out{ fill:var(--c2, var(--accent)); opacity:0; }
+/* selected: the request goes in, the agent works on it, the result comes back out */
+.sm-spoke.active .sm-in{ fill:var(--accent); animation:take-in 2.6s var(--ease) infinite; animation-delay:0s; }
+.sm-spoke.active .sm-out{ animation:give-back 2.6s var(--ease) infinite; }
+@keyframes take-in{
   0%{ transform:translate(0, 0); opacity:0; }
-  15%, 80%{ opacity:1; }
+  8%{ opacity:.9; }
+  38%{ transform:translate(calc(var(--dx) * -1), calc(var(--dy) * -1)); opacity:.9; }
+  42%, 100%{ transform:translate(calc(var(--dx) * -1), calc(var(--dy) * -1)); opacity:0; }
+}
+@keyframes give-back{
+  0%, 55%{ transform:translate(0, 0); opacity:0; }
+  60%{ opacity:1; }
+  92%{ transform:translate(var(--dx), var(--dy)); opacity:1; }
   100%{ transform:translate(var(--dx), var(--dy)); opacity:0; }
 }
 
@@ -390,6 +408,11 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
 @keyframes pulse{ 0%{ opacity:.6; transform:scale(1); } 100%{ opacity:0; transform:scale(1.2); } }
 .sm-core b{ font-size:16px; line-height:24px; font-weight:600; }      /* Title 3 */
 .sm-core span{ font-size:12px; line-height:16px; color:var(--muted); } /* Caption 5 */
+/* the core lights up while the agent works, between the request arriving and the result leaving */
+.sysmap.running .sm-core{ animation:think 2.6s var(--ease) infinite; }
+@keyframes think{ 0%, 36%, 100%{ box-shadow:0 0 0 0 transparent; } 46%{ box-shadow:0 0 0 1px var(--accent-line), 0 0 28px var(--glow); } }
+.sm-run{ transition:opacity .25s var(--ease); }
+.sm-run.swap{ opacity:0; }
 
 .sm-node{
   position:absolute; left:var(--x); top:var(--y); transform:translate(-50%, -50%);
@@ -403,7 +426,7 @@ a[download]:hover .btn-icon{ transform:translateY(2px); }
 .sm-node:active{ transform:translate(-50%, -50%) scale(.98); }
 .sm-desc{ margin-top:16px; min-height:40px; text-align:center; color:var(--muted); font-size:14px; line-height:20px; text-wrap:balance; }
 .sm-desc b{ color:var(--ink); font-weight:600; }
-@media (max-width:640px){ .sysmap{ max-width:340px; } .sm-core{ width:36%; padding:10px 6px; } .sm-core b{ font-size:14px; line-height:20px; } .sm-node{ font-size:13px; padding:6px 10px; min-height:36px; } }
+@media (max-width:640px){ .sysmap{ max-width:340px; } .sm-core{ width:36%; padding:10px 6px; } .sm-core b{ font-size:14px; line-height:20px; } .sm-node{ font-size:12px; padding:6px 10px; min-height:34px; } .sm-core span{ font-size:11px; line-height:14px; } }
 
 /* ============================================================
    INTERACTIVE MOTION — sections respond to hover and reveal
