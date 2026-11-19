@@ -134,6 +134,37 @@ const PROJECTS = [
     hardest: "Moving live agent tool wiring to MCP without disrupting customers."
   },
   {
+    id: "chat", title: "Real-time Chat Platform",
+    category: ["platform", "ai"],
+    tagline: "Internal chat product for Sales, Ops and Support: backend, web UI and a mobile SDK.",
+    metric: { value: "3B+", label: "messages sent and received" },
+    tech: ["Real-time messaging", "AI summaries", "Mobile SDK", "WhatsApp gateway"],
+    problem: "Sales, operations and customer support needed one system to talk with customers and each other, across web, the mobile apps and WhatsApp.",
+    solution: "A complete chat product. The backend handles real-time presence, typing indicators, message receipts, read tracking, chat assignment and ownership routing, with AI layers that summarise conversations and track response-time metrics. The web UI adds canned responses, file uploads, AI tone suggestions, per-conversation context panels and agent metrics. For mobile it ships as a standalone SDK with an imperative API that opens the chat surface on demand, with no changes to host app navigation.",
+    impact: ["400 concurrent chats on minimal infrastructure", "3B+ messages sent and received", "One SDK shipped across the consumer app and the enterprise travel app", "WhatsApp conversations flow into the same system via a self-hosted gateway", "AI summaries and response-time metrics on every conversation"],
+    flow: ["Customer message (app / web / WhatsApp)", "Assignment and ownership routing", "Agent replies in real time", "AI summary and response metrics"]
+  },
+  {
+    id: "leads", title: "Lead Allocation Engine",
+    category: ["platform", "automation"],
+    tagline: "Rule-based routing that assigns every new customer to the right agent in real time.",
+    tech: ["Laravel queue jobs", "Priority rule engine", "Multi-layer capacity management", "Rolling window rate limiting"],
+    problem: "Incoming customers had to reach the right sales, operations, visa and on-trip agents based on destination, profile, language and availability, in real time and at scale.",
+    solution: "A prioritised rule engine that matches customer and trip attributes (departure city, destination, channel, repeat status and more) using exact values or numeric comparisons. Each rule points to a team or team group, and can jump to the next rule or fall back to a secondary team when that team is full. Before assigning, the engine checks the day's roster, the concurrent lead cap, weekly and monthly capacity, and a rolling time window that stops burst over-allocation, with thresholds overridable per destination region.",
+    impact: ["Customer language matched to agent language capability", "Returning customers routed back to their previous agent where possible", "Every decision written to a full audit trail, with a dry-run mode for testing rule changes"],
+    flow: ["New lead (queued job)", "Match prioritised rules", "Roster check", "Concurrent and weekly/monthly caps", "Rolling window limit", "Assign + audit log"]
+  },
+  {
+    id: "vortex", title: "Vortex Git Flow Automation",
+    category: ["automation", "ai"],
+    tagline: "Web app that automates Git Flow branch management across GitHub repositories.",
+    tech: ["GitHub API", "MCP", "Slack", "Browser tests"],
+    problem: "Git Flow branch management across many GitHub repositories (pull requests, merge conflicts, releases and hotfixes) was manual work.",
+    solution: "A web application that creates pull requests automatically, detects merge conflicts and retries, runs the release pipeline, handles hotfixes and posts Slack notifications. An MCP endpoint lets AI agents work with the release pipeline directly.",
+    impact: ["Automated PR creation, conflict retry, releases and hotfixes", "AI agents can drive the release pipeline over MCP", "Three-tier tests: unit, HTTP integration, and a browser suite covering the release flow end to end"],
+    flow: ["Release or hotfix triggered", "PRs created", "Conflict detection and retry", "Merge", "Slack notification"]
+  },
+  {
     id: "plato", title: "Plato Internal CRM",
     category: ["platform"],
     tagline: "One backend for CX, Sales, Product, Visa and Finance.",
