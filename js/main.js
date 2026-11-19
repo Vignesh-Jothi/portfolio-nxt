@@ -336,6 +336,7 @@ if(hamburgerBtn && mobileNav){
 }
 
 /* ---------- active section highlight in nav ---------- */
+const HOME_TITLE = document.title;  // restored when leaving the blog
 const navLinks = document.querySelectorAll('#mainNav a[href^="#"], #mobileNav a[href^="#"]');
 const navSections = Array.from(document.querySelectorAll('#mainNav a[href^="#"]')).map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
 if(navSections.length && 'IntersectionObserver' in window){
@@ -450,7 +451,7 @@ function ensureToast() {
   }
   return t;
 }
-function showToast(msg = 'Copied!') {
+function showToast(msg = 'Copied') {
   const t = ensureToast();
   t.textContent = msg; t.classList.add('show');
   clearTimeout(t._timer);
@@ -628,7 +629,7 @@ function wireCodeCopy(container) {
       const code = block.querySelector('code');
       if (!code) return;
       await copyToClipboard(code.innerText);
-      btn.classList.add('copied'); btn.querySelector('span').textContent = 'Copied!';
+      btn.classList.add('copied'); btn.querySelector('span').textContent = 'Copied';
       setTimeout(() => { btn.classList.remove('copied'); btn.querySelector('span').textContent = 'Copy'; }, 1800);
     });
   });
@@ -741,7 +742,7 @@ function showPost(slug) {
   if (shareBtn) {
     shareBtn.onclick = async () => {
       await copyToClipboard(window.location.href);
-      if (shareLabel) shareLabel.textContent = 'Copied!';
+      if (shareLabel) shareLabel.textContent = 'Copied';
       shareBtn.classList.add('copied');
       showToast(`Share link copied for "${post.title}"!`);
       setTimeout(() => { shareBtn.classList.remove('copied'); if (shareLabel) shareLabel.textContent = 'Share'; }, 2000);
@@ -844,7 +845,7 @@ function showPortfolio(targetHash) {
 
   if (isBlogCurrentlyVisible) {
     transitionTo(viewPortfolio, viewBlog, () => {
-      document.title = 'Vignesh J — Full-Stack & Software Systems Engineer';
+      document.title = HOME_TITLE;
       setTimeout(performScroll, 60);
     });
   } else {

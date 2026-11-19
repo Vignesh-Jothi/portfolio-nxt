@@ -65,7 +65,7 @@
       window.dispatchEvent(new Event('motionchange'));
     });
     // keep the panel in sync when the sun/moon button is used
-    document.addEventListener('click', (e) => { if (e.target.closest('#themeToggle')) setTimeout(sync, 0); });
+    document.addEventListener('click', (e) => { if (e.target.closest('#themeToggle')) { swap(() => {}); setTimeout(sync, 0); } });
     sync();
   }
 

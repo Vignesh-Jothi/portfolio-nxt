@@ -75,7 +75,7 @@ svg{
   z-index:50;
   background:var(--bg);
   border-bottom:1px solid var(--line);
-  font-family:'Plus Jakarta Sans',sans-serif;
+  font-family:'Manrope',sans-serif;
   transition:background .2s ease, border-color .2s ease;
 }
 
@@ -91,7 +91,7 @@ svg{
 }
 
 .topbar .brand{
-  font-family:'Bricolage Grotesque',sans-serif;
+  font-family:'Manrope',sans-serif;
   font-weight:700;
   font-size:16px;
   background:none;
@@ -261,7 +261,7 @@ html[data-theme="light"] .icon-moon{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  font-family:'Plus Jakarta Sans',sans-serif;
+  font-family:'Manrope',sans-serif;
   font-size:13px;
   font-weight:600;
   text-decoration:none;
@@ -319,7 +319,7 @@ header.resume-header{
 }
 
 header.resume-header h1{
-  font-family:'Bricolage Grotesque',sans-serif;
+  font-family:'Manrope',sans-serif;
   font-size:42px;
   font-weight:700;
   letter-spacing:-0.02em;
@@ -327,7 +327,7 @@ header.resume-header h1{
 }
 
 header.resume-header .resume-title{
-  font-family:'Plus Jakarta Sans',sans-serif;
+  font-family:'Manrope',sans-serif;
   font-size:16px;
   color:var(--muted);
   margin-bottom:14px;
@@ -382,7 +382,7 @@ header.resume-header .resume-title{
 
 .section-title{
   background:var(--section-bg);
-  font-family:'Bricolage Grotesque',sans-serif;
+  font-family:'Manrope',sans-serif;
   font-size:15px;
   font-weight:700;
   letter-spacing:0.04em;
@@ -427,7 +427,7 @@ header.resume-header .resume-title{
 }
 
 .entry-title{
-  font-family:'Bricolage Grotesque',sans-serif;
+  font-family:'Manrope',sans-serif;
   font-weight:700;
   font-size:14.5px;
   display: flex;
@@ -451,7 +451,7 @@ header.resume-header .resume-title{
 }
 
 .entry-meta{
-  font-family:'JetBrains Mono',monospace;
+  font-family:'Geist Mono',monospace;
   text-align:right;
   color:var(--muted);
   font-size:12px;
@@ -481,7 +481,7 @@ header.resume-header .resume-title{
 
 .skill-key{
   display:block;
-  font-family:'Plus Jakarta Sans',sans-serif;
+  font-family:'Manrope',sans-serif;
   font-weight:700;
   font-size:11.5px;
   text-transform:uppercase;
@@ -604,8 +604,8 @@ header.resume-header .resume-title{
    SHARED THEME + INTERACTIONS (matches the portfolio)
    ============================================================ */
 :root{
-  --font-sans:'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+  --font-sans:'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:'Geist Mono', ui-monospace, monospace;
   --on-accent:#fff;
   --accent-gradient:var(--accent);
   --surface-2:#ecebe8;
@@ -745,7 +745,7 @@ html[data-motion="off"] .section, html[data-motion="off"] .rz-toast{ transition:
 
   /* header card */
   header.resume-header{ display:grid; grid-template-columns:auto 1fr; gap:6px 20px; align-items:center; padding-bottom:24px; border-bottom:1px solid var(--line); margin-bottom:28px; }
-  .rz-avatar{ grid-row:span 2; width:76px; height:76px; border-radius:22px; display:grid; place-items:center; background:var(--c1); color:var(--on-tone); font:800 26px 'Bricolage Grotesque', sans-serif; }
+  .rz-avatar{ grid-row:span 2; width:76px; height:76px; border-radius:22px; display:grid; place-items:center; background:var(--c1); color:var(--on-tone); font:800 26px 'Manrope', sans-serif; }
   header.resume-header h1{ font-size:40px; line-height:1.05; margin:0; }
   header.resume-header .resume-title{ margin:0; font-size:15px; }
   header.resume-header .contact-row{ grid-column:1 / -1; font-family:var(--font-sans); }
@@ -756,7 +756,7 @@ html[data-motion="off"] .section, html[data-motion="off"] .rz-toast{ transition:
 
   .rz-stats{ grid-column:1 / -1; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:16px; }
   .rz-stat{ padding:12px 14px; border-radius:14px; background:var(--surface); border:1px solid var(--line); }
-  .rz-stat b{ display:block; font:800 24px/1.1 'Bricolage Grotesque', sans-serif; }
+  .rz-stat b{ display:block; font:800 24px/1.1 'Manrope', sans-serif; }
   .rz-stat span{ font-size:12px; color:var(--muted); }
   .rz-stat:nth-child(3n+1) b{ color:var(--c1); }
   .rz-stat:nth-child(3n+2) b{ color:var(--c2); }
@@ -825,3 +825,12 @@ html[data-motion="off"] .section, html[data-motion="off"] .rz-toast{ transition:
 /* project one-line description */
 .entry-desc{ font-style:italic; color:var(--muted); font-size:13px; margin:-2px 0 6px; }
 @media screen{ .entry-desc{ font-style:normal; font-size:14px; } }
+
+/* landing-page-design skill: plain section titles, no counters, badge or stat tiles, no italics */
+@media screen{
+  .section-title::before{ display:none; }
+  .section-title{ font-size:20px; line-height:28px; letter-spacing:0; text-transform:none; font-weight:600; }
+  .rz-avatar, .rz-stats{ display:none; }
+  header.resume-header{ grid-template-columns:1fr; }
+  .entry-desc{ font-style:normal; }
+}
