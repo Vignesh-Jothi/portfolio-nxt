@@ -73,7 +73,8 @@ function start() {
     const white = new THREE.Color('#ffffff');
     renderer.toneMappingExposure = dark ? 1.1 : 1.15;
     for (const b of balls) {
-      const w = b.glass ? 0.4 : (dark ? 0 : 0.2) + b.tint * (dark ? 0.2 : 0.3);
+      // like gravity/index.html: a share of near-white spheres against fully saturated ones, not one pastel wash
+      const w = b.glass ? 0.4 : b.tint < 0.4 ? (dark ? 0.7 : 0.88) : 0;
       b.stages = [0, 1, 2].map(k => tones[(b.tone + k) % 3].clone().lerp(white, w));
     }
     paint(state.progress);
@@ -98,9 +99,18 @@ function start() {
     const cx = wide() ? bounds.w * 0.52 : bounds.w * 0.5, cy = wide() ? bounds.h * 0.05 : bounds.h * 0.5;
     const rx = wide() ? bounds.w * 0.3 : bounds.w * 0.45, ry = wide() ? bounds.h * 0.55 : bounds.h * 0.3;
     const hs = Math.min(bounds.w * (small ? 0.68 : 0.5), bounds.h * 0.6);
+    // wide screens: the spheres ring the hero system map instead of sitting under it, so the map stays readable
+    const map = wide() && document.getElementById('sysmap')?.querySelector('.sm-stage');
+    const mr = map && map.getBoundingClientRect();
+    const ring = mr && mr.width ? {
+      x: ((mr.left + mr.width / 2) / innerWidth * 2 - 1) * bounds.w,
+      y: -((mr.top + scrollY + mr.height / 2) / innerHeight * 2 - 1) * bounds.h,   // hero is at the top of the page
+      r: mr.width / innerWidth * bounds.w * 0.98,   // past the outer nodes (they sit at 76% of the map's half width)
+    } : null;
     balls.forEach((b, i) => {
       const a = Math.random() * 6.28, d = Math.sqrt(Math.random());
-      b.home.set(cx + Math.cos(a) * d * rx, cy + Math.sin(a) * d * ry, (Math.random() - 0.5) * 2.4);
+      if (ring) { const rr = ring.r + b.r + Math.random() * ring.r * 0.55; b.home.set(ring.x + Math.cos(a) * rr, ring.y + Math.sin(a) * rr, (Math.random() - 0.5) * 2.4); }
+      else b.home.set(cx + Math.cos(a) * d * rx, cy + Math.sin(a) * d * ry, (Math.random() - 0.5) * 2.4);
       let x, y;   // rejection-sample the filled heart (x²+y²−1)³ − x²y³ ≤ 0
       // every other sphere goes to the rim, so the outline reads even with few spheres
       const rim = i % 5 < 3;   // 60% on the rim
@@ -156,7 +166,7 @@ function start() {
     else mouse.speed *= 0.9;
     mouse.lx = mouse.x; mouse.ly = mouse.y;
     const repR = 3.4 * (mouse.down ? 1.4 : 1), repF = 0.05 * (mouse.down ? 1.7 : 1) * (1 + mouse.speed * 3.2);
-    const damp = Math.pow(lerp(0.91, 0.975, dropF * (1 - shapeF)), s);
+    const damp = Math.pow(lerp(0.91, 0.975, dropF * (1 - shapeF)), s);   // lighter drag while falling so the bounces read
     const left = heroF > 0.5 ? bounds.left : -bounds.w;
 
     for (const b of balls) {
@@ -175,8 +185,9 @@ function start() {
       v.multiplyScalar(damp);
       p.addScaledVector(v, s);
       if (flyF < 0.5) {
-        const xl = bounds.w - b.r - 0.2, xmin = Math.max(-xl, left + b.r), floor = -bounds.h + b.r;
+        const xl = bounds.w - b.r - 0.2, xmin = Math.max(-xl, left + b.r), floor = -bounds.h + b.r, ceil = bounds.h - b.r - 0.2;
         if (p.x > xl) { p.x = xl; v.x *= -0.3; } else if (p.x < xmin) { p.x = xmin; v.x *= -0.3; }
+        if (p.y > ceil + (heroF > 0.5 ? 0 : 6)) { p.y = ceil; v.y *= -0.3; }   // ceiling in the hero, as in gravity/index.html
         if (p.y < floor) { p.y = floor; v.y = Math.abs(v.y) * (0.3 + 0.35 * dropF); }
       }
       if (flyF < 0.02 && Math.abs(p.z) > 2) { p.z = Math.sign(p.z) * 2; v.z *= -0.3; }
@@ -190,6 +201,14 @@ function start() {
       const d = Math.sqrt(d2), o = (min - d) * cs / d, tm = a.m + c.m;
       a.p.x -= dx * o * c.m / tm; a.p.y -= dy * o * c.m / tm; a.p.z -= dz * o * c.m / tm;
       c.p.x += dx * o * a.m / tm; c.p.y += dy * o * a.m / tm; c.p.z += dz * o * a.m / tm;
+      // velocity impulse along the contact normal, as in gravity/index.html: without it a pile keeps sinking and jiggling
+      const nx = dx / d, ny = dy / d, nz = dz / d;
+      const vn = (c.v.x - a.v.x) * nx + (c.v.y - a.v.y) * ny + (c.v.z - a.v.z) * nz;
+      if (vn < 0) {
+        const J = -1.02 * vn / (1 / a.m + 1 / c.m) / 4;
+        a.v.x -= J * nx / a.m; a.v.y -= J * ny / a.m; a.v.z -= J * nz / a.m;
+        c.v.x += J * nx / c.m; c.v.y += J * ny / c.m; c.v.z += J * nz / c.m;
+      }
     }
   }
 

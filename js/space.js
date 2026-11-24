@@ -14,8 +14,10 @@
     initProjects();
     countUp($$('.impact-stats dd'));
     initTagline();
+    initStory();
     initSkills();
     initExperience();
+    initSteps();
     initPipeline();
     initFloatCta();
     initSystemMap();
@@ -132,14 +134,15 @@
     const words = $$('.tw', el);
     const section = el.closest('.tagline'), pin = $('#taglinePin');
     // story beats: "by hand" is the problem (struck through), "agent" the answer (accent)
-    const by = words.find(w => w.textContent === 'by'), hand = words.find(w => w.textContent === 'hand');
+    const word = (t) => words.find(w => w.textContent.replace(/[^\w]/g, '') === t);  // ignores trailing punctuation
+    const by = word('by'), hand = word('hand');
     if (by && hand) {
       const strike = document.createElement('span');
       strike.className = 'tw-strike';
       by.before(strike);
       strike.append(by, by.nextSibling, hand);  // keeps the space between the two words inside the strike
     }
-    const agent = words.find(w => w.textContent === 'agent');
+    const agent = word('agent');
     if (agent) agent.classList.add('tw-agent');
 
     if (!motionOK() || !pin) {
@@ -157,6 +160,34 @@
       words.forEach((w, i) => w.classList.toggle('on', i < lit));
       section.classList.toggle('resolved', p >= 0.8);
       section.style.setProperty('--p', p.toFixed(3));  // drives the background glow
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update);
+    update();
+  }
+
+  /* ---------------- about story: each chapter lights up like the tagline, scrubbed by scroll ---------------- */
+  function initStory() {
+    const items = $$('.story-item');
+    if (!items.length || !motionOK()) return;   // default markup is fully lit
+    const chapters = items.map(li => {
+      const h = $('h3', li);
+      h.innerHTML = h.textContent.split(/(\s+)/).map(w => w.trim() ? `<span class="tw">${esc(w)}</span>` : w).join('');
+      return { li, words: $$('.tw', h) };
+    });
+    $('.story').classList.add('story--live');
+    let queued = false;
+    const update = () => {
+      queued = false;
+      // a chapter's headline lights word by word while its top travels from 85% to 45% of the screen
+      const from = innerHeight * 0.85, to = innerHeight * 0.45;
+      for (const { li, words } of chapters) {
+        const p = Math.min(1, Math.max(0, (from - li.getBoundingClientRect().top) / (from - to)));
+        const lit = Math.ceil(p * words.length);
+        words.forEach((w, i) => w.classList.toggle('on', i < lit));
+        li.classList.toggle('lit', p > 0);
+        li.classList.toggle('resolved', p >= 1);
+      }
     };
     addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
     addEventListener('resize', update);
@@ -187,30 +218,56 @@
   function cycle(wrap, nodes, show, ms = 1800) {
     let i = 0, timer = null, touched = false;
     const go = (n) => { i = n; show(n); };
-    const stop = () => { clearInterval(timer); timer = null; };
+    const stop = () => { clearInterval(timer); timer = null; wrap.classList.remove('is-cycling'); };
     nodes.forEach((b, k) => ['click', 'mouseenter', 'focus'].forEach(ev =>
       b.addEventListener(ev, () => { touched = true; stop(); go(k); })));
     go(0);
     if (!motionOK() || !('IntersectionObserver' in window)) return;
     new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !touched && !timer) timer = setInterval(() => go((i + 1) % nodes.length), ms);
+      if (e.isIntersecting && !touched && !timer) { timer = setInterval(() => go((i + 1) % nodes.length), ms); wrap.classList.add('is-cycling'); wrap.style.setProperty('--cycle', ms + 'ms'); go(i); }
       if (!e.isIntersecting) stop();
     }, { threshold: 0.4 }).observe(wrap);
+  }
+
+  /* ---------------- how I build: the line draws with scroll and lights each step it reaches ---------------- */
+  function initSteps() {
+    const list = $('#how .steps');
+    if (!list || !motionOK()) return;   // default markup is fully lit
+    const items = $$(':scope > li', list);
+    list.classList.add('steps--live');
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const r = list.getBoundingClientRect();
+      // 0 when the list's top is at 85% of the screen, 1 once it reaches 45%
+      const p = Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (innerHeight * 0.4)));
+      list.style.setProperty('--sp', p.toFixed(3));
+      items.forEach((li, k) => li.classList.toggle('lit', p > 0 && p >= k / (items.length - 1) - 0.001));
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update);
+    update();
   }
 
   /* ---------------- AI pipeline ---------------- */
   function initPipeline() {
     const wrap = $('#pipeline'), desc = $('#pipeDesc');
     if (!wrap) return;
-    const nodes = $$('.pipe-node', wrap);
+    const nodes = $$('.pipe-node', wrap), hint = $('.pipe-hint', wrap);
     cycle(wrap, nodes, (n) => {
       nodes.forEach((b, k) => {
-        b.closest('li').classList.toggle('done', k < n);
+        const li = b.closest('li');
+        li.classList.toggle('done', k < n);
+        // restart the connector fill: it runs from the current node toward the next for one cycle
+        li.classList.remove('current'); if (k === n) { void li.offsetWidth; li.classList.add('current'); }
         b.classList.toggle('active', k === n);
         b.setAttribute('aria-pressed', String(k === n));
       });
-      desc.textContent = nodes[n].dataset.desc;
+      desc.innerHTML = `<span class="pipe-count">Step ${n + 1} of ${nodes.length} · ${esc(nodes[n].textContent)}</span>${esc(nodes[n].dataset.desc)}`;
+      desc.classList.remove('swap'); void desc.offsetWidth; desc.classList.add('swap');
     });
+    // cycle() stops auto-play for good once a step is picked; say so
+    if (hint) nodes.forEach(b => ['click', 'mouseenter', 'focus'].forEach(ev => b.addEventListener(ev, () => { hint.textContent = 'Paused. Pick any step to read it.'; })));
   }
 
   /* ---------------- hero system map ---------------- */
