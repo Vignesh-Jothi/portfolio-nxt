@@ -134,14 +134,15 @@
     const words = $$('.tw', el);
     const section = el.closest('.tagline'), pin = $('#taglinePin');
     // story beats: "by hand" is the problem (struck through), "agent" the answer (accent)
-    const by = words.find(w => w.textContent === 'by'), hand = words.find(w => w.textContent === 'hand');
+    const word = (t) => words.find(w => w.textContent.replace(/[^\w]/g, '') === t);  // ignores trailing punctuation
+    const by = word('by'), hand = word('hand');
     if (by && hand) {
       const strike = document.createElement('span');
       strike.className = 'tw-strike';
       by.before(strike);
       strike.append(by, by.nextSibling, hand);  // keeps the space between the two words inside the strike
     }
-    const agent = words.find(w => w.textContent === 'agent');
+    const agent = word('agent');
     if (agent) agent.classList.add('tw-agent');
 
     if (!motionOK() || !pin) {
