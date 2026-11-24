@@ -156,7 +156,7 @@ function start() {
     else mouse.speed *= 0.9;
     mouse.lx = mouse.x; mouse.ly = mouse.y;
     const repR = 3.4 * (mouse.down ? 1.4 : 1), repF = 0.05 * (mouse.down ? 1.7 : 1) * (1 + mouse.speed * 3.2);
-    const damp = Math.pow(lerp(0.91, 0.975, dropF * (1 - shapeF)), s);
+    const damp = Math.pow(lerp(0.91, 0.94, dropF * (1 - shapeF)), s);   // higher let the settled pile jiggle
     const left = heroF > 0.5 ? bounds.left : -bounds.w;
 
     for (const b of balls) {
@@ -177,7 +177,7 @@ function start() {
       if (flyF < 0.5) {
         const xl = bounds.w - b.r - 0.2, xmin = Math.max(-xl, left + b.r), floor = -bounds.h + b.r;
         if (p.x > xl) { p.x = xl; v.x *= -0.3; } else if (p.x < xmin) { p.x = xmin; v.x *= -0.3; }
-        if (p.y < floor) { p.y = floor; v.y = Math.abs(v.y) * (0.3 + 0.35 * dropF); }
+        if (p.y < floor) { p.y = floor; v.y = Math.abs(v.y) * (0.3 + 0.1 * dropF); }
       }
       if (flyF < 0.02 && Math.abs(p.z) > 2) { p.z = Math.sign(p.z) * 2; v.z *= -0.3; }
     }
