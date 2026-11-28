@@ -1,6 +1,6 @@
 /* ============================================================
    ADMIN — passcode-protected blog management.
-   Depends on: ../js/data.js (ADMIN_PASSCODE)
+   Depends on: ../js/data.js (ADMIN_PASSCODE_HASH)
    ============================================================ */
 
 (function(){
@@ -121,8 +121,10 @@
     backdrop.querySelector('#pwCancel').addEventListener('click', ()=>backdrop.remove());
     backdrop.querySelector('#pwSubmit').addEventListener('click', tryUnlock);
     pwInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') tryUnlock(); });
-    function tryUnlock(){
-      if(pwInput.value === ADMIN_PASSCODE){
+    async function tryUnlock(){
+      const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pwInput.value));
+      const hex = [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join('');
+      if(hex === ADMIN_PASSCODE_HASH){
         isAdmin = true;
         backdrop.remove();
         adminBtn.textContent = '🔓 New Post';

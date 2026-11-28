@@ -84,6 +84,9 @@ const TESTIMONIALS = [
 ];
 
 const ACHIEVEMENTS = [
+  { title: "June 2026 Champ", date: "PickYourTrail, Jul 2026", description: "Named on the monthly winner board." },
+  { title: "FY25 Go For Glory award", date: "PickYourTrail, Sep 2025", description: "Company award for FY25." },
+  { title: "Trippie AI containment: ~40% to 70.5%", date: "PickYourTrail, Sep 2026", description: "Proactive dialer call summaries, per-destination prompt rewrites and chat reviews in the Test Arena lifted the share of chats Trippie resolves on its own to 60%+, peaking at 70.5%." },
   { title: "Rookie of the Year", date: "PickYourTrail", description: "For delivering the Visa Allocation Dashboard, Auto-Quote Engine and Instant Voucher service, and supporting refund systems during launch." },
   { title: "Top Contributor: 10+ modules, 50+ features", date: "PickYourTrail", description: "Ranked #1 contributor across Plato CRM and Locker Room HRM, owning delivery from RFC to production." },
   { title: "Trippie AI launches shipped in under a week", date: "PickYourTrail", description: "Built a pre-production test environment for Trip Custodians and moved agent tool wiring to MCP, reducing escalation failures and speeding up responses." },
@@ -93,8 +96,8 @@ const ACHIEVEMENTS = [
 
 const CERTIFICATIONS = [];
 
-/* CHANGE THIS to your own passcode before sharing this file. */
-const ADMIN_PASSCODE = "vignesh2026";
+/* SHA-256 of the admin passcode. To change it: printf '%s' 'new-passcode' | shasum -a 256 */
+const ADMIN_PASSCODE_HASH = "f967a7652a037567cab6abff86fb23c98480044b66bb0901a761a6c6d4187df0";
 
 /* ============================================================
    PROJECTS — cards + case study modal.
@@ -109,7 +112,7 @@ const PROJECTS = [
     tech: ["OpenAI API", "MCP", "Queues", "Laravel"],
     problem: "Manual post call logging was creating overhead for CX and Sales teams, and CRM stages were moved by hand.",
     solution: "An AI agent workflow using the OpenAI API and Model Context Protocol (MCP) tool wiring that summarises each call and moves the CRM pipeline automatically.",
-    impact: ["Call summaries without manual logging", "CRM pipeline transitions happen on their own", "CX and Sales spend time with customers, not forms"],
+    impact: ["Call summaries without manual logging", "CRM pipeline transitions happen on their own", "CX and Sales spend time with customers, not forms", "Team launch (ALSM): AI reads the first call and moves the lead to SQL or Good Lead"],
     flow: ["Call ends", "Queued job", "LLM summary", "MCP stage rules", "CRM updated"]
   },
   {
@@ -119,18 +122,18 @@ const PROJECTS = [
     tech: ["Voice agents", "LLM orchestration", "Webhooks", "Laravel"],
     problem: "Customer follow ups, lead qualification and trip assistance were all handled manually.",
     solution: "Backend workflows that power AI voice automation, using LLM agent tooling and orchestration to run these touchpoints end to end.",
-    impact: ["Follow ups and lead qualification run automatically", "Trip assistance available without a person on every call", "Agents hand off to people when needed"],
+    impact: ["Follow ups and lead qualification run automatically", "Trip assistance available without a person on every call", "Agents hand off to people when needed", "Team launch: AI makes the first qualifying call, with 17 AI-qualified converts in the first run"],
     flow: ["Trigger (cron / webhook)", "Voice agent call", "LLM orchestration", "Tool calls", "Outcome logged"]
   },
   {
     id: "trippie", title: "Trippie AI Assistant",
     category: ["ai"],
     tagline: "AI voice and chat assistant for travellers before their trip, built on MCP.",
-    metric: { value: "<1 wk", label: "for two AI launches" },
+    metric: { value: "70.5%", label: "peak AI containment" },
     tech: ["MCP", "OpenAI API", "Voice and chat", "Laravel"],
     problem: "Agent tool calls were hard to scale and there was nowhere safe to test agent behaviour before customers saw it.",
     solution: "Backend workflows for an AI voice/chat assistant, agent tool execution moved to MCP for shared context across tools, plus a sandboxed test environment for internal operators.",
-    impact: ["Fewer escalation failures", "Faster responses", "Changes validated before customer rollout"],
+    impact: ["Containment up from ~40% to 60%+ (peak 70.5%) with proactive dialer call summaries", "Then-record 56.5% from per-destination prompt rewrites, FAQs and chat reviews", "Fewer escalation failures and faster responses", "Changes validated in the Test Arena before customer rollout"],
     hardest: "Moving live agent tool wiring to MCP without disrupting customers."
   },
   {
@@ -172,8 +175,18 @@ const PROJECTS = [
     tech: ["PHP", "Laravel", "MySQL", "Redis", "Cron jobs"],
     problem: "No shared backend served the five teams consistently, and a legacy PHP codebase was slowing delivery.",
     solution: "Migrated the legacy codebase to modern Laravel and built modules for workflow tracking, customer data processing and reporting, with background jobs and scheduled tasks for repetitive work.",
-    impact: ["40% faster API responses (query tuning + caching)", "400+ daily users on a stable backend", "5 departments migrated with zero downtime"],
+    impact: ["Cost-sheet load cut from 4.2s to 639ms (6x); dialer, dashboards and reports 3–4x faster", "Post-booking additions adoption raised from 51% to 82%", "Line-item booking-cost audit trail with recurring Finance alerts", "40% faster API responses (query tuning + caching)", "400+ daily users on a stable backend", "5 departments migrated with zero downtime"],
     hardest: "Migrating 5 departments off spreadsheets and legacy tools with 100% data integrity and zero business disruption."
+  },
+  {
+    id: "insurance", title: "Insurance Invoice Automation",
+    category: ["automation"],
+    tagline: "Automatic invoice upload to Plato after every Sankash insurance API booking.",
+    metric: { value: "26 hrs", label: "saved per booking exec / month" },
+    tech: ["Laravel", "Sankash API", "Queues"],
+    problem: "After each insurance booking, booking execs downloaded and uploaded the invoice to Plato by hand.",
+    solution: "Integrated the Sankash insurance API so every API booking uploads its invoice to Plato automatically.",
+    impact: ["26 hours saved per booking exec per month", "Each booking down from ~15 min to under 5 min", "API adoption grew from 53% to 90% in three months"]
   },
   {
     id: "unity", title: "Unity Itinerary Engine",

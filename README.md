@@ -90,7 +90,7 @@ Components are plain HTML fragments in `components/`. They are included in `inde
 - The AI agent playground scenarios are `AGENT_SCENARIOS` in `js/data.js` (`components/ai-lab.html`).
 - Resume interactions (search, skill chips, impact highlighting, quick scan) are in `resume/resume-fx.js`; printing always uses the plain black-on-white layout.
 - Tweak colors and spacing in `css/style.css`.
-- Set your own admin passcode in `js/data.js` (`ADMIN_PASSCODE`) before deploying.
+- The admin passcode is stored as a SHA-256 hash in `js/data.js` (`ADMIN_PASSCODE_HASH`). To change it, run `printf '%s' 'new-passcode' | shasum -a 256` and paste the result.
 
 ## License
 

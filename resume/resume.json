@@ -19,6 +19,10 @@
       "start": "Sep 2024",
       "end": "Present",
       "bullets": [
+        "Plato screens were slow — cut cost-sheet load time from 4.2s to 639ms (6x) and made the dialer, dashboards and reports 3–4x faster in one week.",
+        "Trippie handed too many chats to people — built proactive dialer call summaries for the Trippie AI agent, lifting containment from ~40% to 60%+, peaking at 70.5%.",
+        "Insurance invoices were uploaded by hand — automated invoice upload for the Sankash insurance API, saving 26 hours per booking exec per month.",
+        "The Visa team ran on Google Sheets — built the backend of the Visa dashboard that replaced them and fixed task allocation, within 3 months of joining.",
         "Legacy PHP codebase was becoming hard to maintain and slowing delivery — migrated core systems to modern PHP and Laravel, improving maintainability and long-term scalability for platforms used by 400+ daily active users.",
         "Customer follow-ups, lead qualification, and trip assistance were handled manually — built backend workflows powering AI-based voice automation, using LLM agent tooling and orchestration to automate these touchpoints end-to-end.",
         "Manual post-call logging was creating overhead for CX and Sales teams — engineered an AI agent workflow using the OpenAI API and Model Context Protocol (MCP) tool wiring to automate post-call summarization and CRM pipeline transitions.",
@@ -60,6 +64,8 @@
       "start": "Sep 2024",
       "end": "Present",
       "bullets": [
+        "Cut cost-sheet load time from 4.2s to 639ms (6x) and made the dialer, dashboards and reports 3–4x faster.",
+        "Built the backend for post-booking additions, raising adoption from 51% to 82%.",
         "Reduced API response time by 40% through query optimization and caching.",
         "Supported 400+ daily active users on a stable backend architecture.",
         "Migrated legacy codebase to modern Laravel.",
@@ -74,6 +80,7 @@
       "end": "Present",
       "bullets": [
         "Built backend workflows powering an AI voice/chat assistant for pre-trip customer engagement.",
+        "Added proactive dialer call summaries, lifting containment from ~40% to 60%+ (peak 70.5%).",
         "Migrated agent tool execution to Model Context Protocol (MCP), enabling scalable context sharing across tools.",
         "Built a sandboxed test environment allowing internal operators to validate agent behavior before customer rollout."
       ]
@@ -134,6 +141,9 @@
     }
   ],
   "achievements": [
+    { "title": "June 2026 Champ", "date": "PickYourTrail", "description": "Named on the monthly winner board." },
+    { "title": "FY25 Go For Glory Award", "date": "PickYourTrail", "description": "Company award for FY25." },
+    { "title": "Trippie AI Containment: ~40% to 70.5%", "date": "PickYourTrail", "description": "Proactive dialer call summaries and per-destination prompt work lifted the share of chats Trippie resolves on its own to 60%+, peaking at 70.5%." },
     { "title": "Rookie of the Year Award", "date": "PickYourTrail", "description": "Awarded for exceptional engineering ownership, delivering the Visa Allocation Dashboard, Auto-Quote Engine, Instant Voucher service, and supporting refund systems during launch." },
     { "title": "Top Contributor — 10+ Modules, 50+ Features", "date": "PickYourTrail", "description": "Ranked #1 contributor across internal enterprise platforms (Plato CRM and Locker Room HRM), driving end-to-end delivery from RFC to production." },
     { "title": "Trippie AI Launches Shipped in Under a Week", "date": "PickYourTrail", "description": "Built a pre-production test environment for Trip Custodians and migrated agent tool wiring to MCP, reducing escalation failure rates and improving response speed." },
